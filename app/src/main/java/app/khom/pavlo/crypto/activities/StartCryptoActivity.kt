@@ -26,7 +26,7 @@ class StartCryptoActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         doRequest()
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
-        window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN)
+                 window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN)
     }
 
     private fun doRequest() {
