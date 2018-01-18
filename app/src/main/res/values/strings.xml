@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name" >Cryptocurrency Markets Values</string>
+    <string name="dollars" >%s$</string>
+    <string name="active_currencies" >Cryptocurrencies:</string>
+    <string name="active_markets">Markets:</string>
+    <string name="total_market_cap_usd">Markets Cap:</string>
+    <string name="total_24h_volume_usd" >24h Vol:</string>
+    <string name="btc_dominance" >BTC Dominance:</string>
+    <string name="updated" >Updated:</string>
+    <string name="_7_days">7 days:</string>
+    <string name="rank" >Rank</string>
+    <string name="_24h">24h:</string>
+    <string name="btc_price">BTC price:</string>
+    <string name="_1h">1h:</string>
+    <string name="refreshed">Refreshed</string>
+</resources>

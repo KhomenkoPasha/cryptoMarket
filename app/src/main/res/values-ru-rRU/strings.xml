@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name" >Статистика рынков криптовалют</string>
+    <string name="dollars" >%s$</string>
+    <string name="active_currencies" >Криптовалюты:</string>
+    <string name="active_markets">Рынки:</string>
+    <string name="total_market_cap_usd">Капитализация:</string>
+    <string name="total_24h_volume_usd" >Оборот 24h:</string>
+    <string name="btc_dominance" >BTC часть:</string>
+    <string name="updated" >Обновлен:</string>
+    <string name="_7_days">7 дней:</string>
+    <string name="rank" >Рейтинг</string>
+    <string name="_24h">24 часа:</string>
+    <string name="btc_price">BTC цена:</string>
+    <string name="_1h">1 час:</string>
+    <string name="refreshed">Обновление данных</string>
+</resources>
