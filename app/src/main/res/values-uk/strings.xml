@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name" >КриптоКурс</string>
+    <string name="dollars" >%s$</string>
+    <string name="active_currencies" >Криптовалюти:</string>
+    <string name="active_markets">Ринки:</string>
+    <string name="total_market_cap_usd">Капиталізація:</string>
+    <string name="total_24h_volume_usd" >Оберт 24h:</string>
+    <string name="btc_dominance" >BTC частина:</string>
+    <string name="updated" >Оновлення:</string>
+    <string name="_7_days">7 днів:</string>
+    <string name="rank" >Рейтинг</string>
+    <string name="_24h">24 год:</string>
+    <string name="btc_price">BTC ціна:</string>
+    <string name="_1h">1 год:</string>
+    <string name="refreshed">Оновлення данних</string>
+</resources>
+

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name" >Статистика рынков криптовалют</string>
+    <string name="app_name" >КриптоКурс</string>
     <string name="dollars" >%s$</string>
     <string name="active_currencies" >Криптовалюты:</string>
     <string name="active_markets">Рынки:</string>
