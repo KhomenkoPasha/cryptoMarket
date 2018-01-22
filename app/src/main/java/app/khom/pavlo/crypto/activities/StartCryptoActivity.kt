@@ -76,22 +76,21 @@ class StartCryptoActivity : AppCompatActivity() {
     }
 
      private fun spacer(numb: String): String {
-        if (numb.contains(".")) {
-            val partLeft = numb.substring(0, numb.indexOf("."))
-            val partRight = numb.substring(numb.indexOf("."), numb.length)
-            val strB = StringBuilder()
-            strB.append(partLeft)
-            var Three = 0
-
-            for (i in partLeft.length downTo 1) {
-                Three++
-                if (Three == 3) {
-                    strB.insert(i - 1, " ")
-                    Three = 0
-                }
-            }
-            return strB.toString() + partRight
-        } else return numb
+         return if (numb.contains(".")) {
+             val partLeft = numb.substring(0, numb.indexOf("."))
+             val partRight = numb.substring(numb.indexOf("."), numb.length)
+             val strB = StringBuilder()
+             strB.append(partLeft)
+             var three = 0
+             for (i in partLeft.length downTo 1) {
+                 three++
+                 if (three == 3) {
+                     strB.insert(i - 1, " ")
+                     three = 0
+                 }
+             }
+             strB.toString() + partRight
+         } else numb
     }// end Spacer()
 
 
