@@ -19,6 +19,17 @@ class RecyclerViewAdapter(private var result: List<ResponseCoinItem>, private va
         return result.size
     }
 
+    /*
+    fun getItems(): List<ResponseCoinItem> {
+        return result
+    }
+    */
+
+    fun setItems(newItems: List<ResponseCoinItem>) {
+        result = newItems
+    }
+
+
     override fun onBindViewHolder(holder: CardViewHolder, position: Int) = holder.bind(result, position, resources)
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): CardViewHolder {

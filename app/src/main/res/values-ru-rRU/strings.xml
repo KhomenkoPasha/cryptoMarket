@@ -14,4 +14,12 @@
     <string name="btc_price">BTC цена:</string>
     <string name="_1h">1 час:</string>
     <string name="refreshed">Обновление данных</string>
+    <string name="find">Поиск</string>
+    <string name="finding">Найдено -</string>
+    <string name="cryptocurrency">криптовалют</string>
+    <string name="exit">Выход</string>
+    <string name="exit_text">Выйти из приложения?</string>
+    <string name="yes">Да</string>
+    <string name="cancel">Отмена</string>
+    <string name="refresh">Refresh</string>
 </resources>

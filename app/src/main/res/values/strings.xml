@@ -14,4 +14,12 @@
     <string name="btc_price">BTC price:</string>
     <string name="_1h">1h:</string>
     <string name="refreshed">Refreshed</string>
+    <string name="find">Find</string>
+    <string name="finding">Find -</string>
+    <string name="cryptocurrency">cryptocurrency</string>
+    <string name="exit">Exit</string>
+    <string name="exit_text">Exit from application?</string>
+    <string name="yes">Yes</string>
+    <string name="cancel">Cancel</string>
+    <string name="refresh">Refresh</string>
 </resources>
