@@ -26,4 +26,8 @@ class NetworkModule {
     @Provides @Singleton
     fun provideCoinMarketCapApi(retrofit: Retrofit): CoinMarketCapApi = retrofit.create(CoinMarketCapApi::class.java)
 
+    @Provides @Singleton
+    fun provideNetworkRequests(cryptoCompareAPI: CryptoCompareAPI, coinMarketCapApi: CoinMarketCapApi) =
+            NetworkRequests(cryptoCompareAPI, coinMarketCapApi)
+
 }

@@ -4,11 +4,10 @@ import app.khom.pavlo.crypto.di.PerActivity
 import app.khom.pavlo.crypto.models.CoinsController
 import app.khom.pavlo.crypto.models.HoldingsHandler
 import app.khom.pavlo.crypto.rest.NetworkRequests
+import app.khom.pavlo.crypto.utills.Logger
 import app.khom.pavlo.crypto.utills.ResourceProvider
 import dagger.Provides
 import dagger.Module
-import dagger.android.ContributesAndroidInjector
-import java.util.logging.Logger
 
 
 @Module

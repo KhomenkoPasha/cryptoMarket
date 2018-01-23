@@ -27,7 +27,7 @@ class CoinInfoActivity : BaseActivity(), ICoinInfo.View {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_coin_info)
       //  setupToolbar()
-        presenter.onCreate(intent.extras.getString(NAME), intent.extras.getString(TO))
+        presenter.onCreate("ETH", "USD")
     }
 
     private fun setupToolbar() {

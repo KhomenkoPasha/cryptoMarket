@@ -9,6 +9,8 @@ import app.khom.pavlo.crypto.models.CoinsController
 import app.khom.pavlo.crypto.models.DBController
 import app.khom.pavlo.crypto.models.HoldingsHandler
 import app.khom.pavlo.crypto.utills.DATABASE_NAME
+import app.khom.pavlo.crypto.utills.Logger
+import app.khom.pavlo.crypto.utills.Preferences
 import app.khom.pavlo.crypto.utills.ResourceProvider
 import dagger.Module
 import dagger.Provides
@@ -36,11 +38,17 @@ class AppModule {
     @Provides @Singleton
     fun provideCoinsController(dbController: DBController, db: CMDatabase) = CoinsController(dbController, db)
 
+
     @Provides @Singleton
     fun provideGraphMaker(resourceProvider: ResourceProvider) = GraphMaker(resourceProvider)
 
-
     @Provides @Singleton
     fun provideHoldingsHandler(db: CMDatabase) = HoldingsHandler(db)
+
+    @Provides @Singleton
+    fun provideLogger(context: Context) = Logger(context)
+
+    @Provides @Singleton
+    fun providePreferences(context: Context) = Preferences(context)
 
 }
