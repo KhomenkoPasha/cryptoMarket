@@ -11,4 +11,10 @@
     <color name="green">#388E3C</color>
     <color name="colorPrimaryDarkB">#4000BCD4</color>
     <color name="red">#F44336</color>
+    <color name="black">#000000</color>
+    <color name="grey_light">#A9B7C6</color>
+    <color name="grey">#808080</color>
+    <color name="orange_dark">#CB772F</color>
+    <color name="yellow">#FFFF00</color>
+
 </resources>

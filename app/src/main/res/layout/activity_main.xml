@@ -33,7 +33,7 @@
                     android:layout_height="wrap_content"
                     android:baselineAligned="false"
                     android:text="@string/active_currencies"
-                    android:textSize="16sp" />
+                    android:textSize="12sp" />
 
                 <TextView
                     android:id="@+id/active_currencies_val"
@@ -44,7 +44,7 @@
                     android:baselineAligned="false"
                     android:textStyle="bold"
                     android:textColor="@color/colorPrimaryDark"
-                    android:textSize="18sp" />
+                    android:textSize="14sp" />
 
                 <TextView
                     android:id="@+id/active_markets"
@@ -52,7 +52,7 @@
                     android:layout_height="wrap_content"
                     android:baselineAligned="false"
                     android:text="@string/active_markets"
-                    android:textSize="16sp" />
+                    android:textSize="12sp" />
 
                 <TextView
                     android:id="@+id/active_markets_val"
@@ -63,7 +63,7 @@
                     android:textStyle="bold"
                     android:baselineAligned="false"
                     android:textColor="@color/colorPrimaryDark"
-                    android:textSize="18sp" />
+                    android:textSize="14sp" />
 
             </LinearLayout>
 
@@ -89,7 +89,7 @@
                     android:baselineAligned="false"
                     android:gravity="left"
                     android:text="@string/total_market_cap_usd"
-                    android:textSize="16sp" />
+                    android:textSize="12sp" />
 
                 <TextView
                     android:id="@+id/total_market_cap_usd_val"
@@ -100,7 +100,7 @@
                     android:baselineAligned="false"
                     android:gravity="right"
                     android:textColor="@color/colorPrimaryDark"
-                    android:textSize="18sp" />
+                    android:textSize="14sp" />
 
             </TableRow>
 
@@ -116,7 +116,7 @@
                     android:baselineAligned="false"
                     android:gravity="left"
                     android:text="@string/total_24h_volume_usd"
-                    android:textSize="16sp" />
+                    android:textSize="12sp" />
 
                 <TextView
                     android:id="@+id/total_24h_volume_usd_val"
@@ -127,7 +127,7 @@
                     android:baselineAligned="false"
                     android:gravity="right"
                     android:textColor="@color/colorPrimaryDark"
-                    android:textSize="18sp" />
+                    android:textSize="14sp" />
 
             </TableRow>
 
@@ -143,7 +143,7 @@
                     android:baselineAligned="false"
                     android:gravity="left"
                     android:text="@string/btc_dominance"
-                    android:textSize="16sp" />
+                    android:textSize="12sp" />
 
                 <TextView
                     android:id="@+id/bitcoin_percentage_of_market_cap_val"
@@ -154,7 +154,7 @@
                     android:baselineAligned="false"
                     android:gravity="right"
                     android:textColor="@color/colorPrimaryDark"
-                    android:textSize="18sp" />
+                    android:textSize="14sp" />
 
             </TableRow>
 

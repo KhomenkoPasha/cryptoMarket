@@ -2,15 +2,23 @@
 
 buildscript {
 
-    ext.kotlin_version = '1.1.51'
+    ext.kotlin_version = '1.2.20'
+    ext.room_version = '1.0.0'
+    ext.dagger_version = '2.14.1'
+    ext.support_version = '27.0.2'
 
     repositories {
         google()
         jcenter()
+        mavenCentral()
+        maven { url 'https://maven.fabric.io/public' }
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:3.0.1'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath "org.jetbrains.kotlin:kotlin-android-extensions:$kotlin_version"
+        classpath 'com.neenbedankt.gradle.plugins:android-apt:1.8'
+        classpath 'io.fabric.tools:gradle:1.25.1'
         
 
         // NOTE: Do not place your application dependencies here; they belong
@@ -21,7 +29,9 @@ buildscript {
 allprojects {
     repositories {
         google()
-        jcenter()
+        maven { url 'http://jcenter.bintray.com/' }
+        maven { url 'https://maven.google.com' }
+        maven { url 'https://jitpack.io' }
     }
 }
 

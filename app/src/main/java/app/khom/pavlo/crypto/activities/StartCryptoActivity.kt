@@ -139,10 +139,10 @@ class StartCryptoActivity : AppCompatActivity() {
         val simpleAlert = AlertDialog.Builder(this).create()
         simpleAlert.setTitle(getString(R.string.exit))
         simpleAlert.setMessage(getString(R.string.exit_text))
-        simpleAlert.setButton(AlertDialog.BUTTON_POSITIVE, getString(R.string.yes), { dialogInterface, i ->
+        simpleAlert.setButton(AlertDialog.BUTTON_POSITIVE, getString(R.string.yes), { _, _ ->
             super.onBackPressed()
         })
-        simpleAlert.setButton(AlertDialog.BUTTON_NEGATIVE, getString(R.string.cancel), { dialogInterface, i ->
+        simpleAlert.setButton(AlertDialog.BUTTON_NEGATIVE, getString(R.string.cancel), { _, _ ->
             simpleAlert.dismiss()
         })
 

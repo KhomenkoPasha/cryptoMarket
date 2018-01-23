@@ -1,29 +1,29 @@
 package app.khom.pavlo.crypto.adapters
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.content.res.Resources
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import app.khom.pavlo.crypto.R
+import app.khom.pavlo.crypto.R.id.name
+import app.khom.pavlo.crypto.coinInfo.CoinInfoActivity
 import app.khom.pavlo.crypto.models.ResponseCoinItem
+import app.khom.pavlo.crypto.utills.NAME
+import app.khom.pavlo.crypto.utills.TO
 import kotlinx.android.synthetic.main.item.view.*
 import java.text.SimpleDateFormat
 import java.util.*
 
 
-class RecyclerViewAdapter(private var result: List<ResponseCoinItem>, private var resources: Resources) : RecyclerView.Adapter<RecyclerViewAdapter.CardViewHolder>() {
+class RecyclerViewAdapter(private var result: List<ResponseCoinItem>,
+                          private var resources: Resources) : RecyclerView.Adapter<RecyclerViewAdapter.CardViewHolder>() {
 
     override fun getItemCount(): Int {
         return result.size
     }
-
-    /*
-    fun getItems(): List<ResponseCoinItem> {
-        return result
-    }
-    */
 
     fun setItems(newItems: List<ResponseCoinItem>) {
         result = newItems
@@ -43,6 +43,14 @@ class RecyclerViewAdapter(private var result: List<ResponseCoinItem>, private va
         fun bind(result: List<ResponseCoinItem>, position: Int, resources: Resources) {
             val responseCoinItem: ResponseCoinItem = result[position]
             try {
+
+                itemView.cardItem.setOnClickListener({
+                    val intent = Intent(itemView.context, CoinInfoActivity::class.java)
+                    intent.putExtra(NAME, name)
+                    intent.putExtra(TO, "")
+                    itemView.context?.startActivity(intent)
+                })
+
                 itemView.symbol.text = responseCoinItem.symbol
                 itemView.name.text = responseCoinItem.name
                 itemView.money.text = responseCoinItem.priceUsd + " $"
@@ -85,4 +93,6 @@ class RecyclerViewAdapter(private var result: List<ResponseCoinItem>, private va
 
 
     }
+
+
 }
