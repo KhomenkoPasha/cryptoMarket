@@ -7,6 +7,7 @@
     <color name="primary_text">#212121</color>
     <color name="secondary_text">#757575</color>
     <color name="icons">#FFFFFF</color>
+    <color name="white">#FFFFFF</color>
     <color name="divider">#BDBDBD</color>
     <color name="green">#388E3C</color>
     <color name="colorPrimaryDarkB">#4000BCD4</color>
@@ -16,5 +17,7 @@
     <color name="grey">#808080</color>
     <color name="orange_dark">#CB772F</color>
     <color name="yellow">#FFFF00</color>
+    <color name="darker_gray">#1b1b1b</color>
+
 
 </resources>

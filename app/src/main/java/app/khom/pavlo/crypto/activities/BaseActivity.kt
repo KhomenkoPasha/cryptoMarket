@@ -1,7 +1,7 @@
 package app.khom.pavlo.crypto.activities
 
 import android.content.Context
-import app.khom.pavlo.crypto.utills.LocaleManager
+import app.khom.pavlo.crypto.model.LocaleManager
 import dagger.android.support.DaggerAppCompatActivity
 
 

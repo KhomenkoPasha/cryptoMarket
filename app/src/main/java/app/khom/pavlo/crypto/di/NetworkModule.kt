@@ -1,9 +1,9 @@
 package app.khom.pavlo.crypto.di
 
-import app.khom.pavlo.crypto.rest.CoinMarketCapApi
-import app.khom.pavlo.crypto.rest.CryptoCompareAPI
-import app.khom.pavlo.crypto.rest.NetworkRequests
-import app.khom.pavlo.crypto.utills.BASE_CRYPTOCOMPARE_URL
+import app.khom.pavlo.crypto.model.BASE_CRYPTOCOMPARE_URL
+import app.khom.pavlo.crypto.model.network.CoinMarketCapApi
+import app.khom.pavlo.crypto.model.network.CryptoCompareAPI
+import app.khom.pavlo.crypto.model.network.NetworkRequests
 import dagger.Module
 import dagger.Provides
 import retrofit2.Retrofit

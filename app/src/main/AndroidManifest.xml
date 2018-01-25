@@ -12,15 +12,21 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
+        <activity android:name=".ui.main.MainActivity" />
         <activity
-            android:name=".activities.StartCryptoActivity"
-            android:configChanges="orientation|screenSize|keyboardHidden|screenLayout">
+            android:name=".ui.SplashActivity"
+            android:theme="@style/SplashTheme">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-                <category android:name="android.intent.category.LAUNCHER"/>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".coinInfo.CoinInfoActivity" />
+        <activity android:name=".ui.addCoin.AddCoinActivity" />
+        <activity android:name=".ui.coinInfo.CoinInfoActivity" />
+        <activity android:name=".ui.coinAllocation.CoinAllocationActivity" />
+        <activity android:name=".ui.holdings.HoldingsActivity" />
+        <activity android:name=".ui.settings.SettingsActivity" />
     </application>
 
     </manifest>

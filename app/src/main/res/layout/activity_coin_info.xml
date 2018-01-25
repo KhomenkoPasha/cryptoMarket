@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:App="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@color/colorPrimaryDark"
-    tools:context=".coinInfo.CoinInfoActivity">
+    tools:context=".ui.coinInfo.CoinInfoActivity">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
@@ -16,7 +16,8 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            App:titleTextColor="@color/grey_light"
+            android:theme="@style/ToolbarColoredBackArrow"
+            app:titleTextColor="@color/grey_light"
             android:background="@color/colorPrimary"/>
 
     </android.support.design.widget.AppBarLayout>
@@ -39,8 +40,7 @@
                 <ImageView
                     android:id="@+id/coin_info_logo"
                     android:layout_width="50dp"
-                    android:layout_height="50dp"
-                   />
+                    android:layout_height="50dp" />
 
                 <TextView
                     android:id="@+id/coin_info_main_price"
@@ -66,6 +66,14 @@
                     android:layout_height="250dp"
                     android:visibility="gone"
                     android:background="@color/grey_light" />
+
+                <com.github.ybq.android.spinkit.SpinKitView
+                    android:id="@+id/coin_info_loading"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    style="@style/SpinKitView.Wave"
+                    app:SpinKit_Color="@color/yellow"/>
 
                 <TextView
                     android:id="@+id/coin_info_empty_graph"

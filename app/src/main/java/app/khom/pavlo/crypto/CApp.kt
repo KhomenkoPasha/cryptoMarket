@@ -5,7 +5,7 @@ import android.app.Application
 import android.content.Context
 import android.content.res.Configuration
 import app.khom.pavlo.crypto.di.DaggerAppComponent
-import app.khom.pavlo.crypto.utills.LocaleManager
+import app.khom.pavlo.crypto.model.LocaleManager
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.HasActivityInjector
 import javax.inject.Inject
