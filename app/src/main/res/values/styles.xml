@@ -7,7 +7,6 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
-    <!-- Change color of hamburger-->
     <style name="ToolbarColoredBackArrow" parent="AppTheme">
         <item name="android:textColorSecondary">#ffffff</item>
     </style>
@@ -18,6 +17,6 @@
 
     <style name="MyRadioButton" >
         <item name="android:textSize">18sp</item>
-        <item name="android:textColor">@color/grey_light</item>
+        <item name="android:textColor">@color/black</item>
     </style>
 </resources>

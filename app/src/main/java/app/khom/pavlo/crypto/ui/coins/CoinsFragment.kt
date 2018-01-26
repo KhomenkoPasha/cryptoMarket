@@ -2,6 +2,8 @@ package app.khom.pavlo.crypto.ui.coins
 
 import android.content.Intent
 import android.os.Bundle
+import android.support.v4.content.ContextCompat
+import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -52,6 +54,9 @@ class CoinsFragment : DaggerFragment(), ICoins.View {
         adapter = CoinsListAdapter(coins, resProvider, multiSelector, holdingsHandler,
                 clickListener = { presenter.onCoinClicked(it) })
         recView.adapter = adapter
+        val itemDecorator = DividerItemDecoration(activity!!, DividerItemDecoration.VERTICAL)
+        itemDecorator.setDrawable(ContextCompat.getDrawable(activity!!, R.drawable.divider)!!)
+        recView.addItemDecoration(itemDecorator)
     }
 
     private fun setupSwipeRefresh() {

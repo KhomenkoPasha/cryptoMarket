@@ -16,8 +16,8 @@
 
         <ImageView
             android:id="@+id/add_coin_icon"
-            android:layout_width="@dimen/icon_size"
-            android:layout_height="@dimen/icon_size"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
             android:layout_marginRight="5dp"
             android:layout_marginEnd="5dp"/>
 

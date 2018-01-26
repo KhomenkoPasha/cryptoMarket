@@ -8,9 +8,7 @@ import app.khom.pavlo.crypto.ui.topCoins.TopCoinsModule
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 
-/**
- * Created by ivanov_r on 05.09.2017.
- */
+
 @Module
 abstract class MainFragmentProvider {
 

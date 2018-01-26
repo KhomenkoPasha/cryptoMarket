@@ -7,9 +7,7 @@ import app.khom.pavlo.crypto.utils.Toaster
 import dagger.Module
 import dagger.Provides
 
-/**
- * Created by ivanov_r on 13.09.2017.
- */
+
 @Module
 class HoldingsModule {
 

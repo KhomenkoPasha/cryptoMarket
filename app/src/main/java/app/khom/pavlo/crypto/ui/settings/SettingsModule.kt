@@ -7,9 +7,6 @@ import app.khom.pavlo.crypto.utils.ResourceProvider
 import dagger.Module
 import dagger.Provides
 
-/**
- * Created by ivanov_r on 28.12.2017.
- */
 @Module
 class SettingsModule {
 

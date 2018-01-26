@@ -12,9 +12,7 @@ import app.khom.pavlo.crypto.model.rxbus.LanguageChanged
 import app.khom.pavlo.crypto.model.rxbus.RxBus
 import kotlinx.android.synthetic.main.language_dialog.*
 
-/**
- * Created by ivanov_r on 28.12.2017.
- */
+
 class LanguageDialog : DialogFragment() {
 
     private var selectedLang: String? = null

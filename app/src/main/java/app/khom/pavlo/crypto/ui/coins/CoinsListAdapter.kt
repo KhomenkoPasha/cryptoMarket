@@ -14,7 +14,9 @@ import app.khom.pavlo.crypto.utils.getStringWithTwoDecimalsFromDouble
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.coins_list_item.view.*
 
-
+/**
+ * Created by rmnivnv on 02/07/2017.
+ */
 
 class CoinsListAdapter(private val coins: ArrayList<Coin>,
                        private val resProvider: ResourceProvider,

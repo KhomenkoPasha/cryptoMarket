@@ -10,7 +10,7 @@
         tools:text="COINS"
         android:textStyle="bold"
         android:textAllCaps="true"
-        android:textColor="@color/colorAccent"
+        android:textColor="@color/white"
         android:layout_centerInParent="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />

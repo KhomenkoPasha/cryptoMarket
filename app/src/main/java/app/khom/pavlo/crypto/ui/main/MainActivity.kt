@@ -15,8 +15,6 @@ import android.view.View
 import android.widget.ProgressBar
 import android.widget.RelativeLayout
 import android.widget.TextView
-import com.crashlytics.android.BuildConfig
-import com.crashlytics.android.Crashlytics
 import app.khom.pavlo.crypto.R
 import app.khom.pavlo.crypto.activities.BaseActivity
 import app.khom.pavlo.crypto.ui.addCoin.AddCoinActivity
@@ -25,12 +23,8 @@ import app.khom.pavlo.crypto.ui.settings.SettingsActivity
 import app.khom.pavlo.crypto.ui.topCoins.TopCoinsFragment
 import app.khom.pavlo.crypto.utils.ResourceProvider
 import app.khom.pavlo.crypto.utils.toastShort
-import io.fabric.sdk.android.Fabric
 import kotlinx.android.synthetic.main.activity_main.*
 import javax.inject.Inject
-import com.crashlytics.android.core.CrashlyticsCore
-
-
 
 
 class MainActivity : BaseActivity(), IMain.View {
@@ -90,11 +84,13 @@ class MainActivity : BaseActivity(), IMain.View {
             }
 
             override fun onTabSelected(tab: TabLayout.Tab?) {
+              /*
                 if (tab?.position == 0) {
                     title.setTextColor(resProvider.getColor(R.color.colorAccent))
                 } else {
                     title.setTextColor(resProvider.getColor(R.color.grey_light))
                 }
+            */
             }
 
         })

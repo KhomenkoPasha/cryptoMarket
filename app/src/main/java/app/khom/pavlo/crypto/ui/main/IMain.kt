@@ -1,8 +1,5 @@
 package app.khom.pavlo.crypto.ui.main
 
-/**
- * Created by rmnivnv on 06/07/2017.
- */
 interface IMain {
 
     interface View {

@@ -12,9 +12,7 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
-/**
- * Created by ivanov_r on 28.12.2017.
- */
+
 class SettingsPresenter @Inject constructor(
         private val view: Settings.View,
         private val context: Context,

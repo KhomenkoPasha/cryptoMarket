@@ -19,7 +19,7 @@
                 android:layout_height="wrap_content"
                 android:background="@color/colorPrimary"
                 android:theme="@style/ToolbarColoredBackArrow"
-                app:titleTextColor="@color/grey_light" />
+                app:titleTextColor="@color/white" />
 
             <android.support.design.widget.TabLayout
                 android:id="@+id/tabs"
@@ -27,8 +27,9 @@
                 android:layout_height="wrap_content"
                 app:tabGravity="fill"
                 app:tabMode="fixed"
-                app:tabSelectedTextColor="@color/colorAccent"
-                app:tabTextColor="@color/grey_light" />
+                app:tabIndicatorColor="@color/accent"
+                app:tabSelectedTextColor="@color/white"
+                app:tabTextColor="@color/white" />
 
         </android.support.design.widget.AppBarLayout>
 
@@ -36,7 +37,7 @@
             android:id="@+id/viewpager"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@android:color/black" />
+            android:background="@android:color/white" />
 
     </LinearLayout>
 

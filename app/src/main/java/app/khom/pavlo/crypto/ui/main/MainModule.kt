@@ -7,9 +7,7 @@ import app.khom.pavlo.crypto.model.Preferences
 import dagger.Module
 import dagger.Provides
 
-/**
- * Created by rmnivnv on 06/07/2017.
- */
+
 @Module
 class MainModule {
 

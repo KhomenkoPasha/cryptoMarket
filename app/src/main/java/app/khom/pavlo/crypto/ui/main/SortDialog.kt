@@ -10,9 +10,7 @@ import app.khom.pavlo.crypto.model.rxbus.CoinsSortMethodUpdated
 import app.khom.pavlo.crypto.model.rxbus.RxBus
 import kotlinx.android.synthetic.main.sort_dialog.*
 
-/**
- * Created by rmnivnv on 23/12/2017.
- */
+
 class SortDialog : DialogFragment() {
 
     companion object {

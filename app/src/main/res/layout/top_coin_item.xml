@@ -1,18 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="5dp">
+    android:padding="10dp">
+
 
     <TextView
         android:id="@+id/top_coin_rank"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@color/grey_light"
-        android:textSize="18sp"
+        android:layout_gravity="center_horizontal|center_vertical"
+        android:gravity="center_horizontal|center_vertical"
+        android:textColor="@color/accent"
+        android:textSize="14sp"
         android:textStyle="bold"
+        android:background="@drawable/back_for_rate"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="1" />
@@ -31,7 +36,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="5dp"
-        android:textColor="@color/grey_light"
+        android:textColor="@color/colorPrimaryDark"
         android:textSize="18sp"
         app:layout_constraintBottom_toTopOf="@+id/top_coin_logo"
         app:layout_constraintStart_toEndOf="@+id/top_coin_logo"
@@ -42,7 +47,7 @@
         android:id="@+id/top_coin_24h_pct"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@color/grey_light"
+        android:textColor="@color/colorPrimaryDark"
         app:layout_constraintBottom_toBottomOf="@+id/top_coin_price"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/top_coin_price"
@@ -53,7 +58,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
-        android:textColor="@color/grey_light"
+        android:textColor="@color/colorPrimaryDark"
         android:textSize="18sp"
         app:layout_constraintEnd_toStartOf="@+id/top_coin_24h_pct"
         app:layout_constraintTop_toTopOf="parent"
@@ -64,7 +69,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/dollar_sign"
-        android:textColor="@color/grey_light"
+        android:textColor="@color/colorPrimaryDark"
         android:textSize="18sp"
         app:layout_constraintBottom_toTopOf="@+id/top_coin_price"
         app:layout_constraintEnd_toStartOf="@+id/top_coin_price"
@@ -86,7 +91,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="5dp"
         android:text="@string/dollar_sign"
-        android:textColor="@color/grey_light"
+        android:textColor="@color/colorPrimaryDark"
         app:layout_constraintBottom_toBottomOf="@+id/market_cap"
         app:layout_constraintStart_toEndOf="@+id/market_cap" />
 
@@ -94,7 +99,7 @@
         android:id="@+id/top_coin_market_cap"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@color/grey_light"
+        android:textColor="@color/colorPrimaryDark"
         app:layout_constraintBottom_toBottomOf="@+id/top_coin_cap_currency_sign"
         app:layout_constraintStart_toEndOf="@+id/top_coin_cap_currency_sign"
         tools:text="23112312" />
@@ -114,7 +119,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="5dp"
         android:text="@string/dollar_sign"
-        android:textColor="@color/grey_light"
+        android:textColor="@color/colorPrimaryDark"
         app:layout_constraintBottom_toBottomOf="@+id/circulating_supply"
         app:layout_constraintStart_toEndOf="@+id/circulating_supply" />
 
@@ -122,7 +127,7 @@
         android:id="@+id/top_coin_supply"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@color/grey_light"
+        android:textColor="@color/colorPrimaryDark"
         app:layout_constraintBottom_toBottomOf="@+id/top_coin_circ_supply_currency_sign"
         app:layout_constraintStart_toEndOf="@+id/top_coin_circ_supply_currency_sign"
         tools:text="23112312" />
@@ -142,7 +147,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="5dp"
         android:text="@string/dollar_sign"
-        android:textColor="@color/grey_light"
+        android:textColor="@color/colorPrimaryDark"
         app:layout_constraintBottom_toBottomOf="@+id/volume24"
         app:layout_constraintStart_toEndOf="@+id/volume24" />
 
@@ -150,7 +155,7 @@
         android:id="@+id/top_coin_volume_24h"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@color/grey_light"
+        android:textColor="@color/colorPrimaryDark"
         app:layout_constraintBottom_toBottomOf="@+id/top_coin_volume_currency_sign"
         app:layout_constraintStart_toEndOf="@+id/top_coin_volume_currency_sign"
         tools:text="23112312" />

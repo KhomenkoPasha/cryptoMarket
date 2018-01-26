@@ -2,9 +2,6 @@ package app.khom.pavlo.crypto.ui.coins
 
 import app.khom.pavlo.crypto.model.Coin
 
-/**
- * Created by rmnivnv on 11/07/2017.
- */
 interface ICoins {
 
     interface View {

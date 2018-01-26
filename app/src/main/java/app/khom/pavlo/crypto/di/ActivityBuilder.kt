@@ -11,6 +11,8 @@ import app.khom.pavlo.crypto.ui.holdings.HoldingsModule
 import app.khom.pavlo.crypto.ui.main.MainActivity
 import app.khom.pavlo.crypto.ui.main.MainFragmentProvider
 import app.khom.pavlo.crypto.ui.main.MainModule
+import app.khom.pavlo.crypto.ui.settings.SettingsActivity
+import app.khom.pavlo.crypto.ui.settings.SettingsModule
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 
@@ -36,5 +38,9 @@ abstract class ActivityBuilder {
     @PerActivity
     @ContributesAndroidInjector(modules = arrayOf(HoldingsModule::class))
     abstract fun bindHoldingsActivity(): HoldingsActivity
+
+    @PerActivity
+    @ContributesAndroidInjector(modules = arrayOf(SettingsModule::class))
+    abstract fun bindSettingsActivity(): SettingsActivity
 
 }

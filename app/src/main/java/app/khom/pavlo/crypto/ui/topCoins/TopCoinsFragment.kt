@@ -14,10 +14,12 @@ import app.khom.pavlo.crypto.utils.ResourceProvider
 import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.top_coins_fragment.*
 import javax.inject.Inject
+import android.support.v4.content.ContextCompat
+import android.support.v7.widget.DividerItemDecoration
 
-/**
- * Created by rmnivnv on 11/07/2017.
- */
+
+
+
 class TopCoinsFragment : DaggerFragment(), ITopCoins.View {
 
     @Inject lateinit var presenter: ITopCoins.Presenter
@@ -48,6 +50,10 @@ class TopCoinsFragment : DaggerFragment(), ITopCoins.View {
         adapter = TopCoinsAdapter(coins, resProvider, presenter, coinsController,
                 clickListener = { presenter.onCoinClicked(it) })
         recView.adapter = adapter
+
+        val itemDecorator = DividerItemDecoration(activity!!, DividerItemDecoration.VERTICAL)
+        itemDecorator.setDrawable(ContextCompat.getDrawable(activity!!, R.drawable.divider)!!)
+        recView.addItemDecoration(itemDecorator)
     }
 
     private fun setupSwipeRefresh() {

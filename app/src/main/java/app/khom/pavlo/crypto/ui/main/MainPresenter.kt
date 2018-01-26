@@ -12,9 +12,7 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
-/**
- * Created by rmnivnv on 06/07/2017.
- */
+
 class MainPresenter @Inject constructor(private val view: IMain.View,
                                         private val multiSelector: MultiSelector,
                                         private val pageController: PageController,
