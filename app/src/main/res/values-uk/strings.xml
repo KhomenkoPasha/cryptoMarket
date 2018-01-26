@@ -22,5 +22,6 @@
     <string name="yes">Так</string>
     <string name="cancel">Скасувати</string>
     <string name="refresh">Refresh</string>
+    <string name="add_to_favorites">В избранное</string>
 </resources>
 

@@ -23,14 +23,10 @@
     <string name="cancel">Cancel</string>
     <string name="refresh">Refresh</string>
 
-
-
-
     <!--Translatable-->
-    <string name="coins">Coins</string>
-    <string name="top100">Top 100</string>
+    <string name="coins">Favorite</string>
+    <string name="top100">Rating</string>
     <string name="market">Market</string>
-    <string name="news">News</string>
     <string name="sort_by">Sort by</string>
     <string name="coin_name">Name</string>
     <string name="add_coin">Add coin</string>
@@ -115,4 +111,5 @@
     <string name="dollar_sign" translatable="false">$</string>
     <string name="pct_sign" translatable="false">%</string>
     <string name="ok" translatable="false">OK</string>
+    <string name="add_to_favorites">В избранное</string>
 </resources>

@@ -18,11 +18,11 @@
             android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.addCoin.AddCoinActivity" />
+        <activity android:name=".ui.addCoin.AddCoinActivity"
+            android:theme="@style/AppTheme.NoActionBar_dialog" />
         <activity android:name=".ui.coinInfo.CoinInfoActivity" />
         <activity android:name=".ui.coinAllocation.CoinAllocationActivity" />
         <activity android:name=".ui.holdings.HoldingsActivity" />
