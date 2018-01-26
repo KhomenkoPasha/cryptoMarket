@@ -2,7 +2,6 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/colorPrimaryDark"
     android:orientation="vertical"
     android:padding="8dp">
 
@@ -12,7 +11,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:text="@string/language"
-        android:textColor="@color/grey_light"
+        android:textColor="@color/colorPrimary"
         android:textSize="18sp" />
 
     <RadioGroup
@@ -20,6 +19,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
+        android:padding="8dp"
         android:orientation="vertical">
 
         <RadioButton
@@ -33,6 +33,7 @@
         <RadioButton
             android:id="@+id/lang_dialog_russian"
             style="@style/MyRadioButton"
+            android:layout_marginTop="4dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingStart="8dp"
@@ -49,7 +50,6 @@
         android:layout_marginEnd="10dp"
         android:layout_marginTop="10dp"
         android:text="@string/cancel"
-        android:textAllCaps="true"
-        android:textColor="@color/grey_light" />
+        android:textAllCaps="true" />
 
 </LinearLayout>

@@ -27,6 +27,6 @@
         android:visibility="gone"
         tools:visibility="visible"
         style="@style/SpinKitView.Small.DoubleBounce"
-        app:SpinKit_Color="@color/yellow"/>
+        app:SpinKit_Color="@color/accent"/>
 
 </RelativeLayout>

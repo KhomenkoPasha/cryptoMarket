@@ -3,8 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/black">
+    android:layout_height="match_parent">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/toolbar_layout"
@@ -20,7 +19,7 @@
             android:layout_height="wrap_content"
             android:background="@color/colorPrimary"
             android:theme="@style/ToolbarColoredBackArrow"
-            app:titleTextColor="@color/grey_light" />
+            app:titleTextColor="@color/white" />
 
     </android.support.design.widget.AppBarLayout>
 
@@ -50,7 +49,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
             android:text="@string/language"
-            android:textColor="@color/grey_light"
+            android:textColor="@color/colorPrimary"
             android:textStyle="bold"
             app:layout_constraintBottom_toTopOf="@+id/settings_language"
             app:layout_constraintStart_toEndOf="@id/language_icon"
@@ -62,7 +61,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
-            android:textColor="@color/grey_light"
+            android:textColor="@color/colorPrimary"
             android:textSize="14sp"
             app:layout_constraintBottom_toTopOf="@+id/line_bottom_of_lang"
             app:layout_constraintStart_toEndOf="@id/language_icon"
@@ -74,7 +73,7 @@
             android:layout_width="0dp"
             android:layout_height="0.5dp"
             android:layout_marginTop="20dp"
-            android:background="@color/grey_light"
+            android:background="@drawable/divider"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/language_icon" />

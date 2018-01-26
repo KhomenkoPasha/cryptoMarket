@@ -91,16 +91,5 @@ dependencies {
     implementation('com.crashlytics.sdk.android:crashlytics:2.8.0@aar') {
         transitive = true
     }
-    debugImplementation 'com.squareup.leakcanary:leakcanary-android:1.5.4'
-    releaseImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.4'
-    //Tests
-    testImplementation 'junit:junit:4.12'
-    testImplementation 'org.mockito:mockito-core:2.10.0'
-    testImplementation 'org.robolectric:robolectric:3.2.2'
-    testImplementation 'org.powermock:powermock-api-mockito2:1.7.0RC2'
-    testImplementation 'org.powermock:powermock-module-junit4-rule-agent:1.7.0RC2'
-    testImplementation 'org.powermock:powermock-module-junit4-rule:1.7.0RC2'
-    testImplementation 'org.powermock:powermock-module-junit4:1.7.0RC2'
-    testImplementation 'org.json:json:20140107'
 
 }
