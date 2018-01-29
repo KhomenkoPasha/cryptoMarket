@@ -49,6 +49,11 @@ class MainActivity : BaseActivity(), IMain.View {
     private fun setupToolbar() {
         val toolbar: Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
+        supportActionBar?.title = resProvider.getString(R.string.app_name)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDisplayShowHomeEnabled(true)
+        toolbar.setNavigationOnClickListener { finish() }
+
     }
 
     private fun setupViewPager() {

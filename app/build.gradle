@@ -11,9 +11,9 @@ android {
         applicationId "app.khom.pavlo.crypto"
         minSdkVersion 19
         targetSdkVersion 27
-        versionCode 3
+        versionCode 5
         multiDexEnabled true
-        versionName "0.1.2"
+        versionName "1.0.0"
         javaCompileOptions {
             annotationProcessorOptions {
                 arguments = ["room.schemaLocation": "$projectDir/schemas".toString()]

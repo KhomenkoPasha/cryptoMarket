@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="app_name" >CryptoCap Market</string>
     <string name="dollars" >%s$</string>
     <string name="active_currencies" >Cryptocurrencies:</string>
     <string name="active_markets">Markets:</string>

@@ -4,13 +4,13 @@
 
     <string name="dollars">% s $</string>
 
-    <string name="active_currencies"> Криптовалюты:</string>
+    <string name="active_currencies"> Криптовалюти:</string>
 
-    <string name="active_markets"> Рынки:</string>
+    <string name="active_markets"> Ринки:</string>
 
     <string name="total_market_cap_usd"> Капіталізация:</string>
 
-    <string name="total_24h_volume_usd"> Оборот 24 години:</string>
+    <string name="total_24h_volume_usd"> Оберт 24 години:</string>
 
     <string name="btc_dominance"> BTC частина:</string>
 
@@ -22,9 +22,9 @@
 
     <string name="_24h"> 24 години:</string>
 
-    <string name="btc_price"> BTC цена:</string>
+    <string name="btc_price"> BTC ціна:</string>
 
-    <string name="_1h"> 1 час:</string>
+    <string name="_1h"> 1 год:</string>
 
     <string name="refreshed"> Обновление данных</string>
 
@@ -43,14 +43,11 @@
 
     <string name="refresh"> Оновити</string>
 
-    <string name="coins"> Избранное</string>
+    <string name="coins"> Вибране</string>
 
     <string name="top100"> Рейтинг</string>
 
-    <string name="market"> Рынок</string>
-
-    <string name="news"> Новости</string>
-
+    <string name="market"> Ринок</string>
     <string name="sort_by"> Сортувати по</string>
 
     <string name="coin_name"> Назва</string>
@@ -59,51 +56,49 @@
 
     <string name="price"> Ціна</string>
 
-    <string name="price_changed_24h"> Ціна за 24ч</string>
+    <string name="price_changed_24h"> Ціна за 24г</string>
 
-    <string name="add_coin_from_hint"> Введите назва криптовалюты</string>
+    <string name="add_coin_from_hint"> Введіть назву криптовалюты</string>
 
     <string name="matches_found"> ​​збігаються знайдено</string>
 
     <string name="sort_menu_title"> Сортировка</string>
 
-    <string name="search_info"> Пошук інформації про криптовалюте, подожді пожайливоста</string>
 
     <string name="coin_not_found"> ​​Криптовалюта не знайдена</string>
 
     <string name="coin_added"> Криптовалюта добавлена ​​</string>
-
+    <string name="searching_info">Searching for cryptocurrency info, please wait</string>
     <string name="coin_already_added"> Криптовалюта вже додана</string>
-
+    <string name="finding">Find -</string>
     <string name="settings"> Настройки</string>
-
     <string name="remove_coin"> Видалити криптовалюту</string>
 
-    <string name="coins_deleted"> Криптовалюта удалена</string>
+    <string name="coins_deleted"> Криптовалюта видалена</string>
 
-    <string name="coin_deleted"> Криптовалюта удалена</string>
+    <string name="coin_deleted"> Криптовалюта видалена</string>
 
     <string name="twenty_four_hours"> Інформація за 24ч</string>
 
     <string name="open"> Відкриття</string>
 
-    <string name="high"> Наивысшая цена</string>
+    <string name="high"> Найбільша ціна</string>
 
-    <string name="low"> Найменша цена</string>
+    <string name="low"> Найменша ціна</string>
 
-    <string name="change"> Изменения</string>
+    <string name="change"> Зміни</string>
 
-    <string name="change_pct"> Изменения в%</string>
+    <string name="change_pct"> Зміни в%</string>
 
-    <string name="supply"> Оборот</string>
+    <string name="supply"> Оберт</string>
 
-    <string name="cap"> Рыночная капитализация</string>
+    <string name="cap"> Ринкова капіталізація</string>
 
     <string name="choose_currency"> Виберіть валюту</string>
 
-    <string name="volume_24h"> Объем 24ч</string>
+    <string name="volume_24h"> Обсяг 24г</string>
 
-    <string name="error"> Ошибка</string>
+    <string name="error"> Помилка</string>
 
     <string name="current_price"> Текуча цена</string>
 

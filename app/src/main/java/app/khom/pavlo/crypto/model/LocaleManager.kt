@@ -16,6 +16,7 @@ class LocaleManager {
 
         val ENGLISH = "en"
         val RUSSIAN = "ru"
+        val UKR = "uk"
 
         fun setLocale(context: Context): Context = updateResources(context, getLanguage(context))
 

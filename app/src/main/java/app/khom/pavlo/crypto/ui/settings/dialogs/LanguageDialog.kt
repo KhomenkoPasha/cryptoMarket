@@ -38,6 +38,7 @@ class LanguageDialog : DialogFragment() {
             when (id) {
                 R.id.lang_dialog_english -> onLanguageSelected(LocaleManager.ENGLISH)
                 R.id.lang_dialog_russian -> onLanguageSelected(LocaleManager.RUSSIAN)
+                R.id.lang_dialog_ukr -> onLanguageSelected(LocaleManager.UKR)
             }
         }
     }
@@ -46,6 +47,7 @@ class LanguageDialog : DialogFragment() {
         when (selectedLang) {
             LocaleManager.ENGLISH -> lang_dialog_english.isChecked = true
             LocaleManager.RUSSIAN -> lang_dialog_russian.isChecked = true
+            LocaleManager.UKR -> lang_dialog_ukr.isChecked = true
         }
     }
 

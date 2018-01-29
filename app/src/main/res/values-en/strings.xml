@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="app_name" >CryptoCap Market</string>
     <string name="dollars" >%s$</string>
     <string name="active_currencies" >Cryptocurrencies:</string>
     <string name="active_markets">Markets:</string>
@@ -87,8 +88,6 @@
     <string name="empty_text">No news found</string>
     <string name="empty_coins">Oops, it seems you do not have any cryptocurrency. You can add them through a plus sign or in the top cryptocurrency</string>
     <string name="language">Language</string>
-    <string name="english" translatable="false">English</string>
-    <string name="russian" translatable="false">Русский</string>
     <string name="empty_graph_text">Something went wrong with chart loading</string>
 
     <string-array name="histo_periods">
@@ -102,11 +101,5 @@
         <item>6 months</item>
         <item>1 year</item>
     </string-array>
-
-    <!--Non-translatable-->
-    <string name="coin_logo_transition_name" translatable="false">coinLogo</string>
-    <string name="dollar_sign" translatable="false">$</string>
-    <string name="pct_sign" translatable="false">%</string>
-    <string name="ok" translatable="false">OK</string>
-    <string name="add_to_favorites">В избранное</string>
+    <string name="add_to_favorites">To favorites</string>
 </resources>
