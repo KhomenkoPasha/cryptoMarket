@@ -31,7 +31,6 @@ class MainActivity : BaseActivity(), IMain.View {
 
     @Inject lateinit var presenter: IMain.Presenter
     @Inject lateinit var resProvider: ResourceProvider
-
     private lateinit var coinsLoading: ProgressBar
     private var deleteMenuItem: MenuItem? = null
     private var addMenuItem: MenuItem? = null

@@ -1,27 +1,177 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name" >КриптоКурс</string>
-    <string name="dollars" >%s$</string>
-    <string name="active_currencies" >Криптовалюти:</string>
-    <string name="active_markets">Ринки:</string>
-    <string name="total_market_cap_usd">Капиталізація:</string>
-    <string name="total_24h_volume_usd" >Оберт 24h:</string>
-    <string name="btc_dominance" >BTC частина:</string>
-    <string name="updated" >Оновлення:</string>
-    <string name="_7_days">7 днів:</string>
-    <string name="rank" >Рейтинг</string>
-    <string name="_24h">24 год:</string>
-    <string name="btc_price">BTC ціна:</string>
-    <string name="_1h">1 год:</string>
-    <string name="refreshed">Оновлення данних</string>
-    <string name="find">Пошук</string>
-    <string name="finding">Знайдено -</string>
-    <string name="cryptocurrency">криптовалют</string>
-    <string name="exit">Вихід</string>
-    <string name="exit_text">Выити з додатку?</string>
-    <string name="yes">Так</string>
-    <string name="cancel">Скасувати</string>
-    <string name="refresh">Refresh</string>
-    <string name="add_to_favorites">В избранное</string>
-</resources>
+    <string name="app_name"> КриптоКурс</string>
 
+    <string name="dollars">% s $</string>
+
+    <string name="active_currencies"> Криптовалюты:</string>
+
+    <string name="active_markets"> Рынки:</string>
+
+    <string name="total_market_cap_usd"> Капіталізация:</string>
+
+    <string name="total_24h_volume_usd"> Оборот 24 години:</string>
+
+    <string name="btc_dominance"> BTC частина:</string>
+
+    <string name="updated"> Обновлено:</string>
+
+    <string name="_7_days"> 7 днів:</string>
+
+    <string name="rank"> Рейтинг</string>
+
+    <string name="_24h"> 24 години:</string>
+
+    <string name="btc_price"> BTC цена:</string>
+
+    <string name="_1h"> 1 час:</string>
+
+    <string name="refreshed"> Обновление данных</string>
+
+    <string name="find"> Пошук</string>
+
+       
+    <string name="cryptocurrency"> криптовалют</string>
+
+    <string name="exit"> Вихід</string>
+
+    <string name="exit_text"> Вийти з програми?</string>
+
+    <string name="yes"> Да</string>
+
+    <string name="cancel"> Відміна</string>
+
+    <string name="refresh"> Оновити</string>
+
+    <string name="coins"> Избранное</string>
+
+    <string name="top100"> Рейтинг</string>
+
+    <string name="market"> Рынок</string>
+
+    <string name="news"> Новости</string>
+
+    <string name="sort_by"> Сортувати по</string>
+
+    <string name="coin_name"> Назва</string>
+
+    <string name="add_coin"> Додати криптовалюту</string>
+
+    <string name="price"> Ціна</string>
+
+    <string name="price_changed_24h"> Ціна за 24ч</string>
+
+    <string name="add_coin_from_hint"> Введите назва криптовалюты</string>
+
+    <string name="matches_found"> ​​збігаються знайдено</string>
+
+    <string name="sort_menu_title"> Сортировка</string>
+
+    <string name="search_info"> Пошук інформації про криптовалюте, подожді пожайливоста</string>
+
+    <string name="coin_not_found"> ​​Криптовалюта не знайдена</string>
+
+    <string name="coin_added"> Криптовалюта добавлена ​​</string>
+
+    <string name="coin_already_added"> Криптовалюта вже додана</string>
+
+    <string name="settings"> Настройки</string>
+
+    <string name="remove_coin"> Видалити криптовалюту</string>
+
+    <string name="coins_deleted"> Криптовалюта удалена</string>
+
+    <string name="coin_deleted"> Криптовалюта удалена</string>
+
+    <string name="twenty_four_hours"> Інформація за 24ч</string>
+
+    <string name="open"> Відкриття</string>
+
+    <string name="high"> Наивысшая цена</string>
+
+    <string name="low"> Найменша цена</string>
+
+    <string name="change"> Изменения</string>
+
+    <string name="change_pct"> Изменения в%</string>
+
+    <string name="supply"> Оборот</string>
+
+    <string name="cap"> Рыночная капитализация</string>
+
+    <string name="choose_currency"> Виберіть валюту</string>
+
+    <string name="volume_24h"> Объем 24ч</string>
+
+    <string name="error"> Ошибка</string>
+
+    <string name="current_price"> Текуча цена</string>
+
+    <string name="trading_price"> Ціна при покупці</string>
+
+    <string name="quantity"> Кількість</string>
+
+    <string name="trade_date"> Дата обміну</string>
+
+    <string name="total_value"> Загальна сума</string>
+
+    <string name="confirm_transaction"> Підтвердити транзакцію</string>
+
+    <string name="add_transaction"> Додати транзакцію</string>
+
+    <string name="add_trans_fill_all_fields"> Заповніть всі поля</string>
+
+    <string name="add_trans_fill_date"> Виберіть дату транзакції</string>
+
+    <string name="add_trans_fill_price"> Заповніть поля ціни</string>
+
+    <string name="add_trans_fill_quantity"> Заповніть поле количества</string>
+
+    <string name="total_holdings"> Сумма вкладів</string>
+
+    <string name="total_holdings_change"> Изменение за все время</string>
+
+    <string name="all_time"> За весь час</string>
+
+    <string name="profit"> прибуль</string>
+
+    <string name="loss"> убыток</string>
+
+    <string name="holdings_24h"> 24Ч</string>
+
+    <string name="holdings"> Вклады</string>
+
+    <string name="transaction_added"> Транзакция добавлена ​​</string>
+
+    <string name="current"> Текущие</string>
+    <string name="qty"> КОЛ</string>
+    <string name="val"> СУМ</string>
+    <string name="ch_pct"> ПЦТ ІЗМ</string>
+    <string name="prf"> ПРИБ</string>
+    <string name="ls"> УБЫТ</string>
+    <string name="profit_b"> Прибыль</string>
+    <string name="loss_b"> Втрати</string>
+    <string name="holdings_deleted"> Вклад удален</string>
+    <string name="holdings_data"> ІНФОРМАЦІЯ ПО ВКЛАДУ</string>
+    <string name="change_percent"> Процент змін</string>
+    <string name="allocations"> Распределение</string>
+    <string name="string_coins"> Криптовалюты</string>
+    <string name="enter_hashtag"> Введіть хэштег</string>
+    <string name="empty_text"> Новости не найдены</string>
+    <string name="empty_coins"> У вас немає криптовалют. Ви можете додати їх через знак "плюс" або через топ 100 криптовалют</string>
+    <string name="language"> Язык</string>
+    <string name="empty_graph_text"> Що то пошло не так, графік не був завантажений</string>
+    <string name="add_to_favorites"> В вибране</string>
+
+    <string-array name="histo_periods">
+        <item> 1 час </item>
+        <item> 12 годин </item>
+        <item> 24 часа </item>
+        <item> 3 дня </item>
+        <item> 1 неделя </item>
+        <item> 1 місяць </item>
+        <item> 3 місяця </item>
+        <item> 6 місяців </item>
+        <item> 1 год </item>
+    </string-array>
+</resources>

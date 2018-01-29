@@ -60,6 +60,10 @@ class CoinsFragment : DaggerFragment(), ICoins.View {
     }
 
     private fun setupSwipeRefresh() {
+        swipe_refresh.setColorSchemeResources(
+                R.color.colorPrimaryDark,
+                R.color.colorPrimaryDark,
+                R.color.colorPrimaryDark)
         swipe_refresh.setOnRefreshListener { presenter.onSwipeUpdate() }
     }
 

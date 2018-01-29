@@ -57,6 +57,10 @@ class TopCoinsFragment : DaggerFragment(), ITopCoins.View {
     }
 
     private fun setupSwipeRefresh() {
+        top_coins_fragment_swipe_refresh.setColorSchemeResources(
+                R.color.colorPrimaryDark,
+                R.color.colorPrimaryDark,
+                R.color.colorPrimaryDark)
         top_coins_fragment_swipe_refresh.setOnRefreshListener {
             presenter.onSwipeUpdate()
         }
