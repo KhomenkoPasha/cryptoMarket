@@ -10,9 +10,6 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
-/**
- * Created by ivanov_r on 17.08.2017.
- */
 class CoinInfoPresenter @Inject constructor(private val view: ICoinInfo.View,
                                             private val coinsController: CoinsController,
                                             private val networkRequests: NetworkRequests,
@@ -45,7 +42,6 @@ class CoinInfoPresenter @Inject constructor(private val view: ICoinInfo.View,
         view.setLogo(coin.imgUrl)
         view.setMainPrice(coin.price)
         setCoinInfo()
-        setupHoldings()
         view.setupSpinner()
     }
 
@@ -59,28 +55,6 @@ class CoinInfoPresenter @Inject constructor(private val view: ICoinInfo.View,
         view.setMarketCap(coin.mktCap)
     }
 
-    private fun setupHoldings() {
-        val holdingData = holdingsHandler.isThereSuchHolding(coin.from, coin.to)
-        if (holdingData != null) {
-            view.setHoldingQuantity(holdingData.quantity.toString())
-            view.setHoldingValue("$${getStringWithTwoDecimalsFromDouble(holdingsHandler.getTotalValueWithCurrentPriceByHoldingData(holdingData))}")
-
-            val changePercent = holdingsHandler.getChangePercentByHoldingData(holdingData)
-            view.setHoldingChangePercent("${getStringWithTwoDecimalsFromDouble(changePercent)}%")
-            view.setHoldingChangePercentColor(getChangeColor(changePercent))
-
-            view.setHoldingProfitLoss(getProfitLossTextBig(holdingsHandler.getChangeValueByHoldingData(holdingData), resProvider))
-            val changeValue = holdingsHandler.getChangeValueByHoldingData(holdingData)
-            view.setHoldingProfitValue("$${getStringWithTwoDecimalsFromDouble(changeValue)}")
-            view.setHoldingProfitValueColor(getChangeColor(changeValue))
-
-            view.setHoldingTradePrice("$${holdingData.price}")
-            view.setHoldingTradeDate(formatLongDateToString(holdingData.date, DEFAULT_DATE_FORMAT))
-            view.enableHoldings()
-        } else {
-            view.disableHoldings()
-        }
-    }
 
     private fun onFindCoinError(throwable: Throwable) {
         logger.logDebug("getCoinByName error " + throwable.toString())

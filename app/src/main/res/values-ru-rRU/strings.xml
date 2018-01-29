@@ -44,11 +44,11 @@
     <string name="coins_deleted">Монеты удалены</string>
     <string name="coin_deleted">Монета удалена</string>
     <string name="twenty_four_hours">Информация за 24ч</string>
-    <string name="open">ОТКРЫТИЕ</string>
-    <string name="high">НАИВЫСШАЯ</string>
-    <string name="low">НАИМЕНЬШАЯ</string>
-    <string name="change">ИЗМЕНЕНИЕ</string>
-    <string name="change_pct">ИЗМЕНЕНИЕ В %</string>
+    <string name="open">Открытие</string>
+    <string name="high">Наивысшая цена</string>
+    <string name="low">Наименьшая цена</string>
+    <string name="change">Изменения</string>
+    <string name="change_pct">Изменения в %</string>
     <string name="supply">Оборот</string>
     <string name="cap">Рыночная капитализация</string>
     <string name="choose_currency">Выберите валюту</string>
