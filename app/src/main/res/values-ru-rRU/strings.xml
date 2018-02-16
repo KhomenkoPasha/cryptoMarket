@@ -12,6 +12,7 @@
     <string name="rank" >Рейтинг</string>
     <string name="_24h">24 часа:</string>
     <string name="btc_price">BTC цена:</string>
+    <string name="news">Новости</string>
     <string name="_1h">1 час:</string>
     <string name="refreshed">Обновление данных</string>
     <string name="find">Поиск</string>

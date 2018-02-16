@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="com.twitter.sdk.android.CONSUMER_KEY" translatable="false">GscBWo1rrzAujaheXNqJptnB9</string>
+    <string name="com.twitter.sdk.android.CONSUMER_SECRET" translatable="false">LSuDH5zooP0APMB01QKXh3MKKxqhlaz67DPXCbfgmTz8FP4aQk</string>
+
     <string name="app_name" >CryptoCap Market</string>
     <string name="dollars" >%s$</string>
     <string name="active_currencies" >Cryptocurrencies:</string>
@@ -12,6 +15,7 @@
     <string name="rank" >Rank</string>
     <string name="_24h">24h:</string>
     <string name="btc_price">BTC price:</string>
+    <string name="news">News</string>
     <string name="_1h">1h:</string>
     <string name="refreshed">Refreshed</string>
     <string name="find">Find</string>

@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.res.Configuration
 import app.khom.pavlo.crypto.di.DaggerAppComponent
 import app.khom.pavlo.crypto.model.LocaleManager
+import com.twitter.sdk.android.core.Twitter
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.HasActivityInjector
 import javax.inject.Inject
@@ -21,6 +22,7 @@ class CApp : Application(), HasActivityInjector {
                 .application(this)
                 .build()
                 .inject(this)
+        Twitter.initialize(this)
 
     }
 

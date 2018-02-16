@@ -11,9 +11,9 @@ android {
         applicationId "app.khom.pavlo.crypto"
         minSdkVersion 19
         targetSdkVersion 27
-        versionCode 5
+        versionCode 6
         multiDexEnabled true
-        versionName "1.0.0"
+        versionName "1.1.0"
         javaCompileOptions {
             annotationProcessorOptions {
                 arguments = ["room.schemaLocation": "$projectDir/schemas".toString()]
@@ -81,6 +81,8 @@ dependencies {
     kapt "android.arch.persistence.room:compiler:$room_version"
     implementation "android.arch.persistence.room:runtime:$room_version"
     implementation "android.arch.persistence.room:rxjava2:$room_version"
+    implementation 'com.twitter.sdk.android:twitter-core:3.1.1'
+    implementation 'com.twitter.sdk.android:tweet-ui:3.1.1'
     //Other
     testImplementation 'org.amshove.kluent:kluent:1.20'
     implementation 'org.glassfish:javax.annotation:10.0-b28'

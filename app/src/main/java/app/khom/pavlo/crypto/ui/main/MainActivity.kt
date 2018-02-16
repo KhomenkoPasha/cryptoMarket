@@ -19,6 +19,7 @@ import app.khom.pavlo.crypto.R
 import app.khom.pavlo.crypto.activities.BaseActivity
 import app.khom.pavlo.crypto.ui.addCoin.AddCoinActivity
 import app.khom.pavlo.crypto.ui.coins.CoinsFragment
+import app.khom.pavlo.crypto.ui.news.NewsFragment
 import app.khom.pavlo.crypto.ui.settings.SettingsActivity
 import app.khom.pavlo.crypto.ui.topCoins.TopCoinsFragment
 import app.khom.pavlo.crypto.utils.ResourceProvider
@@ -36,6 +37,7 @@ class MainActivity : BaseActivity(), IMain.View {
     private var addMenuItem: MenuItem? = null
     private var sortMenuItem: MenuItem? = null
     private var settingsMenuItem: MenuItem? = null
+    private lateinit var newsFragment: Fragment
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -60,6 +62,8 @@ class MainActivity : BaseActivity(), IMain.View {
         val adapter = ViewPagerAdapter(supportFragmentManager)
         adapter.addFragment(CoinsFragment(), resProvider.getString(R.string.coins))
         adapter.addFragment(TopCoinsFragment(), resProvider.getString(R.string.top100))
+        newsFragment = NewsFragment()
+        adapter.addFragment(newsFragment, resProvider.getString(R.string.news))
         viewpager.adapter = adapter
         tabs.setupWithViewPager(viewpager)
         setCustomTab()
@@ -159,6 +163,7 @@ class MainActivity : BaseActivity(), IMain.View {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
+        newsFragment.onActivityResult(requestCode, resultCode, data)
     }
 
     override fun showToast(text: String) {
