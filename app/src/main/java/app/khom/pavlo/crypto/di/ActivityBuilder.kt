@@ -20,27 +20,27 @@ import dagger.android.ContributesAndroidInjector
 abstract class ActivityBuilder {
 
     @PerActivity
-    @ContributesAndroidInjector(modules = arrayOf(MainModule::class, MainFragmentProvider::class))
+    @ContributesAndroidInjector(modules = [MainModule::class, MainFragmentProvider::class])
     abstract fun bindMainActivity(): MainActivity
 
     @PerActivity
-    @ContributesAndroidInjector(modules = arrayOf(AddCoinModule::class))
+    @ContributesAndroidInjector(modules = [AddCoinModule::class])
     abstract fun bindAddCoinActivity(): AddCoinActivity
 
     @PerActivity
-    @ContributesAndroidInjector(modules = arrayOf(CoinInfoModule::class))
+    @ContributesAndroidInjector(modules = [CoinInfoModule::class])
     abstract fun bindCoinInfoActivity(): CoinInfoActivity
 
     @PerActivity
-    @ContributesAndroidInjector(modules = arrayOf(CoinAllocationModule::class))
+    @ContributesAndroidInjector(modules = [CoinAllocationModule::class])
     abstract fun bindCoinAllocationActivity(): CoinAllocationActivity
 
     @PerActivity
-    @ContributesAndroidInjector(modules = arrayOf(HoldingsModule::class))
+    @ContributesAndroidInjector(modules = [HoldingsModule::class])
     abstract fun bindHoldingsActivity(): HoldingsActivity
 
     @PerActivity
-    @ContributesAndroidInjector(modules = arrayOf(SettingsModule::class))
+    @ContributesAndroidInjector(modules = [SettingsModule::class])
     abstract fun bindSettingsActivity(): SettingsActivity
 
 }
