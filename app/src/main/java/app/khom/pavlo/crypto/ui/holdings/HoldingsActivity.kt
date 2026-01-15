@@ -1,10 +1,10 @@
 package app.khom.pavlo.crypto.ui.holdings
 
 import android.os.Bundle
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
-import android.support.v7.widget.Toolbar
-import android.support.v7.widget.helper.ItemTouchHelper
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import androidx.appcompat.widget.Toolbar
+import androidx.recyclerview.widget.ItemTouchHelper
 import app.khom.pavlo.crypto.R
 import app.khom.pavlo.crypto.activities.BaseActivity
 
