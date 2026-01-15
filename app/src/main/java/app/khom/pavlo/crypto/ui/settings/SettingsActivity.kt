@@ -1,7 +1,7 @@
 package app.khom.pavlo.crypto.ui.settings
 
 import android.os.Bundle
-import android.support.v7.widget.Toolbar
+import androidx.appcompat.widget.Toolbar
 import app.khom.pavlo.crypto.R
 import app.khom.pavlo.crypto.activities.BaseActivity
 import app.khom.pavlo.crypto.ui.settings.dialogs.LanguageDialog

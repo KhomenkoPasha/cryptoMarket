@@ -9,12 +9,12 @@
     android:focusableInTouchMode="true"
     tools:context=".ui.addCoin.AddCoinActivity">
 
-    <android.support.design.widget.AppBarLayout
+    <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/coin_allocation_app_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <android.support.v7.widget.Toolbar
+        <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -22,7 +22,7 @@
             app:titleTextColor="@color/grey_light"
             android:background="@color/colorPrimary"/>
 
-    </android.support.design.widget.AppBarLayout>
+    </com.google.android.material.appbar.AppBarLayout>
     <com.github.mikephil.charting.charts.PieChart
         android:layout_below="@id/coin_allocation_app_bar"
         android:id="@+id/coin_allocation_pie"

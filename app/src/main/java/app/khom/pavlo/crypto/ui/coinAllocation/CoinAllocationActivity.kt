@@ -2,7 +2,7 @@ package app.khom.pavlo.crypto.ui.coinAllocation
 
 import android.graphics.Color.TRANSPARENT
 import android.os.Bundle
-import android.support.v7.widget.Toolbar
+import androidx.appcompat.widget.Toolbar
 import android.view.View
 import app.khom.pavlo.crypto.R
 import app.khom.pavlo.crypto.activities.BaseActivity

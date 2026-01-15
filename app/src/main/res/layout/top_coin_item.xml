@@ -10,7 +10,7 @@
     android:padding="8dp">
 
 
-    <android.support.constraint.ConstraintLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -81,7 +81,7 @@
             app:layout_constraintEnd_toStartOf="@+id/top_coin_price"
             app:layout_constraintTop_toBottomOf="@+id/top_coin_price" />
 
-    </android.support.constraint.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <TableLayout
         android:layout_width="match_parent"

@@ -2,7 +2,7 @@ package app.khom.pavlo.crypto.utils
 
 import android.content.Context
 import android.graphics.drawable.Drawable
-import android.support.v4.content.ContextCompat
+import androidx.core.content.ContextCompat
 
 
 class ResourceProvider(val context: Context) {
