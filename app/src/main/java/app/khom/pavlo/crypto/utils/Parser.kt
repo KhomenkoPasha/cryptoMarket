@@ -9,6 +9,10 @@ import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 import java.util.*
 
+/**
+ * Created by rmnivnv on 12/07/2017.
+ */
+
 fun getCoinsFromJson(jsonObject: JsonObject, map: Map<String, ArrayList<String?>>): ArrayList<Coin> {
     val result: ArrayList<Coin> = ArrayList()
     var displayJson: JsonElement? = null
