@@ -4,10 +4,6 @@ import android.content.Context
 import android.util.Log
 import android.widget.Toast
 
-/**
- * Created by rmnivnv on 06/07/2017.
- */
-
 fun Context.toastShort(message: CharSequence) {
     Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
 }

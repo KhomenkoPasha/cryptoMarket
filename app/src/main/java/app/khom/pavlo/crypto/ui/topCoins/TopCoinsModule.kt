@@ -1,6 +1,6 @@
 package app.khom.pavlo.crypto.ui.topCoins
 
-import app.khom.pavlo.crypto.di.PerFragment
+import androidx.fragment.app.Fragment
 import app.khom.pavlo.crypto.model.CoinsController
 import app.khom.pavlo.crypto.model.PageController
 import app.khom.pavlo.crypto.model.db.CMDatabase
@@ -10,17 +10,19 @@ import app.khom.pavlo.crypto.utils.ResourceProvider
 import app.khom.pavlo.crypto.utils.Toaster
 import dagger.Module
 import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.android.components.FragmentComponent
+import dagger.hilt.android.scopes.FragmentScoped
 
-/**
- * Created by rmnivnv on 02/09/2017.
- */
+
+@InstallIn(FragmentComponent::class)
 @Module
 class TopCoinsModule {
 
-    @Provides @PerFragment
-    fun provideView(topCoinsFragment: TopCoinsFragment): ITopCoins.View = topCoinsFragment
+    @Provides @FragmentScoped
+    fun provideView(fragment: Fragment): ITopCoins.View = fragment as ITopCoins.View
 
-    @Provides @PerFragment
+    @Provides @FragmentScoped
     fun providePresenter(view: ITopCoins.View,
                          db: CMDatabase,
                          networkRequests: NetworkRequests,

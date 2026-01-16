@@ -11,9 +11,7 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
-/**
- * Created by ivanov_r on 13.09.2017.
- */
+
 class HoldingsPresenter @Inject constructor(private val view: IHoldings.View,
                                             private val db: CMDatabase,
                                             private val resourceProvider: ResourceProvider,

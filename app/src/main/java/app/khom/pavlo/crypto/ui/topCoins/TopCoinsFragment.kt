@@ -7,25 +7,27 @@ import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import app.khom.pavlo.crypto.R
 import app.khom.pavlo.crypto.model.*
 import app.khom.pavlo.crypto.ui.coinInfo.CoinInfoActivity
 import app.khom.pavlo.crypto.utils.ResourceProvider
-import dagger.android.support.DaggerFragment
-import kotlinx.android.synthetic.main.top_coins_fragment.*
+import app.khom.pavlo.crypto.databinding.TopCoinsFragmentBinding
+import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DividerItemDecoration
 
 
-
-
-class TopCoinsFragment : DaggerFragment(), ITopCoins.View {
+@AndroidEntryPoint
+class TopCoinsFragment : Fragment(), ITopCoins.View {
 
     @Inject lateinit var presenter: ITopCoins.Presenter
     @Inject lateinit var resProvider: ResourceProvider
     @Inject lateinit var coinsController: CoinsController
 
+    private var _binding: TopCoinsFragmentBinding? = null
+    private val binding get() = _binding!!
     private lateinit var recView: RecyclerView
     private lateinit var adapter: TopCoinsAdapter
     private var coins: ArrayList<TopCoinData> = ArrayList()
@@ -35,8 +37,10 @@ class TopCoinsFragment : DaggerFragment(), ITopCoins.View {
         presenter.onCreate(coins)
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
-            inflater.inflate(R.layout.top_coins_fragment, container, false)!!
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        _binding = TopCoinsFragmentBinding.inflate(inflater, container, false)
+        return binding.root
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -45,7 +49,7 @@ class TopCoinsFragment : DaggerFragment(), ITopCoins.View {
     }
 
     private fun setupRecView() {
-        recView = top_coins_fragment_rec_view
+        recView = binding.topCoinsFragmentRecView
         recView.layoutManager = LinearLayoutManager(activity)
         adapter = TopCoinsAdapter(coins, resProvider, presenter, coinsController,
                 clickListener = { presenter.onCoinClicked(it) })
@@ -57,11 +61,11 @@ class TopCoinsFragment : DaggerFragment(), ITopCoins.View {
     }
 
     private fun setupSwipeRefresh() {
-        top_coins_fragment_swipe_refresh.setColorSchemeResources(
+        binding.topCoinsFragmentSwipeRefresh.setColorSchemeResources(
                 R.color.colorPrimaryDark,
                 R.color.colorPrimaryDark,
                 R.color.colorPrimaryDark)
-        top_coins_fragment_swipe_refresh.setOnRefreshListener {
+        binding.topCoinsFragmentSwipeRefresh.setOnRefreshListener {
             presenter.onSwipeUpdate()
         }
     }
@@ -81,7 +85,7 @@ class TopCoinsFragment : DaggerFragment(), ITopCoins.View {
     }
 
     override fun hideRefreshing() {
-        top_coins_fragment_swipe_refresh.isRefreshing = false
+        binding.topCoinsFragmentSwipeRefresh.isRefreshing = false
     }
 
     override fun startCoinInfoActivity(name: String?) {
@@ -89,5 +93,10 @@ class TopCoinsFragment : DaggerFragment(), ITopCoins.View {
         intent.putExtra(NAME, name)
         intent.putExtra(TO, USD)
         activity?.startActivity(intent)
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

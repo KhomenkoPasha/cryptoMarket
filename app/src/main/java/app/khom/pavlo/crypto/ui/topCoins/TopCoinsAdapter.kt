@@ -1,22 +1,19 @@
 package app.khom.pavlo.crypto.ui.topCoins
 
-import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import app.khom.pavlo.crypto.R
+import app.khom.pavlo.crypto.databinding.TopCoinItemBinding
 import app.khom.pavlo.crypto.model.CoinsController
 import app.khom.pavlo.crypto.model.TopCoinData
 import app.khom.pavlo.crypto.utils.ResourceProvider
 import app.khom.pavlo.crypto.utils.addCommasToStringNumber
 import app.khom.pavlo.crypto.utils.getChangeColor
 import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.top_coin_item.view.*
+import androidx.recyclerview.widget.RecyclerView
+import android.view.ViewGroup
 import javax.inject.Inject
+import java.text.DecimalFormat
 
-/**
- * Created by rmnivnv on 02/09/2017.
- */
 class TopCoinsAdapter @Inject constructor(private val coins: ArrayList<TopCoinData>,
                                           private val resProvider: ResourceProvider,
                                           private val presenter: ITopCoins.Presenter,
@@ -24,40 +21,42 @@ class TopCoinsAdapter @Inject constructor(private val coins: ArrayList<TopCoinDa
                                           private val clickListener: (TopCoinData) -> Unit) :
         RecyclerView.Adapter<TopCoinsAdapter.ViewHolder>() {
 
-    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ViewHolder {
-        val view = LayoutInflater.from(parent?.context).inflate(R.layout.top_coin_item, parent, false)
-        return ViewHolder(view)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        val binding = TopCoinItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return ViewHolder(binding)
     }
 
-    override fun onBindViewHolder(holder: ViewHolder?, position: Int) {
-        holder?.bindItems(coins[position], clickListener)
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        holder.bindItems(coins[position], clickListener)
     }
 
-    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        fun bindItems(coin: TopCoinData, listener: (TopCoinData) -> Unit) = with(itemView) {
-            setOnClickListener { listener(coin) }
-            top_coin_rank.text = coin.rank.toString()
-            top_coin_name.text = coin.name
-            top_coin_price.text = coin.price_usd
+    inner class ViewHolder(private val binding: TopCoinItemBinding) : RecyclerView.ViewHolder(binding.root) {
+        fun bindItems(coin: TopCoinData, listener: (TopCoinData) -> Unit) = with(binding) {
+            root.setOnClickListener { listener(coin) }
+            topCoinRank.text = coin.rank.toString()
+            topCoinName.text = coin.name
+            topCoinPrice.text = addCommasToStringNumber(coin.price_usd)
             val pctCh24h: String = coin.percent_change_24h ?: ""
-            if (pctCh24h.isNotEmpty()) {
-                top_coin_24h_pct.text = "$pctCh24h%"
-                top_coin_24h_pct.setTextColor(resProvider.getColor(getChangeColor(pctCh24h.replace(",", "").toFloat())))
+            val pctValue = pctCh24h.replace(",", "").toDoubleOrNull()
+            if (pctValue != null) {
+                val pctText = DecimalFormat("#.####").format(pctValue)
+                topCoin24hPct.text = "$pctText%"
+                topCoin24hPct.setTextColor(resProvider.getColor(getChangeColor(pctValue.toFloat())))
             }
-            top_coin_market_cap.text = addCommasToStringNumber(coin.market_cap_usd)
-            top_coin_supply.text = addCommasToStringNumber(coin.total_supply)
-            top_coin_volume_24h.text = addCommasToStringNumber(coin.vol24Usd)
+            topCoinMarketCap.text = addCommasToStringNumber(coin.market_cap_usd)
+            topCoinSupply.text = addCommasToStringNumber(coin.total_supply)
+            topCoinVolume24h.text = addCommasToStringNumber(coin.vol24Usd)
             if (!coin.imgUrl.isNullOrEmpty()) {
-                Picasso.with(context)
+                Picasso.with(binding.root.context)
                         .load(coin.imgUrl)
-                        .into(top_coin_logo)
+                        .into(topCoinLogo)
             }
             if (coinsController.coinIsAdded(coin)) {
-                top_coin_add_icon.setImageDrawable(resProvider.getDrawable(R.drawable.ic_done))
+                topCoinAddIcon.setImageDrawable(resProvider.getDrawable(R.drawable.ic_done))
             } else {
-                top_coin_add_icon.setImageDrawable(resProvider.getDrawable(R.drawable.ic_add_circle))
-                top_coin_add_layout.setOnClickListener {
-                    presenter.onAddCoinClicked(coin, itemView)
+                topCoinAddIcon.setImageDrawable(resProvider.getDrawable(R.drawable.ic_add_circle))
+                topCoinAddLayout.setOnClickListener {
+                    presenter.onAddCoinClicked(coin, root)
                 }
             }
         }

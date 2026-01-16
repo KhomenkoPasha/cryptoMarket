@@ -6,9 +6,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import app.khom.pavlo.crypto.R
+import app.khom.pavlo.crypto.databinding.SortDialogBinding
 import app.khom.pavlo.crypto.model.rxbus.CoinsSortMethodUpdated
 import app.khom.pavlo.crypto.model.rxbus.RxBus
-import kotlinx.android.synthetic.main.sort_dialog.*
 
 
 class SortDialog : DialogFragment() {
@@ -23,21 +23,25 @@ class SortDialog : DialogFragment() {
     }
 
     private var selectedSort: String? = null
+    private var _binding: SortDialogBinding? = null
+    private val binding get() = _binding!!
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         selectedSort = arguments?.getString("sort")
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
-            inflater.inflate(R.layout.sort_dialog, container, false)!!
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        _binding = SortDialogBinding.inflate(inflater, container, false)
+        return binding.root
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        sort_cancel.setOnClickListener { dismiss() }
-        sort_ok.setOnClickListener { onOkClicked() }
+        binding.sortCancel.setOnClickListener { dismiss() }
+        binding.sortOk.setOnClickListener { onOkClicked() }
         setCheckedButton()
-        radio_group.setOnCheckedChangeListener { _, id ->
+        binding.radioGroup.setOnCheckedChangeListener { _, id ->
             when (id) {
                 NOTHING_SELECTED -> {}
                 R.id.sort_dialog_by_name -> selectedSort = SORT_BY_NAME
@@ -56,11 +60,16 @@ class SortDialog : DialogFragment() {
 
     private fun setCheckedButton() {
         when (selectedSort) {
-            SORT_BY_NAME -> sort_dialog_by_name.isChecked = true
-            SORT_BY_PRICE_INCREASE -> sort_dialog_by_price_increase.isChecked = true
-            SORT_BY_PRICE_DECREASE -> sort_dialog_by_price_decrease.isChecked = true
-            SORT_BY_24H_PRICE_INCREASE -> sort_dialog_by_24h_price_increase.isChecked = true
-            SORT_BY_24H_PRICE_DECREASE -> sort_dialog_by_24h_price_decrease.isChecked = true
+            SORT_BY_NAME -> binding.sortDialogByName.isChecked = true
+            SORT_BY_PRICE_INCREASE -> binding.sortDialogByPriceIncrease.isChecked = true
+            SORT_BY_PRICE_DECREASE -> binding.sortDialogByPriceDecrease.isChecked = true
+            SORT_BY_24H_PRICE_INCREASE -> binding.sortDialogBy24hPriceIncrease.isChecked = true
+            SORT_BY_24H_PRICE_DECREASE -> binding.sortDialogBy24hPriceDecrease.isChecked = true
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

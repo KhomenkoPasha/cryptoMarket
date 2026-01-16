@@ -1,6 +1,6 @@
 package app.khom.pavlo.crypto.ui.coinInfo
 
-import app.khom.pavlo.crypto.di.PerActivity
+import android.app.Activity
 import app.khom.pavlo.crypto.model.CoinsController
 import app.khom.pavlo.crypto.model.GraphMaker
 import app.khom.pavlo.crypto.model.HoldingsHandler
@@ -9,15 +9,19 @@ import app.khom.pavlo.crypto.utils.Logger
 import app.khom.pavlo.crypto.utils.ResourceProvider
 import dagger.Module
 import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.android.components.ActivityComponent
+import dagger.hilt.android.scopes.ActivityScoped
 
 
+@InstallIn(ActivityComponent::class)
 @Module
 class CoinInfoModule {
 
-    @Provides @PerActivity
-    fun provideView(coinInfoActivity: CoinInfoActivity): ICoinInfo.View = coinInfoActivity
+    @Provides @ActivityScoped
+    fun provideView(activity: Activity): ICoinInfo.View = activity as ICoinInfo.View
 
-    @Provides @PerActivity
+    @Provides @ActivityScoped
     fun providePresenter(view: ICoinInfo.View,
                          coinsController: CoinsController,
                          networkRequests: NetworkRequests,

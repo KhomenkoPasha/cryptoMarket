@@ -11,22 +11,26 @@ import app.khom.pavlo.crypto.activities.BaseActivity
 import app.khom.pavlo.crypto.model.NAME
 import app.khom.pavlo.crypto.model.TO
 import app.khom.pavlo.crypto.utils.ResourceProvider
+import app.khom.pavlo.crypto.databinding.ActivityCoinInfoBinding
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.CandleData
 import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.activity_coin_info.*
+import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
+@AndroidEntryPoint
 class CoinInfoActivity : BaseActivity(), ICoinInfo.View {
 
     @Inject lateinit var presenter: ICoinInfo.Presenter
     @Inject lateinit var resProvider: ResourceProvider
+    private lateinit var binding: ActivityCoinInfoBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_coin_info)
+        binding = ActivityCoinInfoBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         setupToolbar()
-        presenter.onCreate(intent.extras.getString(NAME), intent.extras.getString(TO))
+        presenter.onCreate(intent.getStringExtra(NAME) ?: "", intent.getStringExtra(TO) ?: "")
     }
 
     private fun setupToolbar() {
@@ -38,10 +42,10 @@ class CoinInfoActivity : BaseActivity(), ICoinInfo.View {
     }
 
     override fun setupSpinner() {
-        coin_info_graph_periods.adapter = ArrayAdapter<String>(this, R.layout.period_item, R.id.period,
+        binding.coinInfoGraphPeriods.adapter = ArrayAdapter<String>(this, R.layout.period_item, R.id.period,
                 resProvider.getStringArray(R.array.histo_periods))
-        coin_info_graph_periods.setSelection(5)
-        coin_info_graph_periods.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+        binding.coinInfoGraphPeriods.setSelection(5)
+        binding.coinInfoGraphPeriods.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(p0: AdapterView<*>?) {}
 
             override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
@@ -58,12 +62,12 @@ class CoinInfoActivity : BaseActivity(), ICoinInfo.View {
         if (url.isNotEmpty()) {
             Picasso.with(this)
                     .load(url)
-                    .into(coin_info_logo)
+                    .into(binding.coinInfoLogo)
         }
     }
 
     override fun setMainPrice(price: String) {
-        coin_info_main_price.text = price
+        binding.coinInfoMainPrice.text = price
     }
 
     override fun onDestroy() {
@@ -78,61 +82,56 @@ class CoinInfoActivity : BaseActivity(), ICoinInfo.View {
 
 
     override fun drawChart(line: CandleData) {
-        val xAxis = coin_info_graph.xAxis
+        val xAxis = binding.coinInfoGraph.xAxis
         xAxis.position = XAxis.XAxisPosition.BOTTOM
-        //TODO set date
-//        val format = SimpleDateFormat("dd MMM", Locale.getDefault())
-//        xAxis.valueFormatter = IAxisValueFormatter { value, axis ->
-//            format.format(Date(value.toLong() * 1000))
-//        }
-        coin_info_graph.data = line
-        coin_info_graph.invalidate()
+        binding.coinInfoGraph.data = line
+        binding.coinInfoGraph.invalidate()
     }
 
     override fun setOpen(open: String) {
-        coin_info_open.text = open
+        binding.coinInfoOpen.text = open
     }
 
     override fun setHigh(high: String) {
-        coin_info_high.text = high
+        binding.coinInfoHigh.text = high
     }
 
     override fun setLow(low: String) {
-        coin_info_low.text = low
+        binding.coinInfoLow.text = low
     }
 
     override fun setChange(change: String) {
-        coin_info_change.text = change
+        binding.coinInfoChange.text = change
     }
 
     override fun setChangePct(pct: String) {
-        coin_info_change_pct.text = pct
+        binding.coinInfoChangePct.text = pct
     }
 
     override fun setSupply(supply: String) {
-        coin_info_supply.text = supply
+        binding.coinInfoSupply.text = supply
     }
 
     override fun setMarketCap(cap: String) {
-        coin_info_market_cap.text = cap
+        binding.coinInfoMarketCap.text = cap
     }
 
     override fun enableGraphLoading() {
-        coin_info_loading.visibility = View.VISIBLE
-        coin_info_graph.visibility = View.GONE
+        binding.coinInfoLoading.visibility = View.VISIBLE
+        binding.coinInfoGraph.visibility = View.GONE
     }
 
     override fun disableGraphLoading() {
-        coin_info_loading.visibility = View.GONE
-        coin_info_graph.visibility = View.VISIBLE
+        binding.coinInfoLoading.visibility = View.GONE
+        binding.coinInfoGraph.visibility = View.VISIBLE
     }
 
 
     override fun enableEmptyGraphText() {
-        coin_info_empty_graph.visibility = View.VISIBLE
+        binding.coinInfoEmptyGraph.visibility = View.VISIBLE
     }
 
     override fun disableEmptyGraphText() {
-        coin_info_empty_graph.visibility = View.GONE
+        binding.coinInfoEmptyGraph.visibility = View.GONE
     }
 }

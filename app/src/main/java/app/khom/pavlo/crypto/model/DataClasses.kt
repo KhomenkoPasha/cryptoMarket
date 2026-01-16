@@ -1,8 +1,8 @@
 package app.khom.pavlo.crypto.model
 
-import android.arch.persistence.room.ColumnInfo
-import android.arch.persistence.room.Entity
-import android.arch.persistence.room.PrimaryKey
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import com.google.gson.JsonObject
 import com.google.gson.annotations.SerializedName
 
@@ -26,10 +26,10 @@ data class InfoCoin(
         @SerializedName("FullName") var fullName: String = "",
         @SerializedName("Algorithm") var algorithm: String = "",
         @SerializedName("ProofType") var proofType: String = "",
-        @SerializedName("FullyPremined") var fullyPremined: String = "",
-        @SerializedName("TotalCoinSupply") var totalCoinSupply: String = "",
-        @SerializedName("PreMinedValue") var preMinedValue: String = "",
-        @SerializedName("TotalCoinsFreeFloat") var totalCoinsFreeFloat: String = "",
+        @SerializedName("FullyPremined") var fullyPremined: String? = null,
+        @SerializedName("TotalCoinSupply") var totalCoinSupply: String? = null,
+        @SerializedName("PreMinedValue") var preMinedValue: String? = null,
+        @SerializedName("TotalCoinsFreeFloat") var totalCoinsFreeFloat: String? = null,
         @SerializedName("SortOrder") var sortOrder: String = "")
 
 @Entity(tableName = "coins", primaryKeys = ["from_name", "to_name"])

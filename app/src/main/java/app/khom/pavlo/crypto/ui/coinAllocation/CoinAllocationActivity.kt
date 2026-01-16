@@ -7,19 +7,23 @@ import android.view.View
 import app.khom.pavlo.crypto.R
 import app.khom.pavlo.crypto.activities.BaseActivity
 import app.khom.pavlo.crypto.utils.ResourceProvider
+import app.khom.pavlo.crypto.databinding.ActivityCoinAllocationBinding
 import com.github.mikephil.charting.components.Description
 import com.github.mikephil.charting.data.PieData
-import kotlinx.android.synthetic.main.activity_coin_allocation.*
+import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
+@AndroidEntryPoint
 class CoinAllocationActivity : BaseActivity(), ICoinAllocation.View {
 
     @Inject lateinit var presenter: ICoinAllocation.Presenter
     @Inject lateinit var resProvider: ResourceProvider
+    private lateinit var binding: ActivityCoinAllocationBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_coin_allocation)
+        binding = ActivityCoinAllocationBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         setupToolbar()
         presenter.onCreate()
     }
@@ -34,7 +38,7 @@ class CoinAllocationActivity : BaseActivity(), ICoinAllocation.View {
     }
 
     override fun drawPieChart(pieData: PieData) {
-        with(coin_allocation_pie) {
+        with(binding.coinAllocationPie) {
             data = pieData
             description = Description().apply { text = "Coin % of Holdings" }
             setHoleColor(TRANSPARENT)
@@ -48,12 +52,12 @@ class CoinAllocationActivity : BaseActivity(), ICoinAllocation.View {
     }
 
     override fun enableGraphLoading() {
-        coin_allocation_loading.visibility = View.VISIBLE
-        coin_allocation_pie.visibility = View.GONE
+        binding.coinAllocationLoading.visibility = View.VISIBLE
+        binding.coinAllocationPie.visibility = View.GONE
     }
 
     override fun disableGraphLoading() {
-        coin_allocation_loading.visibility = View.GONE
-        coin_allocation_pie.visibility = View.VISIBLE
+        binding.coinAllocationLoading.visibility = View.GONE
+        binding.coinAllocationPie.visibility = View.VISIBLE
     }
 }

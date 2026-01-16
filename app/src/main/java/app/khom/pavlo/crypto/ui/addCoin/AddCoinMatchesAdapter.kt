@@ -1,42 +1,41 @@
 package app.khom.pavlo.crypto.ui.addCoin
 
 import android.content.Context
-import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import app.khom.pavlo.crypto.R
+import app.khom.pavlo.crypto.databinding.AddCoinMatchesItemBinding
 import app.khom.pavlo.crypto.model.InfoCoin
 import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.add_coin_matches_item.view.*
+import androidx.recyclerview.widget.RecyclerView
 
 
 class AddCoinMatchesAdapter(private val items: ArrayList<InfoCoin>, private val context: Context,
                             val listener: (InfoCoin) -> Unit) : RecyclerView.Adapter<AddCoinMatchesAdapter.ViewHolder>() {
 
-    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): AddCoinMatchesAdapter.ViewHolder {
-        val v = LayoutInflater.from(parent?.context).inflate(R.layout.add_coin_matches_item, parent, false)
-        return ViewHolder(v)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        val binding = AddCoinMatchesItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return ViewHolder(binding)
     }
 
-    override fun onBindViewHolder(holder: ViewHolder?, position: Int) {
-        holder?.bindItems(items[position], listener)
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        holder.bindItems(items[position], listener)
     }
 
     override fun getItemCount() = items.size
 
-    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        fun bindItems(coin: InfoCoin, listener: (InfoCoin) -> Unit) = with(itemView) {
-            add_coin_name.text = coin.coinName
-            add_coin_short_name.text = coin.name
+    inner class ViewHolder(private val binding: AddCoinMatchesItemBinding) : RecyclerView.ViewHolder(binding.root) {
+        fun bindItems(coin: InfoCoin, listener: (InfoCoin) -> Unit) = with(binding) {
+            addCoinName.text = coin.coinName
+            addCoinShortName.text = coin.name
             if (!coin.imageUrl.isEmpty()) {
                 Picasso.with(context)
                         .load(coin.imageUrl)
-                        .into(add_coin_icon)
+                        .into(addCoinIcon)
             } else {
-                add_coin_icon.visibility = View.INVISIBLE
+                addCoinIcon.visibility = View.INVISIBLE
             }
-            setOnClickListener { listener(coin) }
+            root.setOnClickListener { listener(coin) }
         }
     }
 }

@@ -1,56 +1,45 @@
 package app.khom.pavlo.crypto.ui.news
 
-import android.content.Intent
 import android.os.Bundle
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import app.khom.pavlo.crypto.R
-import dagger.android.support.DaggerFragment
-import com.twitter.sdk.android.core.Callback
-import com.twitter.sdk.android.core.Result
-import com.twitter.sdk.android.core.TwitterException
-import com.twitter.sdk.android.core.TwitterSession
-import com.twitter.sdk.android.core.models.Tweet
-import kotlinx.android.synthetic.main.news_fragment.*
+import app.khom.pavlo.crypto.databinding.NewsFragmentBinding
+import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 //hq9s n25b uymj   twitter code
-class NewsFragment : DaggerFragment(), INews.View {
+@AndroidEntryPoint
+class NewsFragment : Fragment(), INews.View {
 
     @Inject
     lateinit var presenter: INews.Presenter
 
-    private var tweets: ArrayList<Tweet> = ArrayList()
+    private var items: ArrayList<NewsItem> = ArrayList()
     private lateinit var recView: RecyclerView
     private lateinit var adapter: NewsAdapter
     private lateinit var linearLayoutManager: LinearLayoutManager
+    private var _binding: NewsFragmentBinding? = null
+    private val binding get() = _binding!!
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        presenter.onCreate(tweets)
+        presenter.onCreate(items)
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
-            inflater.inflate(R.layout.news_fragment, container, false)!!
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        _binding = NewsFragmentBinding.inflate(inflater, container, false)
+        return binding.root
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupRecView()
-
-        twitter_login_btn.callback = object : Callback<TwitterSession>() {
-            override fun success(result: Result<TwitterSession>?) {
-                presenter.onSuccessLogin(result)
-            }
-
-            override fun failure(exception: TwitterException?) {
-
-            }
-        }
-
-        news_fab.setOnClickListener { presenter.onFabClicked() }
+        binding.newsFab.setOnClickListener { presenter.onFabClicked() }
         setupSwipeRefresh()
     }
 
@@ -65,58 +54,45 @@ class NewsFragment : DaggerFragment(), INews.View {
     }
 
     private fun setupSwipeRefresh() {
-        news_swipe_refresh.setColorSchemeResources(
+        binding.newsSwipeRefresh.setColorSchemeResources(
                 R.color.colorPrimaryDark,
                 R.color.colorPrimaryDark,
                 R.color.colorPrimaryDark)
-        news_swipe_refresh.setOnRefreshListener {
+        binding.newsSwipeRefresh.setOnRefreshListener {
             presenter.onSwipeUpdate() }
     }
 
     private fun setupRecView() {
-        recView = news_rec_view
+        recView = binding.newsRecView
         linearLayoutManager = LinearLayoutManager(activity)
         recView.layoutManager = linearLayoutManager
-        adapter = NewsAdapter(tweets)
+        adapter = NewsAdapter(items)
         recView.adapter = adapter
         recView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrolled(recyclerView: RecyclerView?, dx: Int, dy: Int) {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 presenter.onScrolled(dy, linearLayoutManager.childCount, linearLayoutManager.itemCount, linearLayoutManager.findFirstVisibleItemPosition())
             }
         })
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        twitter_login_btn.onActivityResult(requestCode, resultCode, data)
-    }
-
-    override fun hideLoginBtn() {
-        twitter_login_btn.visibility = View.GONE
-    }
-
-    override fun showLoginBtn() {
-        twitter_login_btn.visibility = View.VISIBLE
-    }
-
     override fun showRecView() {
-        news_rec_view.visibility = View.VISIBLE
+        binding.newsRecView.visibility = View.VISIBLE
     }
 
-    override fun updateInsertedTweets(startPos: Int, count: Int) {
-        adapter.notifyItemRangeInserted(startPos, count)
+    override fun setItems(items: List<NewsItem>) {
+        adapter.notifyDataSetChanged()
     }
 
     override fun showLoading() {
-        news_loading.visibility = View.VISIBLE
+        binding.newsLoading.visibility = View.VISIBLE
     }
 
     override fun hideLoading() {
-        news_loading.visibility = View.GONE
+        binding.newsLoading.visibility = View.GONE
     }
 
     override fun hideSwipeRefreshing() {
-        news_swipe_refresh.isRefreshing = false
+        binding.newsSwipeRefresh.isRefreshing = false
     }
 
     override fun showSearchDialog(query: String) {
@@ -128,18 +104,23 @@ class NewsFragment : DaggerFragment(), INews.View {
     }
 
     override fun showEmptyNews() {
-        news_empty_text.visibility = View.VISIBLE
+        binding.newsEmptyText.visibility = View.VISIBLE
     }
 
     override fun hideEmptyNews() {
-        news_empty_text.visibility = View.GONE
+        binding.newsEmptyText.visibility = View.GONE
     }
 
     override fun showFab() {
-        news_fab.visibility = View.VISIBLE
+        binding.newsFab.visibility = View.VISIBLE
     }
 
     override fun hideFab() {
-        news_fab.visibility = View.GONE
+        binding.newsFab.visibility = View.GONE
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }
