@@ -1,6 +1,6 @@
 package app.khom.pavlo.crypto.model.db
 
-import android.arch.persistence.room.*
+import androidx.room.*
 import app.khom.pavlo.crypto.model.HoldingData
 import io.reactivex.Flowable
 

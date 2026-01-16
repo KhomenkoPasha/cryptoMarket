@@ -15,18 +15,22 @@ import app.khom.pavlo.crypto.ui.coinAllocation.CoinAllocationActivity
 import app.khom.pavlo.crypto.ui.coinInfo.CoinInfoActivity
 import app.khom.pavlo.crypto.ui.holdings.HoldingsActivity
 import app.khom.pavlo.crypto.utils.ResourceProvider
-import dagger.android.support.DaggerFragment
-import kotlinx.android.synthetic.main.coins_fragment.*
+import androidx.fragment.app.Fragment
+import app.khom.pavlo.crypto.databinding.CoinsFragmentBinding
+import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 
-class CoinsFragment : DaggerFragment(), ICoins.View {
+@AndroidEntryPoint
+class CoinsFragment : Fragment(), ICoins.View {
 
     @Inject lateinit var presenter: ICoins.Presenter
     @Inject lateinit var resProvider: ResourceProvider
     @Inject lateinit var multiSelector: MultiSelector
     @Inject lateinit var holdingsHandler: HoldingsHandler
 
+    private var _binding: CoinsFragmentBinding? = null
+    private val binding get() = _binding!!
     private lateinit var recView: RecyclerView
     private lateinit var adapter: CoinsListAdapter
     private var coins: ArrayList<Coin> = ArrayList()
@@ -36,20 +40,22 @@ class CoinsFragment : DaggerFragment(), ICoins.View {
         presenter.onCreate(coins)
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
-            inflater.inflate(R.layout.coins_fragment, container, false)!!
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        _binding = CoinsFragmentBinding.inflate(inflater, container, false)
+        return binding.root
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupRecView()
         setupSwipeRefresh()
         presenter.onViewCreated()
-        coins_fragment_holding_layout.setOnClickListener { presenter.onHoldingsClicked() }
-        coins_fragment_allocations.setOnClickListener { presenter.onAllocationsClicked() }
+        binding.coinsFragmentHoldingLayout.setOnClickListener { presenter.onHoldingsClicked() }
+        binding.coinsFragmentAllocations.setOnClickListener { presenter.onAllocationsClicked() }
     }
 
     private fun setupRecView() {
-        recView = coins_fragment_rec_view
+        recView = binding.coinsFragmentRecView
         recView.layoutManager = LinearLayoutManager(activity)
         adapter = CoinsListAdapter(coins, resProvider, multiSelector, holdingsHandler,
                 clickListener = { presenter.onCoinClicked(it) })
@@ -60,11 +66,11 @@ class CoinsFragment : DaggerFragment(), ICoins.View {
     }
 
     private fun setupSwipeRefresh() {
-        swipe_refresh.setColorSchemeResources(
+        binding.swipeRefresh.setColorSchemeResources(
                 R.color.colorPrimaryDark,
                 R.color.colorPrimaryDark,
                 R.color.colorPrimaryDark)
-        swipe_refresh.setOnRefreshListener { presenter.onSwipeUpdate() }
+        binding.swipeRefresh.setOnRefreshListener { presenter.onSwipeUpdate() }
     }
 
     override fun onStart() {
@@ -82,15 +88,15 @@ class CoinsFragment : DaggerFragment(), ICoins.View {
     }
 
     override fun hideRefreshing() {
-        swipe_refresh.isRefreshing = false
+        binding.swipeRefresh.isRefreshing = false
     }
 
     override fun enableSwipeToRefresh() {
-        swipe_refresh.isEnabled = true
+        binding.swipeRefresh.isEnabled = true
     }
 
     override fun disableSwipeToRefresh() {
-        swipe_refresh.isEnabled = false
+        binding.swipeRefresh.isEnabled = false
     }
 
     override fun startCoinInfoActivity(name: String?, to: String?) {
@@ -105,25 +111,25 @@ class CoinsFragment : DaggerFragment(), ICoins.View {
     }
 
     override fun enableTotalHoldings() {
-        coins_fragment_holding_layout.visibility = View.VISIBLE
-        coins_fragment_holdings_line.visibility = View.VISIBLE
+        binding.coinsFragmentHoldingLayout.visibility = View.VISIBLE
+        binding.coinsFragmentHoldingsLine.visibility = View.VISIBLE
     }
 
     override fun disableTotalHoldings() {
-        coins_fragment_holding_layout.visibility = View.GONE
-        coins_fragment_holdings_line.visibility = View.GONE
+        binding.coinsFragmentHoldingLayout.visibility = View.GONE
+        binding.coinsFragmentHoldingsLine.visibility = View.GONE
     }
 
     override fun setTotalHoldingsValue(total: String) {
-        coins_fragment_total_holdings.text = total
+        binding.coinsFragmentTotalHoldings.text = total
     }
 
     override fun setTotalHoldingsChangePercent(percent: String) {
-        coins_fragment_holdings_change_percent.text = percent
+        binding.coinsFragmentHoldingsChangePercent.text = percent
     }
 
     override fun setTotalHoldingsChangePercentColor(color: Int) {
-        coins_fragment_holdings_change_percent.setTextColor(resProvider.getColor(color))
+        binding.coinsFragmentHoldingsChangePercent.setTextColor(resProvider.getColor(color))
     }
 
     override fun startHoldingsActivity() {
@@ -131,22 +137,27 @@ class CoinsFragment : DaggerFragment(), ICoins.View {
     }
 
     override fun setTotalHoldingsChangeValue(value: String) {
-        coins_fragment_holdings_change_value.text = value
+        binding.coinsFragmentHoldingsChangeValue.text = value
     }
 
     override fun setTotalHoldingsChangeValueColor(color: Int) {
-        coins_fragment_holdings_change_value.setTextColor(resProvider.getColor(color))
+        binding.coinsFragmentHoldingsChangeValue.setTextColor(resProvider.getColor(color))
     }
 
     override fun setAllTimeProfitLossString(text: String) {
-        coins_fragment_all_time_profit_loss.text = text
+        binding.coinsFragmentAllTimeProfitLoss.text = text
     }
 
     override fun enableEmptyText() {
-        coins_fragment_empty_text.visibility = View.VISIBLE
+        binding.coinsFragmentEmptyText.visibility = View.VISIBLE
     }
 
     override fun disableEmptyText() {
-        coins_fragment_empty_text.visibility = View.GONE
+        binding.coinsFragmentEmptyText.visibility = View.GONE
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

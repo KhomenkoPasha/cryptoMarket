@@ -1,6 +1,7 @@
 package app.khom.pavlo.crypto.model.network
 
 import app.khom.pavlo.crypto.model.*
+import app.khom.pavlo.crypto.ui.news.NewsItem
 import app.khom.pavlo.crypto.utils.*
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
@@ -84,8 +85,15 @@ class NetworkRequests(private val cryptoCompareAPI: CryptoCompareAPI,
     }
 
     fun getTopCoins(): Single<List<TopCoinData>> {
-        return coinMarketCapApi.getTopCoins(COIN_MARKET_CAP_URL_TICKER, 100)
+        return cryptoCompareAPI.getTopCoins(100, USD)
                 .subscribeOn(Schedulers.io())
+                .map { getTopCoinsFromJson(it) }
+    }
+
+    fun getNews(categories: String?): Single<ArrayList<NewsItem>> {
+        return cryptoCompareAPI.getNews("EN", categories)
+                .subscribeOn(Schedulers.io())
+                .map { getNewsFromJson(it) }
     }
 
 }

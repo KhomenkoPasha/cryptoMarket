@@ -1,8 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="com.twitter.sdk.android.CONSUMER_KEY" translatable="false">GscBWo1rrzAujaheXNqJptnB9</string>
-    <string name="com.twitter.sdk.android.CONSUMER_SECRET" translatable="false">LSuDH5zooP0APMB01QKXh3MKKxqhlaz67DPXCbfgmTz8FP4aQk</string>
-
     <string name="app_name" >CryptoCap Market</string>
     <string name="dollars" >%s$</string>
     <string name="active_currencies" >Cryptocurrencies:</string>
@@ -113,5 +110,5 @@
     <string name="dollar_sign" translatable="false">$</string>
     <string name="pct_sign" translatable="false">%</string>
     <string name="ok" translatable="false">OK</string>
-    <string name="add_to_favorites">В избранное</string>
+    <string name="add_to_favorites">To favorites</string>
 </resources>

@@ -18,13 +18,13 @@
             android:id="@+id/top_coin_rank"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal|center_vertical"
             android:background="@drawable/back_for_rate"
             android:gravity="center_horizontal|center_vertical"
             android:textColor="@color/accent"
             android:textSize="14sp"
             android:textStyle="bold"
             app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="1" />
 
@@ -33,20 +33,24 @@
             android:layout_width="25dp"
             android:layout_height="25dp"
             android:layout_marginStart="5dp"
-            app:layout_constraintBottom_toTopOf="@+id/top_coin_rank"
             app:layout_constraintStart_toEndOf="@+id/top_coin_rank"
-            app:layout_constraintTop_toBottomOf="@+id/top_coin_rank" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
 
         <TextView
             android:id="@+id/top_coin_name"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="5dp"
+            android:layout_marginEnd="8dp"
+            android:ellipsize="end"
+            android:maxLines="1"
             android:textColor="@color/colorPrimaryDark"
             android:textSize="18sp"
-            app:layout_constraintBottom_toTopOf="@+id/top_coin_logo"
             app:layout_constraintStart_toEndOf="@+id/top_coin_logo"
-            app:layout_constraintTop_toBottomOf="@+id/top_coin_logo"
+            app:layout_constraintEnd_toStartOf="@+id/top_coin_currency_sign"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
             tools:text="Bitcoin" />
 
         <TextView
@@ -54,9 +58,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/colorPrimaryDark"
-            app:layout_constraintBottom_toBottomOf="@+id/top_coin_price"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/top_coin_price"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
             tools:text="+2.73" />
 
         <TextView
@@ -68,6 +72,7 @@
             android:textSize="18sp"
             app:layout_constraintEnd_toStartOf="@+id/top_coin_24h_pct"
             app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
             tools:text="4639" />
 
         <TextView
@@ -77,9 +82,9 @@
             android:text="@string/dollar_sign"
             android:textColor="@color/colorPrimaryDark"
             android:textSize="18sp"
-            app:layout_constraintBottom_toTopOf="@+id/top_coin_price"
             app:layout_constraintEnd_toStartOf="@+id/top_coin_price"
-            app:layout_constraintTop_toBottomOf="@+id/top_coin_price" />
+            app:layout_constraintTop_toTopOf="@+id/top_coin_price"
+            app:layout_constraintBottom_toBottomOf="@+id/top_coin_price" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

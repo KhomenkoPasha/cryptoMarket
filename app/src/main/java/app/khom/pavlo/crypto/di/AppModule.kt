@@ -1,7 +1,7 @@
 package app.khom.pavlo.crypto.di
 
 import android.app.Application
-import android.arch.persistence.room.Room
+import androidx.room.Room
 import android.content.Context
 import app.khom.pavlo.crypto.model.*
 import app.khom.pavlo.crypto.model.db.CMDatabase
@@ -11,7 +11,11 @@ import app.khom.pavlo.crypto.utils.ResourceProvider
 import app.khom.pavlo.crypto.utils.Toaster
 import dagger.Module
 import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
+
+@InstallIn(SingletonComponent::class)
 @Module
 class AppModule {
 

@@ -6,11 +6,14 @@ import app.khom.pavlo.crypto.model.network.CryptoCompareAPI
 import app.khom.pavlo.crypto.model.network.NetworkRequests
 import dagger.Module
 import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
 
+@InstallIn(SingletonComponent::class)
 @Module
 class NetworkModule {
 
