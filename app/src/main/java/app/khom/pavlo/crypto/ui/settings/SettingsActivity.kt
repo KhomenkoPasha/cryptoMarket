@@ -6,20 +6,24 @@ import app.khom.pavlo.crypto.R
 import app.khom.pavlo.crypto.activities.BaseActivity
 import app.khom.pavlo.crypto.ui.settings.dialogs.LanguageDialog
 import app.khom.pavlo.crypto.utils.ResourceProvider
-import kotlinx.android.synthetic.main.activity_settings.*
+import app.khom.pavlo.crypto.databinding.ActivitySettingsBinding
+import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
+@AndroidEntryPoint
 class SettingsActivity : BaseActivity(), Settings.View {
 
     @Inject lateinit var presenter: Settings.Presenter
     @Inject lateinit var resProvider: ResourceProvider
+    private lateinit var binding: ActivitySettingsBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_settings)
+        binding = ActivitySettingsBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         setupToolbar()
         presenter.onCreate()
-        language_layout.setOnClickListener { presenter.onLanguageClicked() }
+        binding.languageLayout.setOnClickListener { presenter.onLanguageClicked() }
     }
 
     private fun setupToolbar() {
@@ -32,7 +36,7 @@ class SettingsActivity : BaseActivity(), Settings.View {
     }
 
     override fun setLanguage(language: String) {
-        settings_language.text = language
+        binding.settingsLanguage.text = language
     }
 
     override fun onStop() {

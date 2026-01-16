@@ -24,14 +24,17 @@ import app.khom.pavlo.crypto.ui.settings.SettingsActivity
 import app.khom.pavlo.crypto.ui.topCoins.TopCoinsFragment
 import app.khom.pavlo.crypto.utils.ResourceProvider
 import app.khom.pavlo.crypto.utils.toastShort
-import kotlinx.android.synthetic.main.activity_main.*
+import app.khom.pavlo.crypto.databinding.ActivityMainBinding
+import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 
+@AndroidEntryPoint
 class MainActivity : BaseActivity(), IMain.View {
 
     @Inject lateinit var presenter: IMain.Presenter
     @Inject lateinit var resProvider: ResourceProvider
+    private lateinit var binding: ActivityMainBinding
     private lateinit var coinsLoading: ProgressBar
     private var deleteMenuItem: MenuItem? = null
     private var addMenuItem: MenuItem? = null
@@ -41,7 +44,8 @@ class MainActivity : BaseActivity(), IMain.View {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         setupToolbar()
         setupViewPager()
         presenter.onCreate()
@@ -64,10 +68,10 @@ class MainActivity : BaseActivity(), IMain.View {
         adapter.addFragment(TopCoinsFragment(), resProvider.getString(R.string.top100))
         newsFragment = NewsFragment()
         adapter.addFragment(newsFragment, resProvider.getString(R.string.news))
-        viewpager.adapter = adapter
-        tabs.setupWithViewPager(viewpager)
+        binding.viewpager.adapter = adapter
+        binding.tabs.setupWithViewPager(binding.viewpager)
         setCustomTab()
-        viewpager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
+        binding.viewpager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
             override fun onPageScrollStateChanged(state: Int) {}
             override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {}
 
@@ -82,7 +86,7 @@ class MainActivity : BaseActivity(), IMain.View {
         val title: TextView = customTab.findViewById(R.id.tab_title)
         coinsLoading = customTab.findViewById(R.id.tab_loading)
         title.text = resProvider.getString(R.string.coins)
-        tabs.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+        binding.tabs.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabReselected(tab: TabLayout.Tab?) {
 
             }
@@ -102,7 +106,7 @@ class MainActivity : BaseActivity(), IMain.View {
             }
 
         })
-        tabs.getTabAt(0)?.customView = customTab
+        binding.tabs.getTabAt(0)?.customView = customTab
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -114,8 +118,8 @@ class MainActivity : BaseActivity(), IMain.View {
         return super.onCreateOptionsMenu(menu)
     }
 
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        when (item?.itemId) {
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
             R.id.main_menu_add_coin -> presenter.onAddCoinClicked()
             R.id.main_menu_sort -> presenter.onSortClicked()
             R.id.main_menu_settings -> presenter.onSettingsClicked()

@@ -1,60 +1,46 @@
 package app.khom.pavlo.crypto.ui.news
 
-import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import app.khom.pavlo.crypto.R
-import com.twitter.sdk.android.core.models.Tweet
-import com.twitter.sdk.android.tweetui.TweetView
-import kotlinx.android.synthetic.main.news_adapter_footer.view.*
-import kotlinx.android.synthetic.main.news_item.view.*
+import androidx.recyclerview.widget.RecyclerView
+import app.khom.pavlo.crypto.databinding.NewsItemBinding
+import com.squareup.picasso.Picasso
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 
-class NewsAdapter(private val tweets: ArrayList<Tweet>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class NewsAdapter(private val items: ArrayList<NewsItem>) : RecyclerView.Adapter<NewsAdapter.ViewHolder>() {
 
-    companion object {
-        private val TYPE_ITEM = 0
-        private val TYPE_FOOTER = 1
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        return ViewHolder(NewsItemBinding.inflate(LayoutInflater.from(parent.context), parent, false))
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int) =
-            when (viewType) {
-                TYPE_ITEM -> ViewHolder(LayoutInflater.from(parent?.context).inflate(R.layout.news_item, parent, false))
-                TYPE_FOOTER -> FooterViewHolder(LayoutInflater.from(parent?.context).inflate(R.layout.news_adapter_footer, parent, false))
-                else -> null
-            }
-
-
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder?, position: Int) {
-        if (holder is ViewHolder) {
-            holder.bindItems(tweets[position])
-        } else if (holder is FooterViewHolder) {
-            holder.bindItems()
-        }
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        holder.bindItems(items[position])
     }
 
-    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        fun bindItems(tweet: Tweet) = with(itemView) {
-            news_item_layout.addView(TweetView(context, tweet))
-        }
-    }
-
-    inner class FooterViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        fun bindItems() = with(itemView) {
-            if (tweets.size > 0) {
-                news_adapter_footer_progress_bar.visibility = View.VISIBLE
+    inner class ViewHolder(private val binding: NewsItemBinding) : RecyclerView.ViewHolder(binding.root) {
+        fun bindItems(item: NewsItem) = with(binding) {
+            newsItemTitle.text = item.title
+            newsItemBody.text = item.body
+            newsItemMeta.text = formatMeta(item)
+            if (item.imageUrl.isNotEmpty()) {
+                newsItemImage.visibility = android.view.View.VISIBLE
+                Picasso.with(binding.root.context)
+                    .load(item.imageUrl)
+                    .into(newsItemImage)
             } else {
-                news_adapter_footer_progress_bar.visibility = View.GONE
+                newsItemImage.visibility = android.view.View.GONE
             }
+        }
+
+        private fun formatMeta(item: NewsItem): String {
+            val date = Date(item.publishedOn * 1000)
+            val formatted = SimpleDateFormat("dd MMM yyyy, HH:mm", Locale.getDefault()).format(date)
+            return if (item.source.isNotEmpty()) "${item.source} • $formatted" else formatted
         }
     }
 
-    override fun getItemCount() = tweets.size + 1
-
-    override fun getItemViewType(position: Int) =
-            when (position) {
-                tweets.size -> TYPE_FOOTER
-                else -> TYPE_ITEM
-            }
+    override fun getItemCount() = items.size
 }

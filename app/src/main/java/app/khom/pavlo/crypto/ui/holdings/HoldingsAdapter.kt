@@ -1,64 +1,61 @@
 package app.khom.pavlo.crypto.ui.holdings
 
-import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import app.khom.pavlo.crypto.R
+import app.khom.pavlo.crypto.databinding.HoldingsItemBinding
 import app.khom.pavlo.crypto.model.DEFAULT_DATE_FORMAT
 import app.khom.pavlo.crypto.model.HoldingData
 import app.khom.pavlo.crypto.model.HoldingsHandler
 import app.khom.pavlo.crypto.utils.*
 import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.holdings_item.view.*
+import androidx.recyclerview.widget.RecyclerView
+import android.view.ViewGroup
 
-/**
- * Created by ivanov_r on 13.09.2017.
- */
+
 class HoldingsAdapter(private val holdings: ArrayList<HoldingData>,
                       private val holdingsHandler: HoldingsHandler,
                       private val resProvider: ResourceProvider,
                       val clickListener: (HoldingData) -> Unit) : RecyclerView.Adapter<HoldingsAdapter.ViewHolder>() {
 
-    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int) =
-            ViewHolder(LayoutInflater.from(parent?.context).inflate(R.layout.holdings_item, parent, false))
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
+            ViewHolder(HoldingsItemBinding.inflate(LayoutInflater.from(parent.context), parent, false))
 
-    override fun onBindViewHolder(holder: ViewHolder?, position: Int) {
-        holder?.bindItems(holdings[position])
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        holder.bindItems(holdings[position])
     }
 
-    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        fun bindItems(holdingData: HoldingData) = with(itemView) {
+    inner class ViewHolder(private val binding: HoldingsItemBinding) : RecyclerView.ViewHolder(binding.root) {
+        fun bindItems(holdingData: HoldingData) = with(binding) {
             val fromTo = "${holdingData.from} / ${holdingData.to}"
-            holdings_item_from_to.text = fromTo
+            holdingsItemFromTo.text = fromTo
             val price = "$${holdingData.price}"
-            holdings_item_trade_price.text = price
-            holdings_item_trade_date.text = formatLongDateToString(holdingData.date, DEFAULT_DATE_FORMAT)
-            holdings_item_quantity.text = holdingData.quantity.toString()
+            holdingsItemTradePrice.text = price
+            holdingsItemTradeDate.text = formatLongDateToString(holdingData.date, DEFAULT_DATE_FORMAT)
+            holdingsItemQuantity.text = holdingData.quantity.toString()
             val total = "$${getStringWithTwoDecimalsFromDouble(holdingsHandler.getTotalValueWithCurrentPriceByHoldingData(holdingData))}"
-            holdings_item_current_total.text = total
+            holdingsItemCurrentTotal.text = total
 
             val changePercent = holdingsHandler.getChangePercentByHoldingData(holdingData)
             val chPct = "${getStringWithTwoDecimalsFromDouble(changePercent)}%"
-            holdings_item_change_percent.text = chPct
-            holdings_item_change_percent.setTextColor(resProvider.getColor(getChangeColor(changePercent)))
+            holdingsItemChangePercent.text = chPct
+            holdingsItemChangePercent.setTextColor(resProvider.getColor(getChangeColor(changePercent)))
 
             val changeValue = holdingsHandler.getChangeValueByHoldingData(holdingData)
             val chValue = "$${getStringWithTwoDecimalsFromDouble(changeValue)}"
-            holdings_item_change_value.text = chValue
-            holdings_item_change_value.setTextColor(resProvider.getColor(getChangeColor(changeValue)))
+            holdingsItemChangeValue.text = chValue
+            holdingsItemChangeValue.setTextColor(resProvider.getColor(getChangeColor(changeValue)))
 
             if (holdingsHandler.getImageUrlByHolding(holdingData).isNotEmpty()) {
-                Picasso.with(context)
+                Picasso.with(binding.root.context)
                         .load(holdingsHandler.getImageUrlByHolding(holdingData))
-                        .into(holdings_item_icon)
+                        .into(holdingsItemIcon)
             }
 
             if (holdingsHandler.getCurrentPriceByHolding(holdingData).isNotEmpty()) {
-                holdings_item_main_price.text = holdingsHandler.getCurrentPriceByHolding(holdingData)
+                holdingsItemMainPrice.text = holdingsHandler.getCurrentPriceByHolding(holdingData)
             }
 
-            holdings_item_profit_loss.text = getProfitLossText(holdingsHandler.getTotalChangeValue(), resProvider)
+            holdingsItemProfitLoss.text = getProfitLossText(holdingsHandler.getTotalChangeValue(), resProvider)
         }
     }
 

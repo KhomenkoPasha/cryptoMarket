@@ -2,9 +2,6 @@ package app.khom.pavlo.crypto.ui.topCoins
 
 import app.khom.pavlo.crypto.model.TopCoinData
 
-/**
- * Created by rmnivnv on 02/09/2017.
- */
 interface ITopCoins {
 
     interface View {

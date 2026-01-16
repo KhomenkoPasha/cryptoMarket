@@ -14,7 +14,6 @@ import app.khom.pavlo.crypto.utils.createCoinsMapWithCurrencies
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
-import kotlinx.android.synthetic.main.top_coin_item.view.*
 import javax.inject.Inject
 
 
@@ -139,8 +138,10 @@ class TopCoinsPresenter @Inject constructor(private val view: ITopCoins.View,
 
     //todo get rid of View
     override fun onAddCoinClicked(coin: TopCoinData, itemView: View) {
-        itemView.top_coin_add_loading.visibility = View.VISIBLE
-        itemView.top_coin_add_icon.visibility = View.GONE
+        val loadingView = itemView.findViewById<View>(R.id.top_coin_add_loading)
+        val iconView = itemView.findViewById<android.widget.ImageView>(R.id.top_coin_add_icon)
+        loadingView.visibility = View.VISIBLE
+        iconView.visibility = View.GONE
         val coinFrom = Coin(from = coin.symbol!!, to = USD)
         disposable.add(networkRequests.getPrice(createCoinsMapWithCurrencies(listOf(coinFrom)))
                 .observeOn(AndroidSchedulers.mainThread())
@@ -150,7 +151,8 @@ class TopCoinsPresenter @Inject constructor(private val view: ITopCoins.View,
     private fun onCoinAdded(list: ArrayList<Coin>, itemView: View) {
         if (list.isNotEmpty()) {
             coinsController.saveCoinsList(list)
-            itemView.top_coin_add_icon.setImageDrawable(resProvider.getDrawable(R.drawable.ic_done))
+            val iconView = itemView.findViewById<android.widget.ImageView>(R.id.top_coin_add_icon)
+            iconView.setImageDrawable(resProvider.getDrawable(R.drawable.ic_done))
             toaster.toastShort(resProvider.getString(R.string.coin_added))
         } else {
             toaster.toastShort(resProvider.getString(R.string.error))
@@ -164,7 +166,9 @@ class TopCoinsPresenter @Inject constructor(private val view: ITopCoins.View,
     }
 
     private fun afterAdded(itemView: View) {
-        itemView.top_coin_add_loading.visibility = View.GONE
-        itemView.top_coin_add_icon.visibility = View.VISIBLE
+        val loadingView = itemView.findViewById<View>(R.id.top_coin_add_loading)
+        val iconView = itemView.findViewById<android.widget.ImageView>(R.id.top_coin_add_icon)
+        loadingView.visibility = View.GONE
+        iconView.visibility = View.VISIBLE
     }
 }

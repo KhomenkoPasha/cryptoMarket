@@ -1,6 +1,6 @@
 package app.khom.pavlo.crypto.ui.addCoin
 
-import app.khom.pavlo.crypto.di.PerActivity
+import android.app.Activity
 import app.khom.pavlo.crypto.model.CoinsController
 import app.khom.pavlo.crypto.model.db.CMDatabase
 import app.khom.pavlo.crypto.model.network.NetworkRequests
@@ -8,17 +8,19 @@ import app.khom.pavlo.crypto.utils.ResourceProvider
 import app.khom.pavlo.crypto.utils.Toaster
 import dagger.Module
 import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.android.components.ActivityComponent
+import dagger.hilt.android.scopes.ActivityScoped
 
-/**
- * Created by rmnivnv on 27/07/2017.
- */
+
 @Module
+@InstallIn(ActivityComponent::class)
 class AddCoinModule {
 
-    @Provides @PerActivity
-    fun provideView(addCoinActivity: AddCoinActivity): IAddCoin.View = addCoinActivity
+    @Provides @ActivityScoped
+    fun provideView(activity: Activity): IAddCoin.View = activity as IAddCoin.View
 
-    @Provides @PerActivity
+    @Provides @ActivityScoped
     fun providePresenter(view: IAddCoin.View,
                          coinsController: CoinsController,
                          networkRequests: NetworkRequests,

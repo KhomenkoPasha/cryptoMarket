@@ -1,7 +1,7 @@
 package app.khom.pavlo.crypto.model.db
 
-import android.arch.persistence.room.Database
-import android.arch.persistence.room.RoomDatabase
+import androidx.room.Database
+import androidx.room.RoomDatabase
 import app.khom.pavlo.crypto.model.*
 
 
@@ -10,7 +10,7 @@ import app.khom.pavlo.crypto.model.*
         Coin::class,
         InfoCoin::class,
         TopCoinData::class,
-        HoldingData::class], version = 2)
+        HoldingData::class], version = 4)
 abstract class CMDatabase : RoomDatabase() {
 
     abstract fun coinsDao(): CoinsDao

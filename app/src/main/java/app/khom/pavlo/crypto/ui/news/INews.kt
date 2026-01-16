@@ -1,17 +1,10 @@
 package app.khom.pavlo.crypto.ui.news
 
-import com.twitter.sdk.android.core.Result
-import com.twitter.sdk.android.core.TwitterSession
-import com.twitter.sdk.android.core.models.Tweet
-
-
 interface INews {
 
     interface View {
-        fun hideLoginBtn()
-        fun showLoginBtn()
         fun showRecView()
-        fun updateInsertedTweets(startPos: Int, count: Int)
+        fun setItems(items: List<NewsItem>)
         fun showLoading()
         fun hideLoading()
         fun hideSwipeRefreshing()
@@ -23,8 +16,7 @@ interface INews {
     }
 
     interface Presenter {
-        fun onCreate(tweets: ArrayList<Tweet>)
-        fun onSuccessLogin(result: Result<TwitterSession>?)
+        fun onCreate(items: ArrayList<NewsItem>)
         fun onStart()
         fun onStop()
         fun onSwipeUpdate()

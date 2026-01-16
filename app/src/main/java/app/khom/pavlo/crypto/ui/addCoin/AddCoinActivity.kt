@@ -10,27 +10,31 @@ import android.view.inputmethod.InputMethodManager
 import com.jakewharton.rxbinding2.widget.textChanges
 import app.khom.pavlo.crypto.R
 import app.khom.pavlo.crypto.activities.BaseActivity
+import app.khom.pavlo.crypto.databinding.ActivityAddCoinBinding
 import app.khom.pavlo.crypto.model.InfoCoin
 import app.khom.pavlo.crypto.utils.ResourceProvider
-import kotlinx.android.synthetic.main.activity_add_coin.*
+import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
+@AndroidEntryPoint
 class AddCoinActivity : BaseActivity(), IAddCoin.View {
 
     @Inject lateinit var presenter: IAddCoin.Presenter
     @Inject lateinit var resProvider: ResourceProvider
 
+    private lateinit var binding: ActivityAddCoinBinding
     private lateinit var recView: RecyclerView
     private lateinit var adapter: AddCoinMatchesAdapter
     private var matches: ArrayList<InfoCoin> = ArrayList()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_add_coin)
+        binding = ActivityAddCoinBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         setupToolbar()
         setupRecView()
         presenter.onCreate(matches)
-        presenter.observeFromText(add_coin_from_edt.textChanges())
+        presenter.observeFromText(binding.addCoinFromEdt.textChanges())
     }
 
     private fun setupToolbar() {
@@ -43,7 +47,7 @@ class AddCoinActivity : BaseActivity(), IAddCoin.View {
     }
 
     private fun setupRecView() {
-        recView = add_coin_matches_rec_view
+        recView = binding.addCoinMatchesRecView
         recView.layoutManager = LinearLayoutManager(this)
         adapter = AddCoinMatchesAdapter(matches, this) {
             presenter.onFromItemClicked(it)
@@ -62,25 +66,25 @@ class AddCoinActivity : BaseActivity(), IAddCoin.View {
 
     override fun setMatchesResultSize(matchesCount: String) {
         val text = matchesCount + " " + resProvider.getString(R.string.matches_found)
-        add_coin_matches_count.text = text
+        binding.addCoinMatchesCount.text = text
     }
 
     override fun disableMatchesCount() {
-        add_coin_matches_count.visibility = View.GONE
+        binding.addCoinMatchesCount.visibility = View.GONE
     }
 
     override fun enableMatchesCount() {
-        add_coin_matches_count.visibility = View.VISIBLE
+        binding.addCoinMatchesCount.visibility = View.VISIBLE
     }
 
     override fun enableLoadingLayout() {
-        loading_layout.visibility = View.VISIBLE
-        add_coin_from_edt.isEnabled = false
+        binding.loadingLayout.visibility = View.VISIBLE
+        binding.addCoinFromEdt.isEnabled = false
     }
 
     override fun disableLoadingLayout() {
-        loading_layout.visibility = View.GONE
-        add_coin_from_edt.isEnabled = true
+        binding.loadingLayout.visibility = View.GONE
+        binding.addCoinFromEdt.isEnabled = true
     }
 
     override fun hideKeyboard() {
@@ -96,6 +100,6 @@ class AddCoinActivity : BaseActivity(), IAddCoin.View {
     }
 
     override fun clearFromEdt() {
-        add_coin_from_edt.setText("")
+        binding.addCoinFromEdt.setText("")
     }
 }

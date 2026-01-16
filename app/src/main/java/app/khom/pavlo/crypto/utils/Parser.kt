@@ -5,13 +5,10 @@ import com.google.gson.JsonElement
 import com.google.gson.JsonObject
 import app.khom.pavlo.crypto.R
 import app.khom.pavlo.crypto.model.*
+import app.khom.pavlo.crypto.ui.news.NewsItem
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 import java.util.*
-
-/**
- * Created by rmnivnv on 12/07/2017.
- */
 
 fun getCoinsFromJson(jsonObject: JsonObject, map: Map<String, ArrayList<String?>>): ArrayList<Coin> {
     val result: ArrayList<Coin> = ArrayList()
@@ -104,6 +101,68 @@ fun getPairsListFromJson(jsonObject: JsonObject): ArrayList<PairData> {
     return result
 }
 
+fun getTopCoinsFromJson(jsonObject: JsonObject): ArrayList<TopCoinData> {
+    val result: ArrayList<TopCoinData> = ArrayList()
+    if (!jsonObject.has(DATA)) return result
+    val dataArray = jsonObject.getAsJsonArray(DATA)
+    var rank = 1
+    dataArray.forEach { item ->
+        val obj = item.asJsonObject
+        val coinInfo = obj.getAsJsonObject("CoinInfo") ?: return@forEach
+        val symbol = coinInfo.get("Name")?.asString ?: return@forEach
+        val fullName = coinInfo.get("FullName")?.asString ?: symbol
+        val imagePath = coinInfo.get("ImageUrl")?.asString ?: ""
+        val imageUrl = if (imagePath.isNotEmpty()) CRYPTOCOMPARE_IMAGE_BASE_URL + imagePath else ""
+
+        val rawUsd = obj.getAsJsonObject("RAW")?.getAsJsonObject(USD)
+        val priceUsd = rawUsd?.get("PRICE")?.asString ?: ""
+        val marketCapUsd = rawUsd?.get("MKTCAP")?.asString ?: ""
+        val supply = rawUsd?.get("SUPPLY")?.asString ?: ""
+        val vol24 = rawUsd?.get("TOTALVOLUME24H")?.asString
+                ?: rawUsd?.get("TOTALVOLUME24HTO")?.asString
+                ?: ""
+        val changePct24h = rawUsd?.get("CHANGEPCT24HOUR")?.asString ?: ""
+
+        result.add(
+            TopCoinData(
+                id = coinInfo.get("Id")?.asString ?: "",
+                name = fullName,
+                symbol = symbol,
+                rank = rank,
+                price_usd = priceUsd,
+                price_btc = "",
+                vol24Usd = vol24,
+                market_cap_usd = marketCapUsd,
+                available_supply = "",
+                total_supply = supply,
+                percent_change_1h = "",
+                percent_change_24h = changePct24h,
+                percent_change_7d = "",
+                last_updated = "",
+                imgUrl = imageUrl
+            )
+        )
+        rank += 1
+    }
+    return result
+}
+
+fun getNewsFromJson(jsonObject: JsonObject): ArrayList<NewsItem> {
+    val result: ArrayList<NewsItem> = ArrayList()
+    if (!jsonObject.has(DATA)) return result
+    jsonObject.getAsJsonArray(DATA).forEach { item ->
+        val obj = item.asJsonObject
+        val title = obj.get("title")?.asString ?: ""
+        val body = obj.get("body")?.asString ?: ""
+        val url = obj.get("url")?.asString ?: ""
+        val source = obj.get("source")?.asString ?: ""
+        val publishedOn = obj.get("published_on")?.asLong ?: 0L
+        val imageUrl = obj.get("imageurl")?.asString ?: ""
+        result.add(NewsItem(title, body, url, source, publishedOn, imageUrl))
+    }
+    return result
+}
+
 fun createCoinsMapWithCurrencies(coinsList: List<Coin>): HashMap<String, ArrayList<String?>> {
     val map: HashMap<String, ArrayList<String?>> = HashMap()
     val fromList: ArrayList<String?> = ArrayList()
@@ -122,11 +181,14 @@ fun getChangeColor(change: Float) = when {
 }
 
 fun addCommasToStringNumber(number: String?): String {
-    val formatter = DecimalFormat("#,###.00")
+    val formatter = DecimalFormat("#,###.####")
     return formatter.format(number?.toDouble())
 }
 
-fun getStringWithTwoDecimalsFromDouble(value: Float) = (Math.round(value * 100.0) / 100.0).toString()
+fun getStringWithTwoDecimalsFromDouble(value: Float): String {
+    val formatter = DecimalFormat("#.####")
+    return formatter.format(value.toDouble())
+}
 
 fun formatLongDateToString(date: Long?, format: String): String = SimpleDateFormat(format, Locale.getDefault()).format(date)
 

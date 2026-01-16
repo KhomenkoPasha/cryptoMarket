@@ -12,9 +12,9 @@
         android:id="@+id/main_item_market_logo"
         android:layout_width="25dp"
         android:layout_height="25dp"
-        app:layout_constraintBottom_toTopOf="@+id/main_item_from"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/main_item_full_name" />
+        app:layout_constraintBottom_toBottomOf="@+id/main_item_full_name"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/main_item_from" />
 
     <TextView
         android:id="@+id/main_item_from"
@@ -71,9 +71,8 @@
         android:layout_height="wrap_content"
         android:textColor="@color/colorPrimaryDark"
         android:textSize="20sp"
-        app:layout_constraintBottom_toTopOf="@+id/main_item_price_arrow"
-        app:layout_constraintRight_toLeftOf="@+id/main_item_price_arrow"
-        app:layout_constraintTop_toBottomOf="@+id/main_item_price_arrow"
+        app:layout_constraintEnd_toStartOf="@+id/main_item_price_arrow"
+        app:layout_constraintTop_toTopOf="parent"
         tools:text="2542" />
 
     <ImageView
