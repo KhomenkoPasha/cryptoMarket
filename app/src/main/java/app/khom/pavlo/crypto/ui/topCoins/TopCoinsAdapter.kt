@@ -31,32 +31,32 @@ class TopCoinsAdapter @Inject constructor(private val coins: ArrayList<TopCoinDa
     }
 
     inner class ViewHolder(private val binding: TopCoinItemBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bindItems(coin: TopCoinData, listener: (TopCoinData) -> Unit) = with(binding) {
-            root.setOnClickListener { listener(coin) }
-            topCoinRank.text = coin.rank.toString()
-            topCoinName.text = coin.name
-            topCoinPrice.text = addCommasToStringNumber(coin.price_usd)
+        fun bindItems(coin: TopCoinData, listener: (TopCoinData) -> Unit) {
+            binding.root.setOnClickListener { listener(coin) }
+            binding.topCoinRank.text = coin.rank.toString()
+            binding.topCoinName.text = coin.name
+            binding.topCoinPrice.text = addCommasToStringNumber(coin.price_usd)
             val pctCh24h: String = coin.percent_change_24h ?: ""
             val pctValue = pctCh24h.replace(",", "").toDoubleOrNull()
             if (pctValue != null) {
                 val pctText = DecimalFormat("#.####").format(pctValue)
-                topCoin24hPct.text = "$pctText%"
-                topCoin24hPct.setTextColor(resProvider.getColor(getChangeColor(pctValue.toFloat())))
+                binding.topCoin24hPct.text = "$pctText%"
+                binding.topCoin24hPct.setTextColor(resProvider.getColor(getChangeColor(pctValue.toFloat())))
             }
-            topCoinMarketCap.text = addCommasToStringNumber(coin.market_cap_usd)
-            topCoinSupply.text = addCommasToStringNumber(coin.total_supply)
-            topCoinVolume24h.text = addCommasToStringNumber(coin.vol24Usd)
+            binding.topCoinMarketCap.text = addCommasToStringNumber(coin.market_cap_usd)
+            binding.topCoinSupply.text = addCommasToStringNumber(coin.total_supply)
+            binding.topCoinVolume24h.text = addCommasToStringNumber(coin.vol24Usd)
             if (!coin.imgUrl.isNullOrEmpty()) {
-                Picasso.with(binding.root.context)
+                Picasso.get()
                         .load(coin.imgUrl)
-                        .into(topCoinLogo)
+                        .into(binding.topCoinLogo)
             }
             if (coinsController.coinIsAdded(coin)) {
-                topCoinAddIcon.setImageDrawable(resProvider.getDrawable(R.drawable.ic_done))
+                binding.topCoinAddIcon.setImageDrawable(resProvider.getDrawable(R.drawable.ic_done))
             } else {
-                topCoinAddIcon.setImageDrawable(resProvider.getDrawable(R.drawable.ic_add_circle))
-                topCoinAddLayout.setOnClickListener {
-                    presenter.onAddCoinClicked(coin, root)
+                binding.topCoinAddIcon.setImageDrawable(resProvider.getDrawable(R.drawable.ic_add_circle))
+                binding.topCoinAddLayout.setOnClickListener {
+                    presenter.onAddCoinClicked(coin, binding.root)
                 }
             }
         }

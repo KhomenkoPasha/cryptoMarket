@@ -25,37 +25,37 @@ class HoldingsAdapter(private val holdings: ArrayList<HoldingData>,
     }
 
     inner class ViewHolder(private val binding: HoldingsItemBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bindItems(holdingData: HoldingData) = with(binding) {
+        fun bindItems(holdingData: HoldingData) {
             val fromTo = "${holdingData.from} / ${holdingData.to}"
-            holdingsItemFromTo.text = fromTo
+            binding.holdingsItemFromTo.text = fromTo
             val price = "$${holdingData.price}"
-            holdingsItemTradePrice.text = price
-            holdingsItemTradeDate.text = formatLongDateToString(holdingData.date, DEFAULT_DATE_FORMAT)
-            holdingsItemQuantity.text = holdingData.quantity.toString()
+            binding.holdingsItemTradePrice.text = price
+            binding.holdingsItemTradeDate.text = formatLongDateToString(holdingData.date, DEFAULT_DATE_FORMAT)
+            binding.holdingsItemQuantity.text = holdingData.quantity.toString()
             val total = "$${getStringWithTwoDecimalsFromDouble(holdingsHandler.getTotalValueWithCurrentPriceByHoldingData(holdingData))}"
-            holdingsItemCurrentTotal.text = total
+            binding.holdingsItemCurrentTotal.text = total
 
             val changePercent = holdingsHandler.getChangePercentByHoldingData(holdingData)
             val chPct = "${getStringWithTwoDecimalsFromDouble(changePercent)}%"
-            holdingsItemChangePercent.text = chPct
-            holdingsItemChangePercent.setTextColor(resProvider.getColor(getChangeColor(changePercent)))
+            binding.holdingsItemChangePercent.text = chPct
+            binding.holdingsItemChangePercent.setTextColor(resProvider.getColor(getChangeColor(changePercent)))
 
             val changeValue = holdingsHandler.getChangeValueByHoldingData(holdingData)
             val chValue = "$${getStringWithTwoDecimalsFromDouble(changeValue)}"
-            holdingsItemChangeValue.text = chValue
-            holdingsItemChangeValue.setTextColor(resProvider.getColor(getChangeColor(changeValue)))
+            binding.holdingsItemChangeValue.text = chValue
+            binding.holdingsItemChangeValue.setTextColor(resProvider.getColor(getChangeColor(changeValue)))
 
             if (holdingsHandler.getImageUrlByHolding(holdingData).isNotEmpty()) {
-                Picasso.with(binding.root.context)
+                Picasso.get()
                         .load(holdingsHandler.getImageUrlByHolding(holdingData))
-                        .into(holdingsItemIcon)
+                        .into(binding.holdingsItemIcon)
             }
 
             if (holdingsHandler.getCurrentPriceByHolding(holdingData).isNotEmpty()) {
-                holdingsItemMainPrice.text = holdingsHandler.getCurrentPriceByHolding(holdingData)
+                binding.holdingsItemMainPrice.text = holdingsHandler.getCurrentPriceByHolding(holdingData)
             }
 
-            holdingsItemProfitLoss.text = getProfitLossText(holdingsHandler.getTotalChangeValue(), resProvider)
+            binding.holdingsItemProfitLoss.text = getProfitLossText(holdingsHandler.getTotalChangeValue(), resProvider)
         }
     }
 

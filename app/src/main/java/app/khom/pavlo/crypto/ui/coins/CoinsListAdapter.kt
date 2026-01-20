@@ -28,47 +28,47 @@ class CoinsListAdapter(private val coins: ArrayList<Coin>,
     }
 
     inner class ViewHolder(private val binding: CoinsListItemBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bindItems(coin: Coin, listener: (Coin) -> Unit) = with(binding) {
-            root.setOnClickListener {
+        fun bindItems(coin: Coin, listener: (Coin) -> Unit) {
+            binding.root.setOnClickListener {
                 if (multiSelector.atLeastOneIsSelected) {
-                    multiSelector.onClick(coin, mainItemLayout, coins)
+                    multiSelector.onClick(coin, binding.mainItemLayout, coins)
                 } else {
                     listener(coin)
                 }
             }
-            root.setOnLongClickListener {
-                multiSelector.onClick(coin, mainItemLayout, coins)
+            binding.root.setOnLongClickListener {
+                multiSelector.onClick(coin, binding.mainItemLayout, coins)
             }
             if (coin.selected) {
-                mainItemLayout.setBackgroundColor(resProvider.getColor(R.color.colorAccent))
+                binding.mainItemLayout.setBackgroundColor(resProvider.getColor(R.color.colorAccent))
             } else {
-                mainItemLayout.setBackgroundResource(0)
+                binding.mainItemLayout.setBackgroundResource(0)
             }
-            mainItemFrom.text = coin.from
+            binding.mainItemFrom.text = coin.from
             val to = " / ${coin.to}"
-            mainItemTo.text = to
-            mainItemFullName.text = coin.fullName
-            mainItemLastPrice.text = coin.price
+            binding.mainItemTo.text = to
+            binding.mainItemFullName.text = coin.fullName
+            binding.mainItemLastPrice.text = coin.price
             val chPct24h = "${coin.changePct24h}%"
-            mainItemChangeIn24.text = chPct24h
-            mainItemChangeIn24.setTextColor(resProvider.getColor(getChangeColor(coin.changePct24hRaw)))
-            mainItemPriceArrow.setImageDrawable(resProvider.getDrawable(getChangeArrowDrawable(coin.changePct24hRaw)))
+            binding.mainItemChangeIn24.text = chPct24h
+            binding.mainItemChangeIn24.setTextColor(resProvider.getColor(getChangeColor(coin.changePct24hRaw)))
+            binding.mainItemPriceArrow.setImageDrawable(resProvider.getDrawable(getChangeArrowDrawable(coin.changePct24hRaw)))
             if (coin.imgUrl.isNotEmpty()) {
-                Picasso.with(binding.root.context)
+                Picasso.get()
                         .load(coin.imgUrl)
-                        .into(mainItemMarketLogo)
+                        .into(binding.mainItemMarketLogo)
             }
 
             val holding = holdingsHandler.isThereSuchHolding(coin.from, coin.to)
             if (holding != null) {
-                mainItemHoldingQty.text = getStringWithTwoDecimalsFromDouble(holding.quantity)
+                binding.mainItemHoldingQty.text = getStringWithTwoDecimalsFromDouble(holding.quantity)
                 val value = "$${getStringWithTwoDecimalsFromDouble(holdingsHandler.getTotalValueWithCurrentPriceByHoldingData(holding))}"
-                mainItemHoldingValue.text = value
-                mainItemHoldingQty.visibility = View.VISIBLE
-                mainItemHoldingValue.visibility = View.VISIBLE
+                binding.mainItemHoldingValue.text = value
+                binding.mainItemHoldingQty.visibility = View.VISIBLE
+                binding.mainItemHoldingValue.visibility = View.VISIBLE
             } else {
-                mainItemHoldingQty.visibility = View.GONE
-                mainItemHoldingValue.visibility = View.GONE
+                binding.mainItemHoldingQty.visibility = View.GONE
+                binding.mainItemHoldingValue.visibility = View.GONE
             }
         }
     }
