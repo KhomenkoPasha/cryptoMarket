@@ -25,17 +25,17 @@ class AddCoinMatchesAdapter(private val items: ArrayList<InfoCoin>, private val 
     override fun getItemCount() = items.size
 
     inner class ViewHolder(private val binding: AddCoinMatchesItemBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bindItems(coin: InfoCoin, listener: (InfoCoin) -> Unit) = with(binding) {
-            addCoinName.text = coin.coinName
-            addCoinShortName.text = coin.name
+        fun bindItems(coin: InfoCoin, listener: (InfoCoin) -> Unit) {
+            binding.addCoinName.text = coin.coinName
+            binding.addCoinShortName.text = coin.name
             if (!coin.imageUrl.isEmpty()) {
-                Picasso.with(context)
+                Picasso.get()
                         .load(coin.imageUrl)
-                        .into(addCoinIcon)
+                        .into(binding.addCoinIcon)
             } else {
-                addCoinIcon.visibility = View.INVISIBLE
+                binding.addCoinIcon.visibility = View.INVISIBLE
             }
-            root.setOnClickListener { listener(coin) }
+            binding.root.setOnClickListener { listener(coin) }
         }
     }
 }

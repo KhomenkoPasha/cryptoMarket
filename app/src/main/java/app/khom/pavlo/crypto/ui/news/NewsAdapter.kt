@@ -21,17 +21,17 @@ class NewsAdapter(private val items: ArrayList<NewsItem>) : RecyclerView.Adapter
     }
 
     inner class ViewHolder(private val binding: NewsItemBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bindItems(item: NewsItem) = with(binding) {
-            newsItemTitle.text = item.title
-            newsItemBody.text = item.body
-            newsItemMeta.text = formatMeta(item)
+        fun bindItems(item: NewsItem) {
+            binding.newsItemTitle.text = item.title
+            binding.newsItemBody.text = item.body
+            binding.newsItemMeta.text = formatMeta(item)
             if (item.imageUrl.isNotEmpty()) {
-                newsItemImage.visibility = android.view.View.VISIBLE
-                Picasso.with(binding.root.context)
+                binding.newsItemImage.visibility = android.view.View.VISIBLE
+                Picasso.get()
                     .load(item.imageUrl)
-                    .into(newsItemImage)
+                    .into(binding.newsItemImage)
             } else {
-                newsItemImage.visibility = android.view.View.GONE
+                binding.newsItemImage.visibility = android.view.View.GONE
             }
         }
 

@@ -25,6 +25,7 @@ import app.khom.pavlo.crypto.ui.topCoins.TopCoinsFragment
 import app.khom.pavlo.crypto.utils.ResourceProvider
 import app.khom.pavlo.crypto.utils.toastShort
 import app.khom.pavlo.crypto.databinding.ActivityMainBinding
+import com.google.android.gms.ads.AdRequest
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -48,7 +49,13 @@ class MainActivity : BaseActivity(), IMain.View {
         setContentView(binding.root)
         setupToolbar()
         setupViewPager()
+        loadBannerAd()
         presenter.onCreate()
+    }
+
+    private fun loadBannerAd() {
+        val adRequest = AdRequest.Builder().build()
+        binding.adView.loadAd(adRequest)
     }
 
 
@@ -158,7 +165,18 @@ class MainActivity : BaseActivity(), IMain.View {
 
     override fun onDestroy() {
         super.onDestroy()
+        binding.adView.destroy()
         presenter.onDestroy()
+    }
+
+    override fun onPause() {
+        binding.adView.pause()
+        super.onPause()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        binding.adView.resume()
     }
 
     override fun startAddCoinActivity() {

@@ -60,7 +60,7 @@ class CoinInfoActivity : BaseActivity(), ICoinInfo.View {
 
     override fun setLogo(url: String) {
         if (url.isNotEmpty()) {
-            Picasso.with(this)
+            Picasso.get()
                     .load(url)
                     .into(binding.coinInfoLogo)
         }
