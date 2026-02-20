@@ -12,8 +12,8 @@ android {
         applicationId "app.khom.pavlo.crypto"
         minSdkVersion 23
         targetSdkVersion 35
-        versionCode 11
-        versionName "1.1.5"
+        versionCode 12
+        versionName "1.1.7"
         multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
@@ -83,6 +83,7 @@ dependencies {
     implementation 'androidx.recyclerview:recyclerview:1.4.0'
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.2.0'
     implementation 'androidx.viewpager:viewpager:1.1.0'
+    implementation 'androidx.work:work-runtime-ktx:2.9.0'
     implementation 'com.google.android.material:material:1.13.0'
     implementation 'com.google.android.gms:play-services-ads:24.9.0'
 

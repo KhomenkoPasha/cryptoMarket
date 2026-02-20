@@ -25,7 +25,10 @@ import app.khom.pavlo.crypto.ui.topCoins.TopCoinsFragment
 import app.khom.pavlo.crypto.utils.ResourceProvider
 import app.khom.pavlo.crypto.utils.toastShort
 import app.khom.pavlo.crypto.databinding.ActivityMainBinding
+import android.util.Log
+import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.LoadAdError
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -33,6 +36,7 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class MainActivity : BaseActivity(), IMain.View {
 
+    private val adTag = "AdMobMain"
     @Inject lateinit var presenter: IMain.Presenter
     @Inject lateinit var resProvider: ResourceProvider
     private lateinit var binding: ActivityMainBinding
@@ -54,6 +58,15 @@ class MainActivity : BaseActivity(), IMain.View {
     }
 
     private fun loadBannerAd() {
+        binding.adView.adListener = object : AdListener() {
+            override fun onAdLoaded() {
+                Log.d(adTag, "Banner loaded")
+            }
+
+            override fun onAdFailedToLoad(error: LoadAdError) {
+                Log.w(adTag, "Banner failed: ${error.code} ${error.message}")
+            }
+        }
         val adRequest = AdRequest.Builder().build()
         binding.adView.loadAd(adRequest)
     }

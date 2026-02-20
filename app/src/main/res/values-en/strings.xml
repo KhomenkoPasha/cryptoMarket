@@ -103,4 +103,7 @@
         <item>1 year</item>
     </string-array>
     <string name="add_to_favorites">To favorites</string>
+    <string name="widget_favorites_title_small">Favorites</string>
+    <string name="widget_favorites_title_large">Favorites</string>
+    <string name="widget_empty_favorites">No favorite coins yet</string>
 </resources>

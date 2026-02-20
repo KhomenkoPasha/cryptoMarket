@@ -4,6 +4,8 @@ import android.app.Application
 import android.content.Context
 import android.content.res.Configuration
 import app.khom.pavlo.crypto.model.LocaleManager
+import app.khom.pavlo.crypto.widget.FavoritesWidgetScheduler
+import app.khom.pavlo.crypto.widget.FavoritesWidgetUpdater
 import com.google.android.gms.ads.MobileAds
 import dagger.hilt.android.HiltAndroidApp
 
@@ -13,6 +15,8 @@ class CApp : Application() {
     override fun onCreate() {
         super.onCreate()
         MobileAds.initialize(this)
+        FavoritesWidgetScheduler.ensureScheduled(this)
+        FavoritesWidgetUpdater.updateAllAsync(this)
     }
 
     override fun attachBaseContext(base: Context?) {
