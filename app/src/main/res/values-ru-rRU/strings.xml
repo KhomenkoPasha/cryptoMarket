@@ -91,6 +91,9 @@
     <string name="language">Язык</string>
     <string name="empty_graph_text">Что то пошло не так, график не был загружен</string>
     <string name="add_to_favorites">В избранное</string>
+    <string name="widget_favorites_title_small">Избранные</string>
+    <string name="widget_favorites_title_large">Избранные</string>
+    <string name="widget_empty_favorites">Нет избранных монет</string>
 
     <string-array name="histo_periods">
         <item>1 час</item>

@@ -157,6 +157,9 @@
     <string name="language"> Язык</string>
     <string name="empty_graph_text"> Що то пошло не так, графік не був завантажений</string>
     <string name="add_to_favorites"> В вибране</string>
+    <string name="widget_favorites_title_small"> Вибране</string>
+    <string name="widget_favorites_title_large"> Вибране</string>
+    <string name="widget_empty_favorites"> Немає вибраних монет</string>
 
     <string-array name="histo_periods">
         <item> 1 час </item>

@@ -10,6 +10,9 @@ interface CoinsDao {
     @Query("SELECT * FROM coins")
     fun getAllCoins(): Flowable<List<Coin>>
 
+    @Query("SELECT * FROM coins ORDER BY from_name ASC")
+    fun getAllCoinsSync(): List<Coin>
+
     @Query("SELECT * FROM coins WHERE from_name LIKE :from AND to_name LIKE :to LIMIT 1")
     fun getCoin(from: String, to: String): Coin
 
