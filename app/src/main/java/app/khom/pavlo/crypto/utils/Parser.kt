@@ -149,18 +149,44 @@ fun getTopCoinsFromJson(jsonObject: JsonObject): ArrayList<TopCoinData> {
 
 fun getNewsFromJson(jsonObject: JsonObject): ArrayList<NewsItem> {
     val result: ArrayList<NewsItem> = ArrayList()
-    if (!jsonObject.has(DATA)) return result
-    jsonObject.getAsJsonArray(DATA).forEach { item ->
+    if (jsonObject.get("Response")?.asString == "Error") {
+        throw IllegalStateException(jsonObject.get("Message")?.asString ?: "CryptoCompare news request failed")
+    }
+    val data = jsonObject.get(DATA) ?: jsonObject.get("articles")
+    if (data == null || !data.isJsonArray) return result
+    data.asJsonArray.forEach { item ->
         val obj = item.asJsonObject
-        val title = obj.get("title")?.asString ?: ""
-        val body = obj.get("body")?.asString ?: ""
-        val url = obj.get("url")?.asString ?: ""
-        val source = obj.get("source")?.asString ?: ""
-        val publishedOn = obj.get("published_on")?.asLong ?: 0L
-        val imageUrl = obj.get("imageurl")?.asString ?: ""
+        val title = obj.getString("title", "TITLE")
+        val body = obj.getString("body", "BODY")
+        val url = obj.getString("url", "URL")
+        val source = obj.getString("source", "SOURCE", "SOURCE_DATA_NAME")
+        val publishedOn = obj.getLong("published_on", "PUBLISHED_ON")
+        val imageUrl = obj.getString("imageurl", "image_url", "IMAGEURL", "IMAGE_URL")
         result.add(NewsItem(title, body, url, source, publishedOn, imageUrl))
     }
     return result
+}
+
+private fun JsonObject.getString(vararg names: String): String {
+    names.forEach { name ->
+        val value = get(name)
+        if (value != null && !value.isJsonNull) return value.asString
+    }
+    return ""
+}
+
+private fun JsonObject.getLong(vararg names: String): Long {
+    names.forEach { name ->
+        val value = get(name)
+        if (value != null && !value.isJsonNull) {
+            return try {
+                value.asLong
+            } catch (ex: Exception) {
+                0L
+            }
+        }
+    }
+    return 0L
 }
 
 fun createCoinsMapWithCurrencies(coinsList: List<Coin>): HashMap<String, ArrayList<String?>> {

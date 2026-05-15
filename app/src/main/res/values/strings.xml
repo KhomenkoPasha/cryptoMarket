@@ -93,8 +93,8 @@
     <string name="russian" translatable="false">Русский</string>
     <string name="empty_graph_text">Something went wrong with chart loading</string>
     <string name="admob_app_id" translatable="false">ca-app-pub-7371958965084168~3069069282</string>
-    <string name="admob_banner_main" translatable="false">ca-app-pub-7371958965084168/1181272545</string>
-    <string name="admob_banner_test" translatable="false">ca-app-pub-3940256099942544/6300978111</string>
+    <string name="admob_banner_main" translatable="false">ca-app-pub-7371958965084168/1234719877</string>
+    <string name="admob_banner_test" translatable="false">ca-app-pub-3940256099942544/9214589741</string>
 
     <string-array name="histo_periods">
         <item>1 hour</item>

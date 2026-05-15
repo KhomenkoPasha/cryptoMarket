@@ -3,6 +3,25 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'dagger.hilt.android.plugin'
 
+def localProperties = new Properties()
+def localPropertiesFile = rootProject.file('local.properties')
+if (localPropertiesFile.exists()) {
+    localPropertiesFile.withInputStream { stream ->
+        localProperties.load(stream)
+    }
+}
+
+def coindeskApiKey = localProperties.getProperty('COINDESK_API_KEY')
+        ?: project.findProperty('COINDESK_API_KEY')
+        ?: System.getenv('COINDESK_API_KEY')
+        ?: localProperties.getProperty('CRYPTOCOMPARE_API_KEY')
+        ?: project.findProperty('CRYPTOCOMPARE_API_KEY')
+        ?: System.getenv('CRYPTOCOMPARE_API_KEY')
+        ?: ''
+def escapedCoindeskApiKey = coindeskApiKey.toString()
+        .replace('\\', '\\\\')
+        .replace('"', '\\"')
+
 android {
     namespace "app.khom.pavlo.crypto"
 
@@ -12,10 +31,11 @@ android {
         applicationId "app.khom.pavlo.crypto"
         minSdkVersion 23
         targetSdkVersion 35
-        versionCode 12
-        versionName "1.1.7"
+        versionCode 19
+        versionName "1.1.9"
         multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        buildConfigField "String", "COINDESK_API_KEY", "\"${escapedCoindeskApiKey}\""
 
         javaCompileOptions {
             annotationProcessorOptions {
@@ -85,7 +105,7 @@ dependencies {
     implementation 'androidx.viewpager:viewpager:1.1.0'
     implementation 'androidx.work:work-runtime-ktx:2.9.0'
     implementation 'com.google.android.material:material:1.13.0'
-    implementation 'com.google.android.gms:play-services-ads:24.9.0'
+    implementation 'com.google.android.gms:play-services-ads:25.2.0'
 
     // Retrofit
     implementation 'com.squareup.retrofit2:retrofit:3.0.0'

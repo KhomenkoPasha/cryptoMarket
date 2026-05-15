@@ -14,7 +14,9 @@ class CApp : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        MobileAds.initialize(this)
+        Thread {
+            MobileAds.initialize(this) {}
+        }.start()
         FavoritesWidgetScheduler.ensureScheduled(this)
         FavoritesWidgetUpdater.updateAllAsync(this)
     }

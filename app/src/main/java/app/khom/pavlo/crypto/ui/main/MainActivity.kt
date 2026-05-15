@@ -12,6 +12,7 @@ import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.view.ViewGroup
 import android.widget.ProgressBar
 import android.widget.RelativeLayout
 import android.widget.TextView
@@ -28,6 +29,8 @@ import app.khom.pavlo.crypto.databinding.ActivityMainBinding
 import android.util.Log
 import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.AdSize
+import com.google.android.gms.ads.AdView
 import com.google.android.gms.ads.LoadAdError
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -46,6 +49,7 @@ class MainActivity : BaseActivity(), IMain.View {
     private var sortMenuItem: MenuItem? = null
     private var settingsMenuItem: MenuItem? = null
     private lateinit var newsFragment: Fragment
+    private var adView: AdView? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -58,17 +62,35 @@ class MainActivity : BaseActivity(), IMain.View {
     }
 
     private fun loadBannerAd() {
-        binding.adView.adListener = object : AdListener() {
-            override fun onAdLoaded() {
-                Log.d(adTag, "Banner loaded")
+        binding.adViewContainer.post {
+            if (isFinishing || isDestroyed) return@post
+
+            val bannerAdView = AdView(this).apply {
+                adUnitId = getString(R.string.admob_banner_main)
+                setAdSize(getAdaptiveBannerSize())
+                adListener = object : AdListener() {
+                    override fun onAdLoaded() {
+                        Log.d(adTag, "Banner loaded")
+                    }
+
+                    override fun onAdFailedToLoad(error: LoadAdError) {
+                        Log.w(adTag, "Banner failed: ${error.code} ${error.message}")
+                    }
+                }
             }
 
-            override fun onAdFailedToLoad(error: LoadAdError) {
-                Log.w(adTag, "Banner failed: ${error.code} ${error.message}")
-            }
+            binding.adViewContainer.removeAllViews()
+            binding.adViewContainer.addView(bannerAdView)
+            adView = bannerAdView
+            bannerAdView.loadAd(AdRequest.Builder().build())
         }
-        val adRequest = AdRequest.Builder().build()
-        binding.adView.loadAd(adRequest)
+    }
+
+    private fun getAdaptiveBannerSize(): AdSize {
+        val displayMetrics = resources.displayMetrics
+        val adWidthPixels = binding.adViewContainer.width.takeIf { it > 0 } ?: displayMetrics.widthPixels
+        val adWidth = (adWidthPixels / displayMetrics.density).toInt()
+        return AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(this, adWidth)
     }
 
 
@@ -178,18 +200,25 @@ class MainActivity : BaseActivity(), IMain.View {
 
     override fun onDestroy() {
         super.onDestroy()
-        binding.adView.destroy()
+        destroyBanner()
         presenter.onDestroy()
     }
 
     override fun onPause() {
-        binding.adView.pause()
+        adView?.pause()
         super.onPause()
     }
 
     override fun onResume() {
         super.onResume()
-        binding.adView.resume()
+        adView?.resume()
+    }
+
+    private fun destroyBanner() {
+        val bannerAdView = adView ?: return
+        (bannerAdView.parent as? ViewGroup)?.removeView(bannerAdView)
+        bannerAdView.destroy()
+        adView = null
     }
 
     override fun startAddCoinActivity() {
