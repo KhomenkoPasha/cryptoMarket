@@ -41,6 +41,9 @@
             android:name=".ui.holdings.HoldingsActivity"
             android:configChanges="orientation|screenSize|keyboardHidden|screenLayout" />
         <activity
+            android:name=".ui.insights.InsightsActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden|screenLayout" />
+        <activity
             android:name=".ui.settings.SettingsActivity"
             android:configChanges="orientation|screenSize|keyboardHidden|screenLayout" />
 

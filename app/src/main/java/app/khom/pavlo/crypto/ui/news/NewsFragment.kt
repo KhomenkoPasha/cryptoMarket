@@ -1,5 +1,8 @@
 package app.khom.pavlo.crypto.ui.news
 
+import android.content.ActivityNotFoundException
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -9,6 +12,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import app.khom.pavlo.crypto.R
 import app.khom.pavlo.crypto.databinding.NewsFragmentBinding
+import app.khom.pavlo.crypto.utils.toastShort
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -66,13 +70,33 @@ class NewsFragment : Fragment(), INews.View {
         recView = binding.newsRecView
         linearLayoutManager = LinearLayoutManager(activity)
         recView.layoutManager = linearLayoutManager
-        adapter = NewsAdapter(items)
+        adapter = NewsAdapter(items) { openNews(it) }
         recView.adapter = adapter
         recView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 presenter.onScrolled(dy, linearLayoutManager.childCount, linearLayoutManager.itemCount, linearLayoutManager.findFirstVisibleItemPosition())
             }
         })
+    }
+
+    private fun openNews(item: NewsItem) {
+        val rawUrl = item.url.trim()
+        if (rawUrl.isEmpty()) {
+            context?.toastShort(getString(R.string.news_link_missing))
+            return
+        }
+
+        val normalizedUrl = if (rawUrl.startsWith("http://") || rawUrl.startsWith("https://")) {
+            rawUrl
+        } else {
+            "https://$rawUrl"
+        }
+
+        try {
+            startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(normalizedUrl)))
+        } catch (ex: ActivityNotFoundException) {
+            context?.toastShort(getString(R.string.news_link_open_error))
+        }
     }
 
     override fun showRecView() {

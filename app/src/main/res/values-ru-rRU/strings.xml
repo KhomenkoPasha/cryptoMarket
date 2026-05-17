@@ -106,4 +106,22 @@
         <item>6 месяцев</item>
         <item>1 год</item>
     </string-array>
+    <string name="notes">Заметки</string>
+    <string name="notes_news_notes">Заметки по новостям</string>
+    <string name="notes_news_notes_hint">Сохраняйте здесь ссылки, заголовки и важные события.</string>
+    <string name="notes_coin_notes">Заметки по монетам</string>
+    <string name="notes_empty_favorites">Сначала добавьте монеты в избранное. Заметки появятся здесь.</string>
+    <string name="notes_tracked_since">Отслеживается с %s</string>
+    <string name="notes_hint">Добавить заметку</string>
+    <string name="notes_save_note">Сохранить</string>
+    <string name="notes_note_saved">Заметка сохранена</string>
+    <string name="portfolio_tracker">Трекер портфеля</string>
+    <string name="portfolio_current_value">Текущая стоимость</string>
+    <string name="portfolio_invested">Вложено</string>
+    <string name="portfolio_total_pnl">Общий PnL</string>
+    <string name="portfolio_day_pnl">PnL за 24ч</string>
+    <string name="portfolio_avg_buy">Средняя покупка</string>
+    <string name="portfolio_allocation">Доля</string>
+    <string name="portfolio_holding_day_pnl">PnL 24ч</string>
+    <string name="portfolio_empty">Сначала добавьте транзакции. Трекинг прибыли появится здесь.</string>
 </resources>

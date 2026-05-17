@@ -38,14 +38,21 @@ class TopCoinsAdapter @Inject constructor(private val coins: ArrayList<TopCoinDa
             binding.topCoinPrice.text = addCommasToStringNumber(coin.price_usd)
             val pctCh24h: String = coin.percent_change_24h ?: ""
             val pctValue = pctCh24h.replace(",", "").toDoubleOrNull()
-            if (pctValue != null) {
+            if (pctValue != null && !pctValue.isNaN() && !pctValue.isInfinite()) {
                 val pctText = DecimalFormat("#.####").format(pctValue)
                 binding.topCoin24hPct.text = "$pctText%"
                 binding.topCoin24hPct.setTextColor(resProvider.getColor(getChangeColor(pctValue.toFloat())))
+            } else {
+                binding.topCoin24hPct.text = ""
+                binding.topCoin24hPct.setTextColor(resProvider.getColor(R.color.colorPrimaryDark))
             }
             binding.topCoinMarketCap.text = addCommasToStringNumber(coin.market_cap_usd)
             binding.topCoinSupply.text = addCommasToStringNumber(coin.total_supply)
             binding.topCoinVolume24h.text = addCommasToStringNumber(coin.vol24Usd)
+            binding.topCoinAddLoading.visibility = android.view.View.GONE
+            binding.topCoinAddIcon.visibility = android.view.View.VISIBLE
+            Picasso.get().cancelRequest(binding.topCoinLogo)
+            binding.topCoinLogo.setImageDrawable(null)
             if (!coin.imgUrl.isNullOrEmpty()) {
                 Picasso.get()
                         .load(coin.imgUrl)
@@ -53,6 +60,7 @@ class TopCoinsAdapter @Inject constructor(private val coins: ArrayList<TopCoinDa
             }
             if (coinsController.coinIsAdded(coin)) {
                 binding.topCoinAddIcon.setImageDrawable(resProvider.getDrawable(R.drawable.ic_done))
+                binding.topCoinAddLayout.setOnClickListener(null)
             } else {
                 binding.topCoinAddIcon.setImageDrawable(resProvider.getDrawable(R.drawable.ic_add_circle))
                 binding.topCoinAddLayout.setOnClickListener {

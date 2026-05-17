@@ -29,7 +29,9 @@ class PieMaker(val resProvider: ResourceProvider,
         val holding = holdingsHandler.isThereSuchHolding(coin.from, coin.to)
         if (holding != null) {
             val value = holdingsHandler.getTotalValueWithCurrentPriceByHoldingData(holding)
-            pieEntryList.add(PieEntry(value.toFloat(), coin.from))
+            if (value > 0f && !value.isNaN() && !value.isInfinite()) {
+                pieEntryList.add(PieEntry(value, coin.from))
+            }
         } else {
             println("No holding for $coin")
         }

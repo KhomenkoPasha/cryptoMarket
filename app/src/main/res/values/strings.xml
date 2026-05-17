@@ -13,6 +13,7 @@
     <string name="_24h">24h:</string>
     <string name="btc_price">BTC price:</string>
     <string name="news">News</string>
+    <string name="notes">Notes</string>
     <string name="_1h">1h:</string>
     <string name="refreshed">Refreshed</string>
     <string name="find">Find</string>
@@ -87,6 +88,25 @@
     <string name="string_coins">Cryptocurrency</string>
     <string name="enter_hashtag">Enter hashtag</string>
     <string name="empty_text">No news found</string>
+    <string name="news_link_missing">News link is missing</string>
+    <string name="news_link_open_error">Cannot open news link</string>
+    <string name="notes_news_notes">News notes</string>
+    <string name="notes_news_notes_hint">Use this for links, headlines, or event notes you want to keep.</string>
+    <string name="notes_coin_notes">Coin notes</string>
+    <string name="notes_empty_favorites">Add favorite coins first. Coin notes will appear here.</string>
+    <string name="notes_tracked_since">Tracked since %s</string>
+    <string name="notes_hint">Add a note</string>
+    <string name="notes_save_note">Save note</string>
+    <string name="notes_note_saved">Note saved</string>
+    <string name="portfolio_tracker">Portfolio tracker</string>
+    <string name="portfolio_current_value">Current value</string>
+    <string name="portfolio_invested">Invested</string>
+    <string name="portfolio_total_pnl">Total PnL</string>
+    <string name="portfolio_day_pnl">24h PnL</string>
+    <string name="portfolio_avg_buy">Avg buy</string>
+    <string name="portfolio_allocation">Share</string>
+    <string name="portfolio_holding_day_pnl">24h PnL</string>
+    <string name="portfolio_empty">Add transactions first. Portfolio profit tracking will appear here.</string>
     <string name="empty_coins">Oops, it seems you do not have any cryptocurrency. You can add them through a plus sign or in the top cryptocurrency</string>
     <string name="language">Language</string>
     <string name="english" translatable="false">English</string>
@@ -117,4 +137,20 @@
     <string name="widget_favorites_title_small">Favorites</string>
     <string name="widget_favorites_title_large">Favorites</string>
     <string name="widget_empty_favorites">No favorite coins yet</string>
+    <string name="insights">Insights</string>
+    <string name="insights_loading">Loading insights...</string>
+    <string name="insights_updated">Updated %s</string>
+    <string name="insights_market_mood">Market mood</string>
+    <string name="insights_daily_digest">Daily digest</string>
+    <string name="insights_smart_alerts">Smart alerts</string>
+    <string name="insights_watchlist_notes">Watchlist notes</string>
+    <string name="insights_compare">Compare coins</string>
+    <string name="insights_anomalies">Market anomalies</string>
+    <string name="insights_categories">Categories</string>
+    <string name="insights_news_impact">News impact</string>
+    <string name="insights_beginner_guide">Beginner guide</string>
+    <string name="insights_glossary">Glossary</string>
+    <string name="insights_save_note">Save note</string>
+    <string name="insights_note_hint">Add a note</string>
+    <string name="insights_note_saved">Note saved</string>
 </resources>

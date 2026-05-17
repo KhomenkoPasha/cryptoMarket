@@ -20,7 +20,9 @@ import app.khom.pavlo.crypto.R
 import app.khom.pavlo.crypto.activities.BaseActivity
 import app.khom.pavlo.crypto.ui.addCoin.AddCoinActivity
 import app.khom.pavlo.crypto.ui.coins.CoinsFragment
+import app.khom.pavlo.crypto.ui.insights.InsightsActivity
 import app.khom.pavlo.crypto.ui.news.NewsFragment
+import app.khom.pavlo.crypto.ui.notes.NotesFragment
 import app.khom.pavlo.crypto.ui.settings.SettingsActivity
 import app.khom.pavlo.crypto.ui.topCoins.TopCoinsFragment
 import app.khom.pavlo.crypto.utils.ResourceProvider
@@ -48,6 +50,7 @@ class MainActivity : BaseActivity(), IMain.View {
     private var addMenuItem: MenuItem? = null
     private var sortMenuItem: MenuItem? = null
     private var settingsMenuItem: MenuItem? = null
+    private var insightsMenuItem: MenuItem? = null
     private lateinit var newsFragment: Fragment
     private var adView: AdView? = null
 
@@ -110,6 +113,7 @@ class MainActivity : BaseActivity(), IMain.View {
         adapter.addFragment(TopCoinsFragment(), resProvider.getString(R.string.top100))
         newsFragment = NewsFragment()
         adapter.addFragment(newsFragment, resProvider.getString(R.string.news))
+        adapter.addFragment(NotesFragment(), resProvider.getString(R.string.notes))
         binding.viewpager.adapter = adapter
         binding.tabs.setupWithViewPager(binding.viewpager)
         setCustomTab()
@@ -157,6 +161,7 @@ class MainActivity : BaseActivity(), IMain.View {
         addMenuItem = menu?.findItem(R.id.main_menu_add_coin)
         sortMenuItem = menu?.findItem(R.id.main_menu_sort)
         settingsMenuItem = menu?.findItem(R.id.main_menu_settings)
+        insightsMenuItem = menu?.findItem(R.id.main_menu_insights)
         return super.onCreateOptionsMenu(menu)
     }
 
@@ -165,6 +170,7 @@ class MainActivity : BaseActivity(), IMain.View {
             R.id.main_menu_add_coin -> presenter.onAddCoinClicked()
             R.id.main_menu_sort -> presenter.onSortClicked()
             R.id.main_menu_settings -> presenter.onSettingsClicked()
+            R.id.main_menu_insights -> openInsights()
             R.id.main_menu_delete -> presenter.onDeleteClicked()
         }
         return super.onOptionsItemSelected(item)
@@ -174,6 +180,7 @@ class MainActivity : BaseActivity(), IMain.View {
         deleteMenuItem?.isVisible = isSelected
         addMenuItem?.isVisible = !isSelected
         settingsMenuItem?.isVisible = !isSelected
+        insightsMenuItem?.isVisible = !isSelected
         sortMenuItem?.isVisible = !isSelected
     }
 
@@ -248,5 +255,9 @@ class MainActivity : BaseActivity(), IMain.View {
 
     override fun openSettings() {
         startActivity(Intent(this, SettingsActivity::class.java))
+    }
+
+    private fun openInsights() {
+        startActivity(Intent(this, InsightsActivity::class.java))
     }
 }

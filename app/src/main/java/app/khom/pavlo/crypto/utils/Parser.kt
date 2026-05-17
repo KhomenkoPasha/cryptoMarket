@@ -62,7 +62,6 @@ fun getCoinsFromJson(jsonObject: JsonObject, map: Map<String, ArrayList<String?>
                     result.add(coin)
                 } catch (ex: Exception) {
                     println(ex)
-                    return result
                 }
             }
         }
@@ -74,18 +73,27 @@ fun getAllCoinsFromJson(response: AllCoinsResponse): ArrayList<InfoCoin> {
     val result: ArrayList<InfoCoin> = ArrayList()
     val jsonObject = response.data
     jsonObject.entrySet().forEach {
-        val coin = Gson().fromJson(it.value, InfoCoin::class.java)
-        coin.imageUrl = response.baseImageUrl + coin.imageUrl
-        result.add(coin)
+        try {
+            val coin = Gson().fromJson(it.value, InfoCoin::class.java)
+            coin.imageUrl = response.baseImageUrl + coin.imageUrl
+            result.add(coin)
+        } catch (ex: Exception) {
+            println(ex)
+        }
     }
     return result
 }
 
 fun getHistoListFromJson(jsonObject: JsonObject): ArrayList<HistoData> {
     val result: ArrayList<HistoData> = ArrayList()
-    if (jsonObject.has(DATA)) {
-        jsonObject.getAsJsonArray(DATA).forEach {
-            result.add(Gson().fromJson(it, HistoData::class.java))
+    val data = jsonObject.get(DATA)
+    if (data != null && data.isJsonArray) {
+        data.asJsonArray.forEach {
+            try {
+                result.add(Gson().fromJson(it, HistoData::class.java))
+            } catch (ex: Exception) {
+                println(ex)
+            }
         }
     }
     return result
@@ -93,9 +101,14 @@ fun getHistoListFromJson(jsonObject: JsonObject): ArrayList<HistoData> {
 
 fun getPairsListFromJson(jsonObject: JsonObject): ArrayList<PairData> {
     val result: ArrayList<PairData> = ArrayList()
-    if (jsonObject.has(DATA)) {
-        jsonObject.getAsJsonArray(DATA).forEach {
-            result.add(Gson().fromJson(it, PairData::class.java))
+    val data = jsonObject.get(DATA)
+    if (data != null && data.isJsonArray) {
+        data.asJsonArray.forEach {
+            try {
+                result.add(Gson().fromJson(it, PairData::class.java))
+            } catch (ex: Exception) {
+                println(ex)
+            }
         }
     }
     return result
@@ -103,29 +116,31 @@ fun getPairsListFromJson(jsonObject: JsonObject): ArrayList<PairData> {
 
 fun getTopCoinsFromJson(jsonObject: JsonObject): ArrayList<TopCoinData> {
     val result: ArrayList<TopCoinData> = ArrayList()
-    if (!jsonObject.has(DATA)) return result
-    val dataArray = jsonObject.getAsJsonArray(DATA)
+    val data = jsonObject.get(DATA)
+    if (data == null || !data.isJsonArray) return result
+    val dataArray = data.asJsonArray
     var rank = 1
     dataArray.forEach { item ->
+        if (!item.isJsonObject) return@forEach
         val obj = item.asJsonObject
-        val coinInfo = obj.getAsJsonObject("CoinInfo") ?: return@forEach
-        val symbol = coinInfo.get("Name")?.asString ?: return@forEach
-        val fullName = coinInfo.get("FullName")?.asString ?: symbol
-        val imagePath = coinInfo.get("ImageUrl")?.asString ?: ""
+        val coinInfo = obj.getObject("CoinInfo") ?: return@forEach
+        val symbol = coinInfo.getString("Name").takeIf { it.isNotBlank() } ?: return@forEach
+        val fullName = coinInfo.getString("FullName").takeIf { it.isNotBlank() } ?: symbol
+        val imagePath = coinInfo.getString("ImageUrl")
         val imageUrl = if (imagePath.isNotEmpty()) CRYPTOCOMPARE_IMAGE_BASE_URL + imagePath else ""
 
-        val rawUsd = obj.getAsJsonObject("RAW")?.getAsJsonObject(USD)
-        val priceUsd = rawUsd?.get("PRICE")?.asString ?: ""
-        val marketCapUsd = rawUsd?.get("MKTCAP")?.asString ?: ""
-        val supply = rawUsd?.get("SUPPLY")?.asString ?: ""
-        val vol24 = rawUsd?.get("TOTALVOLUME24H")?.asString
-                ?: rawUsd?.get("TOTALVOLUME24HTO")?.asString
+        val rawUsd = obj.getObject("RAW")?.getObject(USD)
+        val priceUsd = rawUsd?.getString("PRICE") ?: ""
+        val marketCapUsd = rawUsd?.getString("MKTCAP") ?: ""
+        val supply = rawUsd?.getString("SUPPLY") ?: ""
+        val vol24 = rawUsd?.getString("TOTALVOLUME24H")?.takeIf { it.isNotBlank() }
+                ?: rawUsd?.getString("TOTALVOLUME24HTO")
                 ?: ""
-        val changePct24h = rawUsd?.get("CHANGEPCT24HOUR")?.asString ?: ""
+        val changePct24h = rawUsd?.getString("CHANGEPCT24HOUR") ?: ""
 
         result.add(
             TopCoinData(
-                id = coinInfo.get("Id")?.asString ?: "",
+                id = coinInfo.getString("Id"),
                 name = fullName,
                 symbol = symbol,
                 rank = rank,
@@ -149,12 +164,13 @@ fun getTopCoinsFromJson(jsonObject: JsonObject): ArrayList<TopCoinData> {
 
 fun getNewsFromJson(jsonObject: JsonObject): ArrayList<NewsItem> {
     val result: ArrayList<NewsItem> = ArrayList()
-    if (jsonObject.get("Response")?.asString == "Error") {
-        throw IllegalStateException(jsonObject.get("Message")?.asString ?: "CryptoCompare news request failed")
+    if (jsonObject.getString("Response") == "Error") {
+        throw IllegalStateException(jsonObject.getString("Message").takeIf { it.isNotBlank() } ?: "CryptoCompare news request failed")
     }
     val data = jsonObject.get(DATA) ?: jsonObject.get("articles")
     if (data == null || !data.isJsonArray) return result
     data.asJsonArray.forEach { item ->
+        if (!item.isJsonObject) return@forEach
         val obj = item.asJsonObject
         val title = obj.getString("title", "TITLE")
         val body = obj.getString("body", "BODY")
@@ -170,9 +186,20 @@ fun getNewsFromJson(jsonObject: JsonObject): ArrayList<NewsItem> {
 private fun JsonObject.getString(vararg names: String): String {
     names.forEach { name ->
         val value = get(name)
-        if (value != null && !value.isJsonNull) return value.asString
+        if (value != null && !value.isJsonNull) {
+            return try {
+                value.asString
+            } catch (ex: Exception) {
+                ""
+            }
+        }
     }
     return ""
+}
+
+private fun JsonObject.getObject(name: String): JsonObject? {
+    val value = get(name)
+    return if (value != null && value.isJsonObject) value.asJsonObject else null
 }
 
 private fun JsonObject.getLong(vararg names: String): Long {
@@ -201,28 +228,57 @@ fun createCoinsMapWithCurrencies(coinsList: List<Coin>): HashMap<String, ArrayLi
 }
 
 fun getChangeColor(change: Float) = when {
+    !change.isUsableNumber() -> R.color.orange_dark
     change > 0 -> R.color.green
     change == 0f -> R.color.orange_dark
     else -> R.color.red
 }
 
 fun addCommasToStringNumber(number: String?): String {
+    val value = number.toSafeDoubleOrNull() ?: return ""
     val formatter = DecimalFormat("#,###.####")
-    return formatter.format(number?.toDouble())
+    return formatter.format(value)
 }
 
 fun getStringWithTwoDecimalsFromDouble(value: Float): String {
+    if (!value.isUsableNumber()) return ""
     val formatter = DecimalFormat("#.####")
     return formatter.format(value.toDouble())
 }
 
-fun formatLongDateToString(date: Long?, format: String): String = SimpleDateFormat(format, Locale.getDefault()).format(date)
+fun formatLongDateToString(date: Long?, format: String): String {
+    if (date == null || date <= 0L) return ""
+    return try {
+        SimpleDateFormat(format, Locale.getDefault()).format(Date(date))
+    } catch (ex: Exception) {
+        ""
+    }
+}
 
-fun getNumberSignByValue(value: Double) = if (value >= 0) "+" else "-"
+private fun String?.toSafeDoubleOrNull(): Double? {
+    val value = this
+            ?.trim()
+            ?.replace(",", "")
+            ?.takeIf { it.isNotEmpty() }
+            ?: return null
+    return value.toDoubleOrNull()?.takeIf { it.isUsableNumber() }
+}
 
-fun getProfitLossText(change: Float, resProvider: ResourceProvider) = if (change >= 0) resProvider.getString(R.string.prf) else  resProvider.getString(R.string.ls)
+private fun Double.isUsableNumber() = !isNaN() && !isInfinite()
+
+private fun Float.isUsableNumber() = !isNaN() && !isInfinite()
+
+fun getNumberSignByValue(value: Double) = when {
+    !value.isUsableNumber() -> ""
+    value >= 0 -> "+"
+    else -> "-"
+}
+
+fun getProfitLossText(change: Float, resProvider: ResourceProvider) =
+        if (!change.isUsableNumber() || change >= 0) resProvider.getString(R.string.prf)
+        else  resProvider.getString(R.string.ls)
 
 fun getProfitLossTextBig(change: Float, resProvider: ResourceProvider) =
-        if (change >= 0) resProvider.getString(R.string.profit_b)
+        if (!change.isUsableNumber() || change >= 0) resProvider.getString(R.string.profit_b)
         else  resProvider.getString(R.string.loss_b)
 

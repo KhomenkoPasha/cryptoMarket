@@ -128,7 +128,12 @@ class TopCoinsPresenter @Inject constructor(private val view: ITopCoins.View,
     }
 
     override fun onCoinClicked(coin: TopCoinData) {
-        view.startCoinInfoActivity(coin.symbol)
+        val symbol = coin.symbol?.takeIf { it.isNotBlank() }
+        if (symbol != null) {
+            view.startCoinInfoActivity(symbol)
+        } else {
+            toaster.toastShort(resProvider.getString(R.string.error))
+        }
     }
 
     override fun onSwipeUpdate() {
@@ -138,11 +143,16 @@ class TopCoinsPresenter @Inject constructor(private val view: ITopCoins.View,
 
     //todo get rid of View
     override fun onAddCoinClicked(coin: TopCoinData, itemView: View) {
+        val symbol = coin.symbol?.takeIf { it.isNotBlank() }
+        if (symbol == null) {
+            toaster.toastShort(resProvider.getString(R.string.error))
+            return
+        }
         val loadingView = itemView.findViewById<View>(R.id.top_coin_add_loading)
         val iconView = itemView.findViewById<android.widget.ImageView>(R.id.top_coin_add_icon)
         loadingView.visibility = View.VISIBLE
         iconView.visibility = View.GONE
-        val coinFrom = Coin(from = coin.symbol!!, to = USD)
+        val coinFrom = Coin(from = symbol, to = USD)
         disposable.add(networkRequests.getPrice(createCoinsMapWithCurrencies(listOf(coinFrom)))
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ onCoinAdded(it, itemView) }, { onError(itemView) }))

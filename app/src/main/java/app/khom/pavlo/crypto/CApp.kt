@@ -22,7 +22,11 @@ class CApp : Application() {
     }
 
     override fun attachBaseContext(base: Context?) {
-        super.attachBaseContext(LocaleManager.setLocale(base!!))
+        if (base != null) {
+            super.attachBaseContext(LocaleManager.setLocale(base))
+        } else {
+            super.attachBaseContext(base)
+        }
     }
 
     override fun onConfigurationChanged(newConfig: Configuration) {

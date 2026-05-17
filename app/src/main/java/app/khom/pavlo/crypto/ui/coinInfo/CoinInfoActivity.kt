@@ -59,6 +59,8 @@ class CoinInfoActivity : BaseActivity(), ICoinInfo.View {
     }
 
     override fun setLogo(url: String) {
+        Picasso.get().cancelRequest(binding.coinInfoLogo)
+        binding.coinInfoLogo.setImageDrawable(null)
         if (url.isNotEmpty()) {
             Picasso.get()
                     .load(url)

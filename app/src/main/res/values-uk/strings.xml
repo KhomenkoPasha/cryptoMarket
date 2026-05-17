@@ -172,4 +172,22 @@
         <item> 6 місяців </item>
         <item> 1 год </item>
     </string-array>
+    <string name="notes">Нотатки</string>
+    <string name="notes_news_notes">Нотатки до новин</string>
+    <string name="notes_news_notes_hint">Зберігайте тут посилання, заголовки та важливі події.</string>
+    <string name="notes_coin_notes">Нотатки до монет</string>
+    <string name="notes_empty_favorites">Спочатку додайте монети до вибраного. Нотатки будуть тут.</string>
+    <string name="notes_tracked_since">Відстежується з %s</string>
+    <string name="notes_hint">Додати нотатку</string>
+    <string name="notes_save_note">Зберегти</string>
+    <string name="notes_note_saved">Нотатку збережено</string>
+    <string name="portfolio_tracker">Трекер портфеля</string>
+    <string name="portfolio_current_value">Поточна вартість</string>
+    <string name="portfolio_invested">Вкладено</string>
+    <string name="portfolio_total_pnl">Загальний PnL</string>
+    <string name="portfolio_day_pnl">PnL за 24г</string>
+    <string name="portfolio_avg_buy">Середня купівля</string>
+    <string name="portfolio_allocation">Частка</string>
+    <string name="portfolio_holding_day_pnl">PnL 24г</string>
+    <string name="portfolio_empty">Спочатку додайте транзакції. Трекінг прибутку буде тут.</string>
 </resources>
