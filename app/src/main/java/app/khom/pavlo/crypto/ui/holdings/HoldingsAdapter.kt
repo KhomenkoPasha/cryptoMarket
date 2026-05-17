@@ -10,6 +10,7 @@ import app.khom.pavlo.crypto.utils.*
 import com.squareup.picasso.Picasso
 import androidx.recyclerview.widget.RecyclerView
 import android.view.ViewGroup
+import kotlin.math.abs
 
 
 class HoldingsAdapter(private val holdings: ArrayList<HoldingData>,
@@ -26,36 +27,62 @@ class HoldingsAdapter(private val holdings: ArrayList<HoldingData>,
 
     inner class ViewHolder(private val binding: HoldingsItemBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bindItems(holdingData: HoldingData) {
+            binding.root.setOnClickListener { clickListener(holdingData) }
             val fromTo = "${holdingData.from} / ${holdingData.to}"
             binding.holdingsItemFromTo.text = fromTo
-            val price = "$${holdingData.price}"
+            val price = formatMoney(holdingData.price)
             binding.holdingsItemTradePrice.text = price
             binding.holdingsItemTradeDate.text = formatLongDateToString(holdingData.date, DEFAULT_DATE_FORMAT)
-            binding.holdingsItemQuantity.text = holdingData.quantity.toString()
-            val total = "$${getStringWithTwoDecimalsFromDouble(holdingsHandler.getTotalValueWithCurrentPriceByHoldingData(holdingData))}"
-            binding.holdingsItemCurrentTotal.text = total
+            binding.holdingsItemQuantity.text = "${resProvider.getString(R.string.qty)} ${getStringWithTwoDecimalsFromDouble(holdingData.quantity)}"
+            val total = formatMoney(holdingsHandler.getTotalValueWithCurrentPriceByHoldingData(holdingData))
+            binding.holdingsItemCurrentTotal.text = "${resProvider.getString(R.string.`val`)} $total"
 
             val changePercent = holdingsHandler.getChangePercentByHoldingData(holdingData)
-            val chPct = "${getStringWithTwoDecimalsFromDouble(changePercent)}%"
+            val chPct = formatPercent(changePercent)
             binding.holdingsItemChangePercent.text = chPct
             binding.holdingsItemChangePercent.setTextColor(resProvider.getColor(getChangeColor(changePercent)))
 
             val changeValue = holdingsHandler.getChangeValueByHoldingData(holdingData)
-            val chValue = "$${getStringWithTwoDecimalsFromDouble(changeValue)}"
+            val chValue = formatSignedMoney(changeValue)
             binding.holdingsItemChangeValue.text = chValue
             binding.holdingsItemChangeValue.setTextColor(resProvider.getColor(getChangeColor(changeValue)))
+            binding.holdingsItemProfitLoss.text = getProfitLossText(changeValue, resProvider)
 
-            if (holdingsHandler.getImageUrlByHolding(holdingData).isNotEmpty()) {
+            val portfolioStats = holdingsHandler.getStatsByHoldingData(holdingData)
+            binding.holdingsItemAverageBuy.text = formatMoney(portfolioStats.averageBuyPrice)
+            binding.holdingsItemAllocation.text = formatPercent(portfolioStats.allocationPercent)
+            binding.holdingsItemDayPnl.text = "${formatSignedMoney(portfolioStats.dayPnl)}  ${formatPercent(portfolioStats.dayPnlPercent)}"
+            binding.holdingsItemDayPnl.setTextColor(resProvider.getColor(getChangeColor(portfolioStats.dayPnl)))
+
+            val imageUrl = holdingsHandler.getImageUrlByHolding(holdingData)
+            Picasso.get().cancelRequest(binding.holdingsItemIcon)
+            binding.holdingsItemIcon.setImageDrawable(null)
+            if (imageUrl.isNotEmpty()) {
                 Picasso.get()
-                        .load(holdingsHandler.getImageUrlByHolding(holdingData))
+                        .load(imageUrl)
                         .into(binding.holdingsItemIcon)
             }
 
-            if (holdingsHandler.getCurrentPriceByHolding(holdingData).isNotEmpty()) {
-                binding.holdingsItemMainPrice.text = holdingsHandler.getCurrentPriceByHolding(holdingData)
-            }
+            binding.holdingsItemMainPrice.text = holdingsHandler.getCurrentPriceByHolding(holdingData)
+        }
 
-            binding.holdingsItemProfitLoss.text = getProfitLossText(holdingsHandler.getTotalChangeValue(), resProvider)
+        private fun formatMoney(value: Float): String {
+            val formatted = getStringWithTwoDecimalsFromDouble(value)
+            return if (formatted.isNotEmpty()) "\$$formatted" else ""
+        }
+
+        private fun formatSignedMoney(value: Float): String {
+            val formatted = getStringWithTwoDecimalsFromDouble(abs(value))
+            if (formatted.isEmpty()) return ""
+            val sign = if (value > 0f) "+" else if (value < 0f) "-" else ""
+            return "$sign\$$formatted"
+        }
+
+        private fun formatPercent(value: Float): String {
+            val formatted = getStringWithTwoDecimalsFromDouble(abs(value))
+            if (formatted.isEmpty()) return ""
+            val sign = if (value > 0f) "+" else if (value < 0f) "-" else ""
+            return "$sign$formatted%"
         }
     }
 

@@ -18,6 +18,10 @@
         android:title="@string/sort_menu_title"
         app:showAsAction="ifRoom" />
     <item
+        android:id="@+id/main_menu_insights"
+        android:title="@string/insights"
+        app:showAsAction="never" />
+    <item
         android:id="@+id/main_menu_settings"
         android:title="@string/settings"
         app:showAsAction="never" />

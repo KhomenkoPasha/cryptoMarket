@@ -30,7 +30,9 @@ class CoinInfoPresenter @Inject constructor(private val view: ICoinInfo.View,
     }
 
     private fun getCoinByName(from: String?, to: String?) {
-        disposable.add(Single.fromCallable { coinsController.getCoin(from!!, to!!) }
+        val requestedFrom = from?.takeIf { it.isNotBlank() } ?: return
+        val requestedTo = to?.takeIf { it.isNotBlank() } ?: USD
+        disposable.add(Single.fromCallable { coinsController.getCoin(requestedFrom, requestedTo) }
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ onCoinArrived(it) }, { onFindCoinError(it) }))

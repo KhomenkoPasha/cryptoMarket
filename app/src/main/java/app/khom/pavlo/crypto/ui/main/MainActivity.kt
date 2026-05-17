@@ -12,6 +12,7 @@ import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.view.ViewGroup
 import android.widget.ProgressBar
 import android.widget.RelativeLayout
 import android.widget.TextView
@@ -19,7 +20,9 @@ import app.khom.pavlo.crypto.R
 import app.khom.pavlo.crypto.activities.BaseActivity
 import app.khom.pavlo.crypto.ui.addCoin.AddCoinActivity
 import app.khom.pavlo.crypto.ui.coins.CoinsFragment
+import app.khom.pavlo.crypto.ui.insights.InsightsActivity
 import app.khom.pavlo.crypto.ui.news.NewsFragment
+import app.khom.pavlo.crypto.ui.notes.NotesFragment
 import app.khom.pavlo.crypto.ui.settings.SettingsActivity
 import app.khom.pavlo.crypto.ui.topCoins.TopCoinsFragment
 import app.khom.pavlo.crypto.utils.ResourceProvider
@@ -28,6 +31,8 @@ import app.khom.pavlo.crypto.databinding.ActivityMainBinding
 import android.util.Log
 import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.AdSize
+import com.google.android.gms.ads.AdView
 import com.google.android.gms.ads.LoadAdError
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -45,7 +50,9 @@ class MainActivity : BaseActivity(), IMain.View {
     private var addMenuItem: MenuItem? = null
     private var sortMenuItem: MenuItem? = null
     private var settingsMenuItem: MenuItem? = null
+    private var insightsMenuItem: MenuItem? = null
     private lateinit var newsFragment: Fragment
+    private var adView: AdView? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -58,17 +65,35 @@ class MainActivity : BaseActivity(), IMain.View {
     }
 
     private fun loadBannerAd() {
-        binding.adView.adListener = object : AdListener() {
-            override fun onAdLoaded() {
-                Log.d(adTag, "Banner loaded")
+        binding.adViewContainer.post {
+            if (isFinishing || isDestroyed) return@post
+
+            val bannerAdView = AdView(this).apply {
+                adUnitId = getString(R.string.admob_banner_main)
+                setAdSize(getAdaptiveBannerSize())
+                adListener = object : AdListener() {
+                    override fun onAdLoaded() {
+                        Log.d(adTag, "Banner loaded")
+                    }
+
+                    override fun onAdFailedToLoad(error: LoadAdError) {
+                        Log.w(adTag, "Banner failed: ${error.code} ${error.message}")
+                    }
+                }
             }
 
-            override fun onAdFailedToLoad(error: LoadAdError) {
-                Log.w(adTag, "Banner failed: ${error.code} ${error.message}")
-            }
+            binding.adViewContainer.removeAllViews()
+            binding.adViewContainer.addView(bannerAdView)
+            adView = bannerAdView
+            bannerAdView.loadAd(AdRequest.Builder().build())
         }
-        val adRequest = AdRequest.Builder().build()
-        binding.adView.loadAd(adRequest)
+    }
+
+    private fun getAdaptiveBannerSize(): AdSize {
+        val displayMetrics = resources.displayMetrics
+        val adWidthPixels = binding.adViewContainer.width.takeIf { it > 0 } ?: displayMetrics.widthPixels
+        val adWidth = (adWidthPixels / displayMetrics.density).toInt()
+        return AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(this, adWidth)
     }
 
 
@@ -88,6 +113,7 @@ class MainActivity : BaseActivity(), IMain.View {
         adapter.addFragment(TopCoinsFragment(), resProvider.getString(R.string.top100))
         newsFragment = NewsFragment()
         adapter.addFragment(newsFragment, resProvider.getString(R.string.news))
+        adapter.addFragment(NotesFragment(), resProvider.getString(R.string.notes))
         binding.viewpager.adapter = adapter
         binding.tabs.setupWithViewPager(binding.viewpager)
         setCustomTab()
@@ -135,6 +161,7 @@ class MainActivity : BaseActivity(), IMain.View {
         addMenuItem = menu?.findItem(R.id.main_menu_add_coin)
         sortMenuItem = menu?.findItem(R.id.main_menu_sort)
         settingsMenuItem = menu?.findItem(R.id.main_menu_settings)
+        insightsMenuItem = menu?.findItem(R.id.main_menu_insights)
         return super.onCreateOptionsMenu(menu)
     }
 
@@ -143,6 +170,7 @@ class MainActivity : BaseActivity(), IMain.View {
             R.id.main_menu_add_coin -> presenter.onAddCoinClicked()
             R.id.main_menu_sort -> presenter.onSortClicked()
             R.id.main_menu_settings -> presenter.onSettingsClicked()
+            R.id.main_menu_insights -> openInsights()
             R.id.main_menu_delete -> presenter.onDeleteClicked()
         }
         return super.onOptionsItemSelected(item)
@@ -152,6 +180,7 @@ class MainActivity : BaseActivity(), IMain.View {
         deleteMenuItem?.isVisible = isSelected
         addMenuItem?.isVisible = !isSelected
         settingsMenuItem?.isVisible = !isSelected
+        insightsMenuItem?.isVisible = !isSelected
         sortMenuItem?.isVisible = !isSelected
     }
 
@@ -178,18 +207,25 @@ class MainActivity : BaseActivity(), IMain.View {
 
     override fun onDestroy() {
         super.onDestroy()
-        binding.adView.destroy()
+        destroyBanner()
         presenter.onDestroy()
     }
 
     override fun onPause() {
-        binding.adView.pause()
+        adView?.pause()
         super.onPause()
     }
 
     override fun onResume() {
         super.onResume()
-        binding.adView.resume()
+        adView?.resume()
+    }
+
+    private fun destroyBanner() {
+        val bannerAdView = adView ?: return
+        (bannerAdView.parent as? ViewGroup)?.removeView(bannerAdView)
+        bannerAdView.destroy()
+        adView = null
     }
 
     override fun startAddCoinActivity() {
@@ -219,5 +255,9 @@ class MainActivity : BaseActivity(), IMain.View {
 
     override fun openSettings() {
         startActivity(Intent(this, SettingsActivity::class.java))
+    }
+
+    private fun openInsights() {
+        startActivity(Intent(this, InsightsActivity::class.java))
     }
 }

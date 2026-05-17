@@ -53,6 +53,8 @@ class CoinsListAdapter(private val coins: ArrayList<Coin>,
             binding.mainItemChangeIn24.text = chPct24h
             binding.mainItemChangeIn24.setTextColor(resProvider.getColor(getChangeColor(coin.changePct24hRaw)))
             binding.mainItemPriceArrow.setImageDrawable(resProvider.getDrawable(getChangeArrowDrawable(coin.changePct24hRaw)))
+            Picasso.get().cancelRequest(binding.mainItemMarketLogo)
+            binding.mainItemMarketLogo.setImageDrawable(null)
             if (coin.imgUrl.isNotEmpty()) {
                 Picasso.get()
                         .load(coin.imgUrl)
@@ -67,6 +69,8 @@ class CoinsListAdapter(private val coins: ArrayList<Coin>,
                 binding.mainItemHoldingQty.visibility = View.VISIBLE
                 binding.mainItemHoldingValue.visibility = View.VISIBLE
             } else {
+                binding.mainItemHoldingQty.text = ""
+                binding.mainItemHoldingValue.text = ""
                 binding.mainItemHoldingQty.visibility = View.GONE
                 binding.mainItemHoldingValue.visibility = View.GONE
             }
@@ -74,6 +78,7 @@ class CoinsListAdapter(private val coins: ArrayList<Coin>,
     }
 
     private fun getChangeArrowDrawable(change: Float) = when {
+        change.isNaN() || change.isInfinite() -> R.drawable.ic_remove_orange
         change > 0 -> R.drawable.ic_arrow_drop_up_green
         change == 0f -> R.drawable.ic_remove_orange
         else -> R.drawable.ic_arrow_drop_down_red

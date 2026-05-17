@@ -9,8 +9,10 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
-
-class NewsAdapter(private val items: ArrayList<NewsItem>) : RecyclerView.Adapter<NewsAdapter.ViewHolder>() {
+class NewsAdapter(
+    private val items: ArrayList<NewsItem>,
+    private val onNewsClicked: (NewsItem) -> Unit
+) : RecyclerView.Adapter<NewsAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(NewsItemBinding.inflate(LayoutInflater.from(parent.context), parent, false))
@@ -25,6 +27,12 @@ class NewsAdapter(private val items: ArrayList<NewsItem>) : RecyclerView.Adapter
             binding.newsItemTitle.text = item.title
             binding.newsItemBody.text = item.body
             binding.newsItemMeta.text = formatMeta(item)
+            binding.newsItemLayout.setOnClickListener {
+                onNewsClicked(item)
+            }
+
+            Picasso.get().cancelRequest(binding.newsItemImage)
+            binding.newsItemImage.setImageDrawable(null)
             if (item.imageUrl.isNotEmpty()) {
                 binding.newsItemImage.visibility = android.view.View.VISIBLE
                 Picasso.get()
@@ -36,9 +44,15 @@ class NewsAdapter(private val items: ArrayList<NewsItem>) : RecyclerView.Adapter
         }
 
         private fun formatMeta(item: NewsItem): String {
-            val date = Date(item.publishedOn * 1000)
-            val formatted = SimpleDateFormat("dd MMM yyyy, HH:mm", Locale.getDefault()).format(date)
-            return if (item.source.isNotEmpty()) "${item.source} • $formatted" else formatted
+            val formatted = if (item.publishedOn > 0L) {
+                val date = Date(item.publishedOn * 1000)
+                SimpleDateFormat("dd MMM yyyy, HH:mm", Locale.getDefault()).format(date)
+            } else {
+                ""
+            }
+            return listOf(item.source, formatted)
+                .filter { it.isNotEmpty() }
+                .joinToString(" - ")
         }
     }
 

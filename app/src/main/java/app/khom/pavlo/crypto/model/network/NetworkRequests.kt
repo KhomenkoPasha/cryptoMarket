@@ -1,5 +1,6 @@
 package app.khom.pavlo.crypto.model.network
 
+import app.khom.pavlo.crypto.BuildConfig
 import app.khom.pavlo.crypto.model.*
 import app.khom.pavlo.crypto.ui.news.NewsItem
 import app.khom.pavlo.crypto.utils.*
@@ -91,7 +92,8 @@ class NetworkRequests(private val cryptoCompareAPI: CryptoCompareAPI,
     }
 
     fun getNews(categories: String?): Single<ArrayList<NewsItem>> {
-        return cryptoCompareAPI.getNews("EN", categories)
+        val apiKey = BuildConfig.COINDESK_API_KEY.takeIf { it.isNotBlank() }
+        return cryptoCompareAPI.getNews(COINDESK_NEWS_URL, "EN", categories, 50, apiKey)
                 .subscribeOn(Schedulers.io())
                 .map { getNewsFromJson(it) }
     }

@@ -60,9 +60,13 @@ class CoinsFragment : Fragment(), ICoins.View {
         adapter = CoinsListAdapter(coins, resProvider, multiSelector, holdingsHandler,
                 clickListener = { presenter.onCoinClicked(it) })
         recView.adapter = adapter
-        val itemDecorator = DividerItemDecoration(activity!!, DividerItemDecoration.VERTICAL)
-        itemDecorator.setDrawable(ContextCompat.getDrawable(activity!!, R.drawable.divider)!!)
-        recView.addItemDecoration(itemDecorator)
+        context?.let { safeContext ->
+            ContextCompat.getDrawable(safeContext, R.drawable.divider)?.let { divider ->
+                val itemDecorator = DividerItemDecoration(safeContext, DividerItemDecoration.VERTICAL)
+                itemDecorator.setDrawable(divider)
+                recView.addItemDecoration(itemDecorator)
+            }
+        }
     }
 
     private fun setupSwipeRefresh() {

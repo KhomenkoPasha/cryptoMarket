@@ -30,6 +30,12 @@ interface CryptoCompareAPI {
     @GET("top/totalvolfull")
     fun getTopCoins(@Query("limit") limit: Int, @Query("tsym") toSymbol: String): Single<JsonObject>
 
-    @GET("v2/news/")
-    fun getNews(@Query("lang") lang: String, @Query("categories") categories: String?): Single<JsonObject>
+    @GET
+    fun getNews(
+            @Url url: String,
+            @Query("lang") lang: String,
+            @Query("categories") categories: String?,
+            @Query("limit") limit: Int,
+            @Query("api_key") apiKey: String?
+    ): Single<JsonObject>
 }

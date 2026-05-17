@@ -1,6 +1,7 @@
 package app.khom.pavlo.crypto.ui.news
 
 
+import android.util.Log
 import app.khom.pavlo.crypto.model.Preferences
 import app.khom.pavlo.crypto.model.network.NetworkRequests
 import app.khom.pavlo.crypto.model.rxbus.RxBus
@@ -19,6 +20,7 @@ class NewsPresenter @Inject constructor(private val view: INews.View,
     private var allItems: ArrayList<NewsItem> = ArrayList()
     private var isSwipeRefreshing = false
     private val disposable = CompositeDisposable()
+    private val logTag = "NewsPresenter"
 
     override fun onCreate(items: ArrayList<NewsItem>) {
         this.items = items
@@ -73,9 +75,11 @@ class NewsPresenter @Inject constructor(private val view: INews.View,
                     allItems = ArrayList(list)
                     applyFilterAndRender()
                     view.hideLoading()
-                }, {
+                }, { error ->
+                    Log.w(logTag, "News load failed", error)
                     view.hideLoading()
                     view.showEmptyNews()
+                    afterRefresh()
                 })
         )
     }

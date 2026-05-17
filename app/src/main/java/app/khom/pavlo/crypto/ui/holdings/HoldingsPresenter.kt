@@ -33,11 +33,9 @@ class HoldingsPresenter @Inject constructor(private val view: IHoldings.View,
     }
 
     private fun onHoldingsUpdate(list: List<HoldingData>) {
-        if (list.isNotEmpty()) {
-            holdings.clear()
-            holdings.addAll(list)
-            view.updateRecyclerView()
-        }
+        holdings.clear()
+        holdings.addAll(list)
+        view.updateRecyclerView()
     }
 
     override fun onStop() {
@@ -45,7 +43,7 @@ class HoldingsPresenter @Inject constructor(private val view: IHoldings.View,
     }
 
     override fun onItemSwiped(position: Int?) {
-        if (position != null) {
+        if (position != null && position >= 0 && position < holdings.size) {
             disposable.add(Single.fromCallable { db.holdingsDao().deleteHolding(holdings[position]) }
                     .subscribeOn(Schedulers.io())
                     .subscribe())
