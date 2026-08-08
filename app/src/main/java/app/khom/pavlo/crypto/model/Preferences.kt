@@ -18,6 +18,7 @@ class Preferences(context: Context) {
         private const val INSIGHTS_TRACKED_DATE_PREFIX = "insights_tracked_date_"
         private const val INSIGHTS_TRACKED_PRICE_PREFIX = "insights_tracked_price_"
         private const val INSIGHTS_NEWS_NOTES = "insights_news_notes"
+        private const val TOP_COINS_LAST_UPDATED = "top_coins_last_updated"
     }
 
     private val prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
@@ -37,6 +38,10 @@ class Preferences(context: Context) {
     var newsNotes: String
         get() = prefs.getString(INSIGHTS_NEWS_NOTES, "") ?: ""
         set(value) = prefs.edit().putString(INSIGHTS_NEWS_NOTES, value).apply()
+
+    var topCoinsLastUpdated: Long
+        get() = prefs.getLong(TOP_COINS_LAST_UPDATED, 0L)
+        set(value) = prefs.edit().putLong(TOP_COINS_LAST_UPDATED, value).apply()
 
     fun getCoinNote(symbol: String): String =
             prefs.getString(INSIGHTS_NOTE_PREFIX + symbol.uppercase(Locale.US), "") ?: ""

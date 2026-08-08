@@ -2,6 +2,7 @@ package app.khom.pavlo.crypto.model.network
 
 import com.google.gson.JsonObject
 import app.khom.pavlo.crypto.model.AllCoinsResponse
+import app.khom.pavlo.crypto.model.CoinPaprikaTicker
 import io.reactivex.rxjava3.core.Single
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -29,6 +30,12 @@ interface CryptoCompareAPI {
 
     @GET("top/totalvolfull")
     fun getTopCoins(@Query("limit") limit: Int, @Query("tsym") toSymbol: String): Single<JsonObject>
+
+    @GET
+    fun getCoinPaprikaTickers(
+            @Url url: String,
+            @Query("quotes") quote: String
+    ): Single<List<CoinPaprikaTicker>>
 
     @GET
     fun getNews(

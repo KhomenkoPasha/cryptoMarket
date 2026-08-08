@@ -3,6 +3,7 @@ package app.khom.pavlo.crypto.ui.topCoins
 import androidx.fragment.app.Fragment
 import app.khom.pavlo.crypto.model.CoinsController
 import app.khom.pavlo.crypto.model.PageController
+import app.khom.pavlo.crypto.model.Preferences
 import app.khom.pavlo.crypto.model.db.CMDatabase
 import app.khom.pavlo.crypto.model.network.NetworkRequests
 import app.khom.pavlo.crypto.utils.Logger
@@ -29,7 +30,9 @@ class TopCoinsModule {
                          coinsController: CoinsController,
                          resProvider: ResourceProvider,
                          pageController: PageController,
+                         preferences: Preferences,
                          toaster: Toaster,
                          logger: Logger): ITopCoins.Presenter =
-            TopCoinsPresenter(view, db, networkRequests, coinsController, resProvider, pageController, toaster, logger)
+            TopCoinsPresenter(view, db, networkRequests, coinsController, resProvider, pageController,
+                    preferences, toaster, logger)
 }

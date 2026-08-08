@@ -155,4 +155,6 @@
     <string name="insights_note_saved">Note saved</string>
     <string name="portfolio">Portfolio</string>
     <string name="loading">Loading</string>
+    <string name="top_coins_load_error">Couldn’t load the cryptocurrency rating</string>
+    <string name="retry">Try again</string>
 </resources>

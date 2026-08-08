@@ -97,10 +97,25 @@ class NetworkRequests(private val cryptoCompareAPI: CryptoCompareAPI) {
                 .map { getHistoListFromJson(it) }
     }
 
-    fun getTopCoins(): Single<List<TopCoinData>> {
-        return cryptoCompareAPI.getTopCoins(100, USD)
+    fun getTopCoins(): Single<ArrayList<TopCoinData>> {
+        val coinPaprika = cryptoCompareAPI
+                .getCoinPaprikaTickers(COINPAPRIKA_TICKERS_URL, USD)
+                .subscribeOn(Schedulers.io())
+                .map { getTopCoinsFromCoinPaprika(it) }
+                .flatMap { coins ->
+                    if (coins.isEmpty()) Single.error(IllegalStateException("CoinPaprika returned no top coins"))
+                    else Single.just(coins)
+                }
+
+        return coinPaprika.onErrorResumeNext {
+            cryptoCompareAPI.getTopCoins(100, USD)
                 .subscribeOn(Schedulers.io())
                 .map { getTopCoinsFromJson(it) }
+                .flatMap { coins ->
+                    if (coins.isEmpty()) Single.error(IllegalStateException("CryptoCompare returned no top coins"))
+                    else Single.just(coins)
+                }
+        }
     }
 
     fun getNews(categories: String?): Single<ArrayList<NewsItem>> {

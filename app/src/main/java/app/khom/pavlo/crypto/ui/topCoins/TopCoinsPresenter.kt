@@ -22,6 +22,7 @@ class TopCoinsPresenter @Inject constructor(private val view: ITopCoins.View,
                                             private val coinsController: CoinsController,
                                             private val resProvider: ResourceProvider,
                                             private val pageController: PageController,
+                                            private val preferences: Preferences,
                                             private val toaster: Toaster,
                                             private val logger: Logger) : ITopCoins.Presenter {
 
@@ -30,6 +31,7 @@ class TopCoinsPresenter @Inject constructor(private val view: ITopCoins.View,
     private var isRefreshing = false
     private var needToUpdate = false
     private var topCoinsRequestInFlight = false
+    private var initialCacheHandled = false
     private val addingSymbols = mutableSetOf<String>()
 
     override fun onCreate(coins: ArrayList<TopCoinData>) {
@@ -37,9 +39,9 @@ class TopCoinsPresenter @Inject constructor(private val view: ITopCoins.View,
     }
 
     override fun onStart() {
+        initialCacheHandled = false
         view.setLoadingVisibility(true)
         subscribeToObservables()
-        updateAllCoins()
     }
 
     private fun subscribeToObservables() {
@@ -47,10 +49,6 @@ class TopCoinsPresenter @Inject constructor(private val view: ITopCoins.View,
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ onCoinsUpdated(it) }, { logger.logError("Observe top coins: $it") }))
-        disposable.add(db.allCoinsDao().getAllCoins()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({ onAllCoinsUpdated(it) }, { logger.logError("Observe all coins: $it") }))
         disposable.add(RxBus.listen(MainCoinsListUpdatedEvent::class.java)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -59,18 +57,29 @@ class TopCoinsPresenter @Inject constructor(private val view: ITopCoins.View,
     }
 
     private fun onCoinsUpdated(list: List<TopCoinData>) {
+        coins.clear()
+        coins.addAll(list)
+        coins.sortBy { it.rank }
+        view.updateRecyclerView()
+
         if (list.isNotEmpty()) {
-            coins.clear()
-            coins.addAll(list)
-            coins.sortBy { it.rank }
-            view.updateRecyclerView()
+            view.showContent()
+            view.setLoadingVisibility(false)
+        }
+
+        if (!initialCacheHandled) {
+            initialCacheHandled = true
+            if (list.isEmpty() || topCoinsCacheIsStale()) {
+                updateTopCoins()
+            } else {
+                view.setLoadingVisibility(false)
+            }
         }
     }
 
-    private fun onAllCoinsUpdated(list: List<InfoCoin>) {
-        if (list.isNotEmpty()) {
-            updateTopCoins()
-        }
+    private fun topCoinsCacheIsStale(): Boolean {
+        val lastUpdated = preferences.topCoinsLastUpdated
+        return lastUpdated <= 0L || System.currentTimeMillis() - lastUpdated >= TOP_COINS_CACHE_TTL_MS
     }
 
     private fun onMainCoinsUpdated() {
@@ -117,6 +126,11 @@ class TopCoinsPresenter @Inject constructor(private val view: ITopCoins.View,
     private fun onTopCoinsError(error: Throwable) {
         logger.logError("updateTopCoins $error")
         view.setLoadingVisibility(false)
+        if (coins.isEmpty()) {
+            view.showLoadError()
+        } else {
+            toaster.toastShort(resProvider.getString(R.string.top_coins_load_error))
+        }
         if (isRefreshing) {
             view.hideRefreshing()
             isRefreshing = false
@@ -126,34 +140,18 @@ class TopCoinsPresenter @Inject constructor(private val view: ITopCoins.View,
     private fun onTopCoinsReceived(coins: List<TopCoinData>) {
         view.setLoadingVisibility(false)
         if (coins.isNotEmpty()) {
+            this.coins.clear()
+            this.coins.addAll(coins.sortedBy { it.rank })
+            view.updateRecyclerView()
+            view.showContent()
+            preferences.topCoinsLastUpdated = System.currentTimeMillis()
             coinsController.saveTopCoinsList(coins)
+        } else if (this.coins.isEmpty()) {
+            view.showLoadError()
         }
         if (isRefreshing) {
             view.hideRefreshing()
             isRefreshing = false
-        }
-    }
-
-    private fun updateAllCoins() {
-        if (coinsController.allInfoCoinsIsEmpty()) {
-            disposable.add(networkRequests.getAllCoins()
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe({ onAllCoinsReceived(it) },
-                            {
-                                logger.logError("getAllCoinsInfo $it")
-                                view.setLoadingVisibility(false)
-                            }))
-        } else {
-            updateTopCoins()
-        }
-    }
-
-    private fun onAllCoinsReceived(list: ArrayList<InfoCoin>) {
-        if (list.isNotEmpty()) {
-            coinsController.saveAllCoinsInfo(list)
-            updateTopCoins()
-        } else {
-            view.setLoadingVisibility(false)
         }
     }
 
@@ -168,6 +166,11 @@ class TopCoinsPresenter @Inject constructor(private val view: ITopCoins.View,
 
     override fun onSwipeUpdate() {
         isRefreshing = true
+        updateTopCoins()
+    }
+
+    override fun onRetryClicked() {
+        view.setLoadingVisibility(true)
         updateTopCoins()
     }
 
@@ -205,5 +208,9 @@ class TopCoinsPresenter @Inject constructor(private val view: ITopCoins.View,
     private fun finishAdding(symbol: String) {
         addingSymbols.remove(symbol)
         view.setCoinAdding(symbol, false)
+    }
+
+    private companion object {
+        const val TOP_COINS_CACHE_TTL_MS = 60L * 60L * 1000L
     }
 }

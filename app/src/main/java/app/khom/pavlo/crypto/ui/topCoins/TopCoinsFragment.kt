@@ -42,6 +42,7 @@ class TopCoinsFragment : Fragment(), ITopCoins.View {
         super.onViewCreated(view, savedInstanceState)
         setupRecView()
         setupSwipeRefresh()
+        binding.topCoinsRetry.setOnClickListener { presenter.onRetryClicked() }
     }
 
     private fun setupRecView() {
@@ -83,6 +84,16 @@ class TopCoinsFragment : Fragment(), ITopCoins.View {
         binding.topCoinsLoading.visibility = if (isLoading) View.VISIBLE else View.GONE
     }
 
+    override fun showLoadError() {
+        binding.topCoinsState.visibility = View.VISIBLE
+        binding.topCoinsFragmentRecView.visibility = View.GONE
+    }
+
+    override fun showContent() {
+        binding.topCoinsState.visibility = View.GONE
+        binding.topCoinsFragmentRecView.visibility = View.VISIBLE
+    }
+
     override fun setCoinAdding(symbol: String, isAdding: Boolean) {
         adapter?.setCoinAdding(symbol, isAdding)
     }
@@ -99,6 +110,7 @@ class TopCoinsFragment : Fragment(), ITopCoins.View {
     }
 
     override fun onDestroyView() {
+        binding.topCoinsRetry.setOnClickListener(null)
         binding.topCoinsFragmentRecView.adapter = null
         adapter = null
         _binding = null

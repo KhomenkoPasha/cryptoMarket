@@ -138,6 +138,26 @@ data class PairData(
         val volume24h: Float,
         val volume24hTo: Float)
 
+data class CoinPaprikaTicker(
+        val id: String? = null,
+        val name: String? = null,
+        val symbol: String? = null,
+        val rank: Int? = null,
+        val total_supply: Double? = null,
+        val last_updated: String? = null,
+        val quotes: CoinPaprikaQuotes? = null)
+
+data class CoinPaprikaQuotes(
+        @SerializedName("USD") val usd: CoinPaprikaQuote? = null)
+
+data class CoinPaprikaQuote(
+        val price: Double? = null,
+        val volume_24h: Double? = null,
+        val market_cap: Double? = null,
+        val percent_change_1h: Double? = null,
+        val percent_change_24h: Double? = null,
+        val percent_change_7d: Double? = null)
+
 @Entity(tableName = "top_coins")
 data class TopCoinData(
         var id: String? = "",

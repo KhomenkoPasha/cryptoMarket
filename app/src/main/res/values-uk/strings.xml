@@ -210,4 +210,6 @@
     <string name="portfolio_empty">Спочатку додайте транзакції. Трекінг прибутку буде тут.</string>
     <string name="portfolio">Портфель</string>
     <string name="loading">Завантаження</string>
+    <string name="top_coins_load_error">Не вдалося завантажити рейтинг криптовалют</string>
+    <string name="retry">Повторити</string>
 </resources>

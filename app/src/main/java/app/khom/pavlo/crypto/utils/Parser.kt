@@ -123,6 +123,12 @@ fun getPairsListFromJson(jsonObject: JsonObject): ArrayList<PairData> {
 }
 
 fun getTopCoinsFromJson(jsonObject: JsonObject): ArrayList<TopCoinData> {
+    if (jsonObject.getString("Response").equals("Error", ignoreCase = true)) {
+        val message = jsonObject.getString("Message")
+                .takeIf { it.isNotBlank() }
+                ?: "CryptoCompare top coins request failed"
+        throw IllegalStateException(message)
+    }
     val result: ArrayList<TopCoinData> = ArrayList()
     val data = jsonObject.get(DATA)
     if (data == null || !data.isJsonArray) return result
@@ -135,7 +141,11 @@ fun getTopCoinsFromJson(jsonObject: JsonObject): ArrayList<TopCoinData> {
         val symbol = coinInfo.getString("Name").takeIf { it.isNotBlank() } ?: return@forEach
         val fullName = coinInfo.getString("FullName").takeIf { it.isNotBlank() } ?: symbol
         val imagePath = coinInfo.getString("ImageUrl")
-        val imageUrl = if (imagePath.isNotEmpty()) CRYPTOCOMPARE_IMAGE_BASE_URL + imagePath else ""
+        val imageUrl = when {
+            imagePath.isEmpty() -> ""
+            imagePath.startsWith("http://") || imagePath.startsWith("https://") -> imagePath
+            else -> CRYPTOCOMPARE_IMAGE_BASE_URL + imagePath
+        }
 
         val rawUsd = obj.getObject("RAW")?.getObject(USD)
         val priceUsd = rawUsd?.getString("PRICE") ?: ""
@@ -190,6 +200,40 @@ fun getNewsFromJson(jsonObject: JsonObject): ArrayList<NewsItem> {
     }
     return result
 }
+
+fun getTopCoinsFromCoinPaprika(
+        tickers: List<CoinPaprikaTicker>,
+        limit: Int = 100
+): ArrayList<TopCoinData> = ArrayList(
+        tickers.asSequence()
+                .filter { !it.name.isNullOrBlank() && !it.symbol.isNullOrBlank() && (it.rank ?: 0) > 0 }
+                .sortedBy { it.rank }
+                .take(limit)
+                .map { ticker ->
+                    val quote = ticker.quotes?.usd
+                    TopCoinData(
+                            id = ticker.id.orEmpty(),
+                            name = ticker.name.orEmpty(),
+                            symbol = ticker.symbol.orEmpty().uppercase(Locale.US),
+                            rank = ticker.rank,
+                            price_usd = quote?.price?.toString().orEmpty(),
+                            price_btc = "",
+                            vol24Usd = quote?.volume_24h?.toString().orEmpty(),
+                            market_cap_usd = quote?.market_cap?.toString().orEmpty(),
+                            available_supply = "",
+                            total_supply = ticker.total_supply?.toString().orEmpty(),
+                            percent_change_1h = quote?.percent_change_1h?.toString().orEmpty(),
+                            percent_change_24h = quote?.percent_change_24h?.toString().orEmpty(),
+                            percent_change_7d = quote?.percent_change_7d?.toString().orEmpty(),
+                            last_updated = ticker.last_updated.orEmpty(),
+                            imgUrl = ticker.id
+                                    ?.takeIf { it.isNotBlank() }
+                                    ?.let { "$COINPAPRIKA_IMAGE_BASE_URL$it/logo.png" }
+                                    .orEmpty()
+                    )
+                }
+                .toList()
+)
 
 private fun JsonObject.getString(vararg names: String): String {
     names.forEach { name ->

@@ -2,11 +2,15 @@ package app.khom.pavlo.crypto.utils
 
 import app.khom.pavlo.crypto.model.DATA
 import app.khom.pavlo.crypto.model.AllCoinsResponse
+import app.khom.pavlo.crypto.model.CoinPaprikaQuote
+import app.khom.pavlo.crypto.model.CoinPaprikaQuotes
+import app.khom.pavlo.crypto.model.CoinPaprikaTicker
 import com.google.gson.Gson
 import com.google.gson.JsonParser
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
+import kotlin.test.assertFailsWith
 
 class ParserTest {
 
@@ -130,5 +134,56 @@ class ParserTest {
         assertEquals(listOf("BTC", "ETH"), result.map { it.symbol })
         assertEquals(listOf(1, 2), result.map { it.rank })
         assertTrue(result.all { it.name.isNotBlank() })
+    }
+
+    @Test
+    fun `top coins parser exposes CryptoCompare error responses`() {
+        val json = JsonParser.parseString(
+            """{"Response":"Error","Message":"Rate limit exceeded"}"""
+        ).asJsonObject
+
+        val error = assertFailsWith<IllegalStateException> { getTopCoinsFromJson(json) }
+
+        assertEquals("Rate limit exceeded", error.message)
+    }
+
+    @Test
+    fun `CoinPaprika tickers map and sort by rank`() {
+        val tickers = listOf(
+            CoinPaprikaTicker(
+                id = "eth-ethereum",
+                name = "Ethereum",
+                symbol = "eth",
+                rank = 2,
+                total_supply = 120_000_000.0,
+                quotes = CoinPaprikaQuotes(CoinPaprikaQuote(price = 3_000.0))
+            ),
+            CoinPaprikaTicker(
+                id = "btc-bitcoin",
+                name = "Bitcoin",
+                symbol = "btc",
+                rank = 1,
+                total_supply = 21_000_000.0,
+                quotes = CoinPaprikaQuotes(
+                    CoinPaprikaQuote(
+                        price = 100_000.0,
+                        volume_24h = 50_000_000_000.0,
+                        market_cap = 2_000_000_000_000.0,
+                        percent_change_24h = 2.5
+                    )
+                )
+            )
+        )
+
+        val result = getTopCoinsFromCoinPaprika(tickers)
+
+        assertEquals(listOf("BTC", "ETH"), result.map { it.symbol })
+        assertEquals(listOf(1, 2), result.map { it.rank })
+        assertEquals("100000.0", result.first().price_usd)
+        assertEquals("2.5", result.first().percent_change_24h)
+        assertEquals(
+            "https://static.coinpaprika.com/coin/btc-bitcoin/logo.png",
+            result.first().imgUrl
+        )
     }
 }

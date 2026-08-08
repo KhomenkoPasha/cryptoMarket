@@ -3,6 +3,8 @@ package app.khom.pavlo.crypto.model
 
 val BASE_CRYPTOCOMPARE_URL = "https://min-api.cryptocompare.com/data/"
 val COINDESK_NEWS_URL = "https://data-api.coindesk.com/news/v1/article/list"
+val COINPAPRIKA_TICKERS_URL = "https://api.coinpaprika.com/v1/tickers"
+val COINPAPRIKA_IMAGE_BASE_URL = "https://static.coinpaprika.com/coin/"
 val CRYPTOCOMPARE_IMAGE_BASE_URL = "https://www.cryptocompare.com"
 
 val CRYPTOMOON_PREFS = "cryptoMoonPrefs"
