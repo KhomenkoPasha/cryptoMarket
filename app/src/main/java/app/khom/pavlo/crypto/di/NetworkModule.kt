@@ -1,15 +1,17 @@
 package app.khom.pavlo.crypto.di
 
+import app.khom.pavlo.crypto.BuildConfig
 import app.khom.pavlo.crypto.model.BASE_CRYPTOCOMPARE_URL
-import app.khom.pavlo.crypto.model.network.CoinMarketCapApi
+import app.khom.pavlo.crypto.model.network.CryptoCompareAuthInterceptor
 import app.khom.pavlo.crypto.model.network.CryptoCompareAPI
 import app.khom.pavlo.crypto.model.network.NetworkRequests
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import okhttp3.OkHttpClient
 import retrofit2.Retrofit
-import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
+import retrofit2.adapter.rxjava3.RxJava3CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
 
@@ -18,10 +20,17 @@ import javax.inject.Singleton
 class NetworkModule {
 
     @Provides @Singleton
-    fun provideRetrofit(): Retrofit =
+    fun provideOkHttpClient(): OkHttpClient =
+            OkHttpClient.Builder()
+                    .addInterceptor(CryptoCompareAuthInterceptor(BuildConfig.CRYPTOCOMPARE_API_KEY))
+                    .build()
+
+    @Provides @Singleton
+    fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit =
             Retrofit.Builder()
                     .baseUrl(BASE_CRYPTOCOMPARE_URL)
-                    .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                    .client(okHttpClient)
+                    .addCallAdapterFactory(RxJava3CallAdapterFactory.create())
                     .addConverterFactory(GsonConverterFactory.create())
                     .build()
 
@@ -29,9 +38,5 @@ class NetworkModule {
     fun provideCrComApi(retrofit: Retrofit): CryptoCompareAPI = retrofit.create(CryptoCompareAPI::class.java)
 
     @Provides @Singleton
-    fun provideCoinMarketCapApi(retrofit: Retrofit): CoinMarketCapApi = retrofit.create(CoinMarketCapApi::class.java)
-
-    @Provides @Singleton
-    fun provideNetworkRequests(cryptoCompareAPI: CryptoCompareAPI, coinMarketCapApi: CoinMarketCapApi) =
-            NetworkRequests(cryptoCompareAPI, coinMarketCapApi)
+    fun provideNetworkRequests(cryptoCompareAPI: CryptoCompareAPI) = NetworkRequests(cryptoCompareAPI)
 }

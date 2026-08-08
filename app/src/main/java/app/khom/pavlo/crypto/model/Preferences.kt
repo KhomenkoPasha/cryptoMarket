@@ -62,7 +62,7 @@ class Preferences(context: Context) {
             prefs.getFloat(INSIGHTS_TRACKED_PRICE_PREFIX + symbol.uppercase(Locale.US), 0f)
 
     private fun setLang(value: String) {
-        prefs.edit().putString(SELECTED_LANGUAGE, value).commit()
+        prefs.edit().putString(SELECTED_LANGUAGE, value).apply()
     }
 
 }

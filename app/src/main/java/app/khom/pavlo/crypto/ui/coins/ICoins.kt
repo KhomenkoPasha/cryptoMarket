@@ -7,6 +7,7 @@ interface ICoins {
     interface View {
         fun updateRecyclerView()
         fun hideRefreshing()
+        fun setLoadingVisibility(isLoading: Boolean)
         fun enableSwipeToRefresh()
         fun disableSwipeToRefresh()
         fun startCoinInfoActivity(name: String?, to: String?)

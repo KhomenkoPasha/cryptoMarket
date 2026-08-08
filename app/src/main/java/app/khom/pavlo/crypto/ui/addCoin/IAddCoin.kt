@@ -1,7 +1,7 @@
 package app.khom.pavlo.crypto.ui.addCoin
 
 import app.khom.pavlo.crypto.model.InfoCoin
-import io.reactivex.Observable
+import io.reactivex.rxjava3.core.Observable
 
 
 interface IAddCoin {
@@ -20,6 +20,7 @@ interface IAddCoin {
 
     interface Presenter {
         fun onCreate(matches: ArrayList<InfoCoin>)
+        fun onStart()
         fun onFromItemClicked(coin: InfoCoin)
         fun observeFromText(observable: Observable<CharSequence>)
         fun onStop()

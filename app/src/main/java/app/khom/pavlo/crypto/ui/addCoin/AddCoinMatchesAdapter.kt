@@ -1,6 +1,5 @@
 package app.khom.pavlo.crypto.ui.addCoin
 
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,7 +9,7 @@ import com.squareup.picasso.Picasso
 import androidx.recyclerview.widget.RecyclerView
 
 
-class AddCoinMatchesAdapter(private val items: ArrayList<InfoCoin>, private val context: Context,
+class AddCoinMatchesAdapter(private val items: ArrayList<InfoCoin>,
                             val listener: (InfoCoin) -> Unit) : RecyclerView.Adapter<AddCoinMatchesAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -34,11 +33,30 @@ class AddCoinMatchesAdapter(private val items: ArrayList<InfoCoin>, private val 
                 binding.addCoinIcon.visibility = View.VISIBLE
                 Picasso.get()
                         .load(coin.imageUrl)
+                        .tag(this@AddCoinMatchesAdapter)
+                        .fit()
+                        .centerInside()
                         .into(binding.addCoinIcon)
             } else {
                 binding.addCoinIcon.visibility = View.INVISIBLE
             }
             binding.root.setOnClickListener { listener(coin) }
         }
+
+        fun recycle() {
+            Picasso.get().cancelRequest(binding.addCoinIcon)
+            binding.addCoinIcon.setImageDrawable(null)
+            binding.root.setOnClickListener(null)
+        }
+    }
+
+    override fun onViewRecycled(holder: ViewHolder) {
+        holder.recycle()
+        super.onViewRecycled(holder)
+    }
+
+    override fun onDetachedFromRecyclerView(recyclerView: RecyclerView) {
+        Picasso.get().cancelTag(this)
+        super.onDetachedFromRecyclerView(recyclerView)
     }
 }

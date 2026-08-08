@@ -8,7 +8,10 @@ import app.khom.pavlo.crypto.model.*
 import app.khom.pavlo.crypto.ui.news.NewsItem
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
+import java.math.BigDecimal
 import java.util.*
+
+private val parserGson = Gson()
 
 fun getCoinsFromJson(jsonObject: JsonObject, map: Map<String, ArrayList<String?>>): ArrayList<Coin> {
     val result: ArrayList<Coin> = ArrayList()
@@ -20,9 +23,9 @@ fun getCoinsFromJson(jsonObject: JsonObject, map: Map<String, ArrayList<String?>
         map[FSYMS]?.forEach {
             if (it != null) {
                 try {
-                    val displayCoin: DisplayCoin = Gson().fromJson(displayJson.asJsonObject[it].asJsonObject[USD],
+                    val displayCoin: DisplayCoin = parserGson.fromJson(displayJson.asJsonObject[it].asJsonObject[USD],
                             DisplayCoin::class.java)
-                    val rawCoin: RawCoin = Gson().fromJson(rawJson.asJsonObject[it].asJsonObject[USD],
+                    val rawCoin: RawCoin = parserGson.fromJson(rawJson.asJsonObject[it].asJsonObject[USD],
                             RawCoin::class.java)
                     val coin = Coin(
                             from = it,
@@ -74,8 +77,13 @@ fun getAllCoinsFromJson(response: AllCoinsResponse): ArrayList<InfoCoin> {
     val jsonObject = response.data
     jsonObject.entrySet().forEach {
         try {
-            val coin = Gson().fromJson(it.value, InfoCoin::class.java)
-            coin.imageUrl = response.baseImageUrl + coin.imageUrl
+            val coin = parserGson.fromJson(it.value, InfoCoin::class.java)
+            if (coin.coinName.isNullOrEmpty()) coin.coinName = coin.fullName
+            coin.imageUrl = when {
+                coin.imageUrl.isBlank() -> ""
+                coin.imageUrl.startsWith("http://") || coin.imageUrl.startsWith("https://") -> coin.imageUrl
+                else -> response.baseImageUrl.trimEnd('/') + "/" + coin.imageUrl.trimStart('/')
+            }
             result.add(coin)
         } catch (ex: Exception) {
             println(ex)
@@ -90,7 +98,7 @@ fun getHistoListFromJson(jsonObject: JsonObject): ArrayList<HistoData> {
     if (data != null && data.isJsonArray) {
         data.asJsonArray.forEach {
             try {
-                result.add(Gson().fromJson(it, HistoData::class.java))
+                result.add(parserGson.fromJson(it, HistoData::class.java))
             } catch (ex: Exception) {
                 println(ex)
             }
@@ -105,7 +113,7 @@ fun getPairsListFromJson(jsonObject: JsonObject): ArrayList<PairData> {
     if (data != null && data.isJsonArray) {
         data.asJsonArray.forEach {
             try {
-                result.add(Gson().fromJson(it, PairData::class.java))
+                result.add(parserGson.fromJson(it, PairData::class.java))
             } catch (ex: Exception) {
                 println(ex)
             }
@@ -234,6 +242,12 @@ fun getChangeColor(change: Float) = when {
     else -> R.color.red
 }
 
+fun getChangeColor(change: BigDecimal) = when (change.signum()) {
+    1 -> R.color.green
+    -1 -> R.color.red
+    else -> R.color.orange_dark
+}
+
 fun addCommasToStringNumber(number: String?): String {
     val value = number.toSafeDoubleOrNull() ?: return ""
     val formatter = DecimalFormat("#,###.####")
@@ -244,6 +258,11 @@ fun getStringWithTwoDecimalsFromDouble(value: Float): String {
     if (!value.isUsableNumber()) return ""
     val formatter = DecimalFormat("#.####")
     return formatter.format(value.toDouble())
+}
+
+fun getStringWithTwoDecimalsFromDouble(value: BigDecimal): String {
+    val formatter = DecimalFormat("#.####")
+    return formatter.format(value)
 }
 
 fun formatLongDateToString(date: Long?, format: String): String {
@@ -277,6 +296,10 @@ fun getNumberSignByValue(value: Double) = when {
 fun getProfitLossText(change: Float, resProvider: ResourceProvider) =
         if (!change.isUsableNumber() || change >= 0) resProvider.getString(R.string.prf)
         else  resProvider.getString(R.string.ls)
+
+fun getProfitLossText(change: BigDecimal, resProvider: ResourceProvider) =
+        if (change.signum() >= 0) resProvider.getString(R.string.prf)
+        else resProvider.getString(R.string.ls)
 
 fun getProfitLossTextBig(change: Float, resProvider: ResourceProvider) =
         if (!change.isUsableNumber() || change >= 0) resProvider.getString(R.string.profit_b)

@@ -2,7 +2,8 @@ package app.khom.pavlo.crypto.model.db
 
 import androidx.room.*
 import app.khom.pavlo.crypto.model.HoldingData
-import io.reactivex.Flowable
+import io.reactivex.rxjava3.core.Completable
+import io.reactivex.rxjava3.core.Flowable
 
 
 @Dao
@@ -12,8 +13,11 @@ interface HoldingsDao {
     fun getAllHoldings(): Flowable<List<HoldingData>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insert(holdingData: HoldingData)
+    fun insert(holdingData: HoldingData): Completable
 
     @Delete
-    fun deleteHolding(holdingData: HoldingData)
+    fun deleteHolding(holdingData: HoldingData): Completable
+
+    @Query("DELETE FROM holdings WHERE from_coin = :from AND to_currency = :to")
+    fun deleteByPair(from: String, to: String): Completable
 }

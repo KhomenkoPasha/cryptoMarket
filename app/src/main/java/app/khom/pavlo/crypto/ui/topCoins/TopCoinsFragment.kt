@@ -3,7 +3,6 @@ package app.khom.pavlo.crypto.ui.topCoins
 import android.content.Intent
 import android.os.Bundle
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,8 +14,6 @@ import app.khom.pavlo.crypto.utils.ResourceProvider
 import app.khom.pavlo.crypto.databinding.TopCoinsFragmentBinding
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
-import androidx.core.content.ContextCompat
-import androidx.recyclerview.widget.DividerItemDecoration
 
 
 @AndroidEntryPoint
@@ -28,8 +25,7 @@ class TopCoinsFragment : Fragment(), ITopCoins.View {
 
     private var _binding: TopCoinsFragmentBinding? = null
     private val binding get() = _binding!!
-    private lateinit var recView: RecyclerView
-    private lateinit var adapter: TopCoinsAdapter
+    private var adapter: TopCoinsAdapter? = null
     private var coins: ArrayList<TopCoinData> = ArrayList()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -49,19 +45,10 @@ class TopCoinsFragment : Fragment(), ITopCoins.View {
     }
 
     private fun setupRecView() {
-        recView = binding.topCoinsFragmentRecView
-        recView.layoutManager = LinearLayoutManager(activity)
+        binding.topCoinsFragmentRecView.layoutManager = LinearLayoutManager(requireContext())
         adapter = TopCoinsAdapter(coins, resProvider, presenter, coinsController,
                 clickListener = { presenter.onCoinClicked(it) })
-        recView.adapter = adapter
-
-        context?.let { safeContext ->
-            ContextCompat.getDrawable(safeContext, R.drawable.divider)?.let { divider ->
-                val itemDecorator = DividerItemDecoration(safeContext, DividerItemDecoration.VERTICAL)
-                itemDecorator.setDrawable(divider)
-                recView.addItemDecoration(itemDecorator)
-            }
-        }
+        binding.topCoinsFragmentRecView.adapter = adapter
     }
 
     private fun setupSwipeRefresh() {
@@ -75,7 +62,7 @@ class TopCoinsFragment : Fragment(), ITopCoins.View {
     }
 
     override fun updateRecyclerView() {
-        adapter.notifyDataSetChanged()
+        adapter?.notifyDataSetChanged()
     }
 
     override fun onStart() {
@@ -92,6 +79,18 @@ class TopCoinsFragment : Fragment(), ITopCoins.View {
         binding.topCoinsFragmentSwipeRefresh.isRefreshing = false
     }
 
+    override fun setLoadingVisibility(isLoading: Boolean) {
+        binding.topCoinsLoading.visibility = if (isLoading) View.VISIBLE else View.GONE
+    }
+
+    override fun setCoinAdding(symbol: String, isAdding: Boolean) {
+        adapter?.setCoinAdding(symbol, isAdding)
+    }
+
+    override fun setCoinAdded(symbol: String) {
+        adapter?.setCoinAdded(symbol)
+    }
+
     override fun startCoinInfoActivity(name: String?) {
         val intent = Intent(context, CoinInfoActivity::class.java)
         intent.putExtra(NAME, name)
@@ -100,7 +99,9 @@ class TopCoinsFragment : Fragment(), ITopCoins.View {
     }
 
     override fun onDestroyView() {
-        super.onDestroyView()
+        binding.topCoinsFragmentRecView.adapter = null
+        adapter = null
         _binding = null
+        super.onDestroyView()
     }
 }

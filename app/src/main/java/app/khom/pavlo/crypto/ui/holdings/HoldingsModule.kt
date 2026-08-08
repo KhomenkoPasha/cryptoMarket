@@ -2,6 +2,7 @@ package app.khom.pavlo.crypto.ui.holdings
 
 import android.app.Activity
 import app.khom.pavlo.crypto.model.db.CMDatabase
+import app.khom.pavlo.crypto.model.db.PortfolioRepository
 import app.khom.pavlo.crypto.utils.ResourceProvider
 import app.khom.pavlo.crypto.utils.Toaster
 import dagger.Module
@@ -20,9 +21,9 @@ class HoldingsModule {
 
     @Provides @ActivityScoped
     fun providePresenter(view: IHoldings.View,
-                         db: CMDatabase,
+                         portfolioRepository: PortfolioRepository,
                          resourceProvider: ResourceProvider,
                          toaster: Toaster): IHoldings.Presenter =
-            HoldingsPresenter(view, db, resourceProvider, toaster)
+            HoldingsPresenter(view, portfolioRepository, resourceProvider, toaster)
 
 }

@@ -10,7 +10,7 @@ import app.khom.pavlo.crypto.utils.*
 import com.squareup.picasso.Picasso
 import androidx.recyclerview.widget.RecyclerView
 import android.view.ViewGroup
-import kotlin.math.abs
+import java.math.BigDecimal
 
 
 class HoldingsAdapter(private val holdings: ArrayList<HoldingData>,
@@ -60,31 +60,50 @@ class HoldingsAdapter(private val holdings: ArrayList<HoldingData>,
             if (imageUrl.isNotEmpty()) {
                 Picasso.get()
                         .load(imageUrl)
+                        .tag(this@HoldingsAdapter)
+                        .fit()
+                        .centerInside()
                         .into(binding.holdingsItemIcon)
             }
 
             binding.holdingsItemMainPrice.text = holdingsHandler.getCurrentPriceByHolding(holdingData)
         }
 
-        private fun formatMoney(value: Float): String {
+        private fun formatMoney(value: BigDecimal): String {
             val formatted = getStringWithTwoDecimalsFromDouble(value)
             return if (formatted.isNotEmpty()) "\$$formatted" else ""
         }
 
-        private fun formatSignedMoney(value: Float): String {
-            val formatted = getStringWithTwoDecimalsFromDouble(abs(value))
+        private fun formatSignedMoney(value: BigDecimal): String {
+            val formatted = getStringWithTwoDecimalsFromDouble(value.abs())
             if (formatted.isEmpty()) return ""
-            val sign = if (value > 0f) "+" else if (value < 0f) "-" else ""
+            val sign = if (value.signum() > 0) "+" else if (value.signum() < 0) "-" else ""
             return "$sign\$$formatted"
         }
 
-        private fun formatPercent(value: Float): String {
-            val formatted = getStringWithTwoDecimalsFromDouble(abs(value))
+        private fun formatPercent(value: BigDecimal): String {
+            val formatted = getStringWithTwoDecimalsFromDouble(value.abs())
             if (formatted.isEmpty()) return ""
-            val sign = if (value > 0f) "+" else if (value < 0f) "-" else ""
+            val sign = if (value.signum() > 0) "+" else if (value.signum() < 0) "-" else ""
             return "$sign$formatted%"
+        }
+
+        fun recycle() {
+            Picasso.get().cancelRequest(binding.holdingsItemIcon)
+            binding.holdingsItemIcon.setImageDrawable(null)
+            binding.root.setOnClickListener(null)
         }
     }
 
     override fun getItemCount() = holdings.size
+
+    override fun onViewRecycled(holder: ViewHolder) {
+        holder.recycle()
+        super.onViewRecycled(holder)
+    }
+
+    override fun onDetachedFromRecyclerView(recyclerView: RecyclerView) {
+        Picasso.get().cancelTag(this)
+        super.onDetachedFromRecyclerView(recyclerView)
+    }
 }

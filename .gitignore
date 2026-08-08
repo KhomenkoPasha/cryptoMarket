@@ -10,3 +10,8 @@
 .externalNativeBuild
 .idea/
 *.iml
+*.apk
+*.aab
+/app/release/
+/oldrepo/
+/.codex-build/

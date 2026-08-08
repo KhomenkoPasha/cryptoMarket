@@ -37,6 +37,9 @@ class NewsAdapter(
                 binding.newsItemImage.visibility = android.view.View.VISIBLE
                 Picasso.get()
                     .load(item.imageUrl)
+                    .tag(this@NewsAdapter)
+                    .fit()
+                    .centerCrop()
                     .into(binding.newsItemImage)
             } else {
                 binding.newsItemImage.visibility = android.view.View.GONE
@@ -54,7 +57,23 @@ class NewsAdapter(
                 .filter { it.isNotEmpty() }
                 .joinToString(" - ")
         }
+
+        fun recycle() {
+            Picasso.get().cancelRequest(binding.newsItemImage)
+            binding.newsItemImage.setImageDrawable(null)
+            binding.newsItemLayout.setOnClickListener(null)
+        }
     }
 
     override fun getItemCount() = items.size
+
+    override fun onViewRecycled(holder: ViewHolder) {
+        holder.recycle()
+        super.onViewRecycled(holder)
+    }
+
+    override fun onDetachedFromRecyclerView(recyclerView: RecyclerView) {
+        Picasso.get().cancelTag(this)
+        super.onDetachedFromRecyclerView(recyclerView)
+    }
 }

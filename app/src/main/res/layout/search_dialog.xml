@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/white"
+    android:background="@color/surface_container"
     android:orientation="vertical">
 
     <TextView
@@ -13,8 +13,8 @@
         android:padding="10dp"
         android:text="@string/enter_hashtag"
         android:textSize="18sp"
-        android:background="@color/colorPrimary"
-        android:textColor="@color/white"
+        android:background="@color/primary_container"
+        android:textColor="@color/on_primary_container"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -27,8 +27,12 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:hint="@string/enter_hashtag"
-        android:textColor="@color/accent"
-        android:textColorHint="@color/white"
+        android:importantForAutofill="no"
+        android:inputType="text"
+        android:background="@drawable/bg_input_surface"
+        android:padding="16dp"
+        android:textColor="@color/on_surface"
+        android:textColorHint="@color/on_surface_variant"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/search_title" />
@@ -36,7 +40,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/white"
+        android:background="@color/surface_container"
         android:layout_marginTop="10dp"
         android:gravity="right"
         android:layout_gravity="right"
@@ -46,7 +50,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
-        android:textColor="@color/colorPrimary"
+        android:textColor="@color/on_surface_variant"
         android:layout_marginEnd="4dp"
         android:background="?android:attr/selectableItemBackground"
         android:layout_marginStart="8dp"
@@ -69,7 +73,7 @@
         android:layout_marginTop="8dp"
         android:minWidth="130dp"
         android:text="@string/ok"
-        android:textColor="@color/accent"
+        android:textColor="@color/brand_primary"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/search_cancel"

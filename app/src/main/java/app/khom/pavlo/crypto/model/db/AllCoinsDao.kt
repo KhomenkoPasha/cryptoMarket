@@ -4,8 +4,9 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Transaction
 import app.khom.pavlo.crypto.model.InfoCoin
-import io.reactivex.Flowable
+import io.reactivex.rxjava3.core.Flowable
 
 
 @Dao
@@ -22,4 +23,10 @@ interface AllCoinsDao {
 
     @Query("DELETE FROM all_coins")
     fun clearAllCoins()
+
+    @Transaction
+    fun replaceAll(list: List<InfoCoin>) {
+        clearAllCoins()
+        insertList(list)
+    }
 }

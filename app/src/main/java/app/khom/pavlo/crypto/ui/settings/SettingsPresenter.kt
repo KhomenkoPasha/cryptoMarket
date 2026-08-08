@@ -7,9 +7,9 @@ import app.khom.pavlo.crypto.model.Preferences
 import app.khom.pavlo.crypto.model.rxbus.LanguageChanged
 import app.khom.pavlo.crypto.model.rxbus.RxBus
 import app.khom.pavlo.crypto.utils.ResourceProvider
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.schedulers.Schedulers
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.disposables.CompositeDisposable
+import io.reactivex.rxjava3.schedulers.Schedulers
 import javax.inject.Inject
 
 
@@ -23,6 +23,9 @@ class SettingsPresenter @Inject constructor(
 
     override fun onCreate() {
         initLanguage()
+    }
+
+    override fun onStart() {
         setRxEventsListeners()
     }
 
@@ -46,7 +49,7 @@ class SettingsPresenter @Inject constructor(
     private fun onLanguageChanged(language: String?) {
         if (language != null) preferences.language = language
         LocaleManager.setNewLocale(context, preferences.language)
-        System.exit(0)
+        view.restartApplication()
     }
 
     override fun onLanguageClicked() {

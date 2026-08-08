@@ -1,7 +1,5 @@
 buildscript {
-    ext.kotlin_version = "2.2.20"
-    ext.google_services_version = '4.4.1'
-    ext.crashlytics_version = "2.9.9"
+    ext.kotlin_version = "2.3.21"
 
     repositories {
         google()
@@ -9,16 +7,9 @@ buildscript {
     }
 
     dependencies {
-        classpath "com.android.tools.build:gradle:8.6.1"
+        classpath "com.android.tools.build:gradle:8.13.2"
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath "com.google.dagger:hilt-android-gradle-plugin:2.58"
-
-        // Google services
-        classpath "com.google.gms:google-services:$google_services_version"
-
-        // Firebase Crashlytics Gradle plugin
-        classpath "com.google.firebase:firebase-crashlytics-gradle:$crashlytics_version"
-
     }
 }
 
@@ -26,7 +17,7 @@ allprojects {
     repositories {
         google()
         mavenCentral()
-        maven { url 'https://jitpack.io' }
+        maven { url = 'https://jitpack.io' }
     }
 }
 

@@ -124,4 +124,24 @@
     <string name="widget_favorites_title_small">Favorites</string>
     <string name="widget_favorites_title_large">Favorites</string>
     <string name="widget_empty_favorites">No favorite coins yet</string>
+    <string name="news_link_missing">News link is missing</string>
+    <string name="news_link_open_error">Cannot open news link</string>
+    <string name="insights">Insights</string>
+    <string name="insights_loading">Loading insights…</string>
+    <string name="insights_updated">Updated %s</string>
+    <string name="insights_market_mood">Market mood</string>
+    <string name="insights_daily_digest">Daily digest</string>
+    <string name="insights_smart_alerts">Smart alerts</string>
+    <string name="insights_watchlist_notes">Watchlist notes</string>
+    <string name="insights_compare">Compare coins</string>
+    <string name="insights_anomalies">Market anomalies</string>
+    <string name="insights_categories">Categories</string>
+    <string name="insights_news_impact">News impact</string>
+    <string name="insights_beginner_guide">Beginner guide</string>
+    <string name="insights_glossary">Glossary</string>
+    <string name="insights_save_note">Save note</string>
+    <string name="insights_note_hint">Add a note</string>
+    <string name="insights_note_saved">Note saved</string>
+    <string name="portfolio">Portfolio</string>
+    <string name="loading">Loading</string>
 </resources>

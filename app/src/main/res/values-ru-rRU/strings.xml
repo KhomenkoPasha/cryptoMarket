@@ -94,6 +94,24 @@
     <string name="widget_favorites_title_small">Избранные</string>
     <string name="widget_favorites_title_large">Избранные</string>
     <string name="widget_empty_favorites">Нет избранных монет</string>
+    <string name="news_link_missing">Ссылка на новость отсутствует</string>
+    <string name="news_link_open_error">Не удалось открыть ссылку на новость</string>
+    <string name="insights">Аналитика</string>
+    <string name="insights_loading">Загрузка аналитики…</string>
+    <string name="insights_updated">Обновлено %s</string>
+    <string name="insights_market_mood">Настроение рынка</string>
+    <string name="insights_daily_digest">Ежедневный обзор</string>
+    <string name="insights_smart_alerts">Умные уведомления</string>
+    <string name="insights_watchlist_notes">Заметки списка наблюдения</string>
+    <string name="insights_compare">Сравнение монет</string>
+    <string name="insights_anomalies">Рыночные аномалии</string>
+    <string name="insights_categories">Категории</string>
+    <string name="insights_news_impact">Влияние новостей</string>
+    <string name="insights_beginner_guide">Руководство для начинающих</string>
+    <string name="insights_glossary">Глоссарий</string>
+    <string name="insights_save_note">Сохранить заметку</string>
+    <string name="insights_note_hint">Добавить заметку</string>
+    <string name="insights_note_saved">Заметка сохранена</string>
 
     <string-array name="histo_periods">
         <item>1 час</item>
@@ -124,4 +142,6 @@
     <string name="portfolio_allocation">Доля</string>
     <string name="portfolio_holding_day_pnl">PnL 24ч</string>
     <string name="portfolio_empty">Сначала добавьте транзакции. Трекинг прибыли появится здесь.</string>
+    <string name="portfolio">Портфель</string>
+    <string name="loading">Загрузка</string>
 </resources>

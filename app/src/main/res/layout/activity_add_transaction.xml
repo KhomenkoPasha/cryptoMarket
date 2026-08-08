@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/colorPrimaryDark">
+    android:background="@drawable/bg_app_depth">
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
@@ -17,8 +17,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:theme="@style/ToolbarColoredBackArrow"
-            app:titleTextColor="@color/grey_light"
-            android:background="@color/colorPrimary"/>
+            app:titleTextColor="@color/on_surface"
+            android:background="@drawable/bg_appbar_glass"/>
 
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -44,6 +44,18 @@
             android:textSize="20sp"
             android:textColor="@color/grey_light"
             tools:text="$4504"/>
+
+        <com.github.ybq.android.spinkit.SpinKitView
+            android:id="@+id/add_trans_price_loading"
+            style="@style/SpinKitView.Small.DoubleBounce"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="6dp"
+            android:contentDescription="@string/loading"
+            android:visibility="gone"
+            app:SpinKit_Color="@color/accent"
+            tools:visibility="visible" />
 
     </LinearLayout>
 
@@ -136,5 +148,16 @@
         android:layout_marginTop="30dp"
         android:layout_gravity="center_horizontal"
         android:text="@string/confirm_transaction"/>
+
+    <com.github.ybq.android.spinkit.SpinKitView
+        android:id="@+id/add_trans_save_loading"
+        style="@style/SpinKitView.FadingCircle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:contentDescription="@string/loading"
+        android:visibility="gone"
+        app:SpinKit_Color="@color/accent"
+        tools:visibility="visible" />
 
 </LinearLayout>

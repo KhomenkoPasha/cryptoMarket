@@ -6,9 +6,9 @@ import app.khom.pavlo.crypto.model.Preferences
 import app.khom.pavlo.crypto.model.network.NetworkRequests
 import app.khom.pavlo.crypto.model.rxbus.RxBus
 import app.khom.pavlo.crypto.model.rxbus.SearchHashTagUpdated
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.schedulers.Schedulers
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.disposables.CompositeDisposable
+import io.reactivex.rxjava3.schedulers.Schedulers
 import javax.inject.Inject
 
 

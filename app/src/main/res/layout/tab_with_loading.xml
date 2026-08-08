@@ -10,7 +10,7 @@
         tools:text="COINS"
         android:textStyle="bold"
         android:textAllCaps="true"
-        android:textColor="@color/white"
+        android:textColor="@color/brand_primary"
         android:layout_centerInParent="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
@@ -19,14 +19,12 @@
         android:id="@+id/tab_loading"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toRightOf="@id/tab_title"
         android:layout_toEndOf="@id/tab_title"
         android:layout_centerVertical="true"
-        android:layout_marginLeft="3dp"
         android:layout_marginStart="3dp"
         android:visibility="gone"
         tools:visibility="visible"
         style="@style/SpinKitView.Small.DoubleBounce"
-        app:SpinKit_Color="@color/green"/>
+        app:SpinKit_Color="@color/brand_primary"/>
 
 </RelativeLayout>

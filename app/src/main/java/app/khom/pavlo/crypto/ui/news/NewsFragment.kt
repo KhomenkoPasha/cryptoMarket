@@ -5,7 +5,6 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,7 +15,6 @@ import app.khom.pavlo.crypto.utils.toastShort
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
-//hq9s n25b uymj   twitter code
 @AndroidEntryPoint
 class NewsFragment : Fragment(), INews.View {
 
@@ -24,9 +22,7 @@ class NewsFragment : Fragment(), INews.View {
     lateinit var presenter: INews.Presenter
 
     private var items: ArrayList<NewsItem> = ArrayList()
-    private lateinit var recView: RecyclerView
-    private lateinit var adapter: NewsAdapter
-    private lateinit var linearLayoutManager: LinearLayoutManager
+    private var adapter: NewsAdapter? = null
     private var _binding: NewsFragmentBinding? = null
     private val binding get() = _binding!!
 
@@ -67,16 +63,10 @@ class NewsFragment : Fragment(), INews.View {
     }
 
     private fun setupRecView() {
-        recView = binding.newsRecView
-        linearLayoutManager = LinearLayoutManager(activity)
-        recView.layoutManager = linearLayoutManager
+        val layoutManager = LinearLayoutManager(requireContext())
+        binding.newsRecView.layoutManager = layoutManager
         adapter = NewsAdapter(items) { openNews(it) }
-        recView.adapter = adapter
-        recView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                presenter.onScrolled(dy, linearLayoutManager.childCount, linearLayoutManager.itemCount, linearLayoutManager.findFirstVisibleItemPosition())
-            }
-        })
+        binding.newsRecView.adapter = adapter
     }
 
     private fun openNews(item: NewsItem) {
@@ -104,7 +94,7 @@ class NewsFragment : Fragment(), INews.View {
     }
 
     override fun setItems(items: List<NewsItem>) {
-        adapter.notifyDataSetChanged()
+        adapter?.notifyDataSetChanged()
     }
 
     override fun showLoading() {
@@ -144,7 +134,10 @@ class NewsFragment : Fragment(), INews.View {
     }
 
     override fun onDestroyView() {
-        super.onDestroyView()
+        binding.newsRecView.adapter = null
+        binding.newsRecView.layoutManager = null
+        adapter = null
         _binding = null
+        super.onDestroyView()
     }
 }

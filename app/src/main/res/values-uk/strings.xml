@@ -2,7 +2,7 @@
 <resources>
     <string name="app_name"> КриптоКурс</string>
 
-    <string name="dollars">% s $</string>
+    <string name="dollars">%s $</string>
 
     <string name="active_currencies"> Криптовалюти:</string>
 
@@ -160,6 +160,24 @@
     <string name="widget_favorites_title_small"> Вибране</string>
     <string name="widget_favorites_title_large"> Вибране</string>
     <string name="widget_empty_favorites"> Немає вибраних монет</string>
+    <string name="news_link_missing">Посилання на новину відсутнє</string>
+    <string name="news_link_open_error">Не вдалося відкрити посилання на новину</string>
+    <string name="insights">Аналітика</string>
+    <string name="insights_loading">Завантаження аналітики…</string>
+    <string name="insights_updated">Оновлено %s</string>
+    <string name="insights_market_mood">Настрій ринку</string>
+    <string name="insights_daily_digest">Щоденний огляд</string>
+    <string name="insights_smart_alerts">Розумні сповіщення</string>
+    <string name="insights_watchlist_notes">Нотатки списку спостереження</string>
+    <string name="insights_compare">Порівняння монет</string>
+    <string name="insights_anomalies">Ринкові аномалії</string>
+    <string name="insights_categories">Категорії</string>
+    <string name="insights_news_impact">Вплив новин</string>
+    <string name="insights_beginner_guide">Посібник для початківців</string>
+    <string name="insights_glossary">Глосарій</string>
+    <string name="insights_save_note">Зберегти нотатку</string>
+    <string name="insights_note_hint">Додати нотатку</string>
+    <string name="insights_note_saved">Нотатку збережено</string>
 
     <string-array name="histo_periods">
         <item> 1 час </item>
@@ -190,4 +208,6 @@
     <string name="portfolio_allocation">Частка</string>
     <string name="portfolio_holding_day_pnl">PnL 24г</string>
     <string name="portfolio_empty">Спочатку додайте транзакції. Трекінг прибутку буде тут.</string>
+    <string name="portfolio">Портфель</string>
+    <string name="loading">Завантаження</string>
 </resources>

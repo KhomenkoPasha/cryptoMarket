@@ -1,6 +1,5 @@
 package app.khom.pavlo.crypto.ui.coinAllocation
 
-import android.graphics.Color.TRANSPARENT
 import android.os.Bundle
 import androidx.appcompat.widget.Toolbar
 import android.view.View
@@ -37,12 +36,27 @@ class CoinAllocationActivity : BaseActivity(), ICoinAllocation.View {
         toolbar.setNavigationOnClickListener { finish() }
     }
 
+    override fun onStart() {
+        super.onStart()
+        presenter.onStart()
+    }
+
     override fun drawPieChart(pieData: PieData) {
         with(binding.coinAllocationPie) {
             data = pieData
-            description = Description().apply { text = "Coin % of Holdings" }
-            setHoleColor(TRANSPARENT)
+            description = Description().apply {
+                text = "Coin % of Holdings"
+                textColor = resProvider.getColor(R.color.on_surface_variant)
+            }
+            legend.textColor = resProvider.getColor(R.color.on_surface)
+            setEntryLabelColor(resProvider.getColor(R.color.on_surface))
+            setEntryLabelTextSize(12f)
+            setHoleColor(resProvider.getColor(R.color.surface_container))
+            setTransparentCircleAlpha(0)
+            holeRadius = 58f
             setUsePercentValues(true)
+            animateY(500)
+            invalidate()
         }
     }
 

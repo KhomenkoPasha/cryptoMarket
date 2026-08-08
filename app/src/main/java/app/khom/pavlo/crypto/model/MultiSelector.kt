@@ -3,17 +3,18 @@ package app.khom.pavlo.crypto.model
 import android.view.ViewGroup
 import app.khom.pavlo.crypto.R
 import app.khom.pavlo.crypto.utils.ResourceProvider
-import io.reactivex.Observable
-import io.reactivex.subjects.PublishSubject
+import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.subjects.PublishSubject
+import io.reactivex.rxjava3.subjects.Subject
 
 
 class MultiSelector(val resProvider: ResourceProvider) {
 
-    private val subject = PublishSubject.create<Boolean>()
+    private val subject: Subject<Boolean> = PublishSubject.create<Boolean>().toSerialized()
     var atLeastOneIsSelected = false
         set(value) {
-            subject.onNext(value)
             field = value
+            subject.onNext(value)
         }
 
     fun getSelectorObservable(): Observable<Boolean> = subject
@@ -26,10 +27,10 @@ class MultiSelector(val resProvider: ResourceProvider) {
 
     private fun setBackgroundAndSelected(coin: Coin, card: ViewGroup) =
         if (coin.selected) {
-            card.setBackgroundColor(0)
+            card.setBackgroundResource(R.drawable.bg_card_surface)
             false
         } else {
-            card.setBackgroundColor(resProvider.getColor(R.color.colorAccent))
+            card.setBackgroundResource(R.drawable.bg_card_selected)
             true
         }
 }

@@ -5,6 +5,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.google.gson.JsonObject
 import com.google.gson.annotations.SerializedName
+import java.math.BigDecimal
 
 
 
@@ -21,7 +22,7 @@ data class InfoCoin(
         @PrimaryKey @SerializedName("Id") var coinId: String,
         @SerializedName("Url") var url: String = "",
         @SerializedName("ImageUrl") var imageUrl: String = "",
-        @SerializedName("Name") var name: String = "",
+        @SerializedName(value = "Name", alternate = ["Symbol"]) var name: String = "",
         @SerializedName("CoinName") var coinName: String = "",
         @SerializedName("FullName") var fullName: String = "",
         @SerializedName("Algorithm") var algorithm: String = "",
@@ -156,9 +157,13 @@ data class TopCoinData(
         var imgUrl: String? = ""
 )
 
-@Entity(tableName = "holdings", primaryKeys = arrayOf("from_coin", "to_currency", "transaction_date"))
-data class HoldingData(@ColumnInfo(name = "from_coin") var from: String,
+@Entity(
+        tableName = "holdings",
+        indices = [androidx.room.Index(value = ["from_coin", "to_currency"])]
+)
+data class HoldingData(@PrimaryKey(autoGenerate = true) var id: Long = 0,
+                       @ColumnInfo(name = "from_coin") var from: String,
                        @ColumnInfo(name = "to_currency") var to: String,
-                       var quantity: Float = 0f,
-                       var price: Float = 0f,
+                       var quantity: BigDecimal = BigDecimal.ZERO,
+                       var price: BigDecimal = BigDecimal.ZERO,
                        @ColumnInfo(name = "transaction_date") var date: Long)

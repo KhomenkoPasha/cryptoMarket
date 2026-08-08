@@ -2,25 +2,30 @@ package app.khom.pavlo.crypto.model
 
 import app.khom.pavlo.crypto.model.db.CMDatabase
 import app.khom.pavlo.crypto.model.db.DBController
-import io.reactivex.schedulers.Schedulers
+import io.reactivex.rxjava3.disposables.CompositeDisposable
+import io.reactivex.rxjava3.schedulers.Schedulers
+import app.khom.pavlo.crypto.utils.Logger
 
 
-class CoinsController(private val dbController: DBController, db: CMDatabase) {
+class CoinsController(private val dbController: DBController, db: CMDatabase, logger: Logger) {
+
+    // Process-lifetime subscriptions owned by this application-scoped controller.
+    private val subscriptions = CompositeDisposable()
 
     init {
-        db.allCoinsDao().getAllCoins()
+        subscriptions.add(db.allCoinsDao().getAllCoins()
                 .subscribeOn(Schedulers.io())
                 .subscribe({
-                    allInfoCoins = it
+                    allInfoCoins = it.associateBy(InfoCoin::name)
                     enrichSavedCoinsIfNeeded()
-                })
-        db.coinsDao().getAllCoins()
+                }, { logger.logError("Observe all coin info: $it") }))
+        subscriptions.add(db.coinsDao().getAllCoins()
                 .subscribeOn(Schedulers.io())
-                .subscribe({ allCoins = it })
+                .subscribe({ allCoins = it.toList() }, { logger.logError("Observe saved coins: $it") }))
     }
 
-    private var allInfoCoins: List<InfoCoin> = mutableListOf()
-    private var allCoins: List<Coin> = mutableListOf()
+    @Volatile private var allInfoCoins: Map<String, InfoCoin> = emptyMap()
+    @Volatile private var allCoins: List<Coin> = emptyList()
     private var hasEnrichedCoins = false
 
     fun saveCoin(coin: Coin) {
@@ -36,11 +41,11 @@ class CoinsController(private val dbController: DBController, db: CMDatabase) {
     }
 
     private fun addImageUrlToCoin(coin: Coin) {
-        coin.imgUrl = allInfoCoins.find { it.name == coin.from }?.imageUrl ?: ""
+        coin.imgUrl = allInfoCoins[coin.from]?.imageUrl ?: ""
     }
 
     private fun addFullNameToCoin(coin: Coin) {
-        coin.fullName = allInfoCoins.find { it.name == coin.from }?.coinName ?: ""
+        coin.fullName = allInfoCoins[coin.from]?.coinName ?: ""
     }
 
     fun saveCoinsList(list: List<Coin>) {
@@ -52,6 +57,7 @@ class CoinsController(private val dbController: DBController, db: CMDatabase) {
         dbController.saveCoinsList(list)
     }
 
+    @Synchronized
     private fun enrichSavedCoinsIfNeeded() {
         if (hasEnrichedCoins) return
         if (allInfoCoins.isEmpty() || allCoins.isEmpty()) return
@@ -77,7 +83,7 @@ class CoinsController(private val dbController: DBController, db: CMDatabase) {
 
     fun saveTopCoinsList(list: List<TopCoinData>) {
         list.forEach { coin ->
-            val info = allInfoCoins.find { it.name == coin.symbol }
+            val info = allInfoCoins[coin.symbol]
             if (info != null && info.imageUrl.isNotEmpty()) {
                 coin.imgUrl = info.imageUrl
             }

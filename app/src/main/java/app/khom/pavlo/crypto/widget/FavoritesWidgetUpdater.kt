@@ -12,11 +12,12 @@ import androidx.room.Room
 import app.khom.pavlo.crypto.R
 import app.khom.pavlo.crypto.model.DATABASE_NAME
 import app.khom.pavlo.crypto.model.db.CMDatabase
+import app.khom.pavlo.crypto.model.db.ALL_MIGRATIONS
 import app.khom.pavlo.crypto.model.Coin
 import app.khom.pavlo.crypto.model.NAME
 import app.khom.pavlo.crypto.model.TO
 import app.khom.pavlo.crypto.ui.coinInfo.CoinInfoActivity
-import app.khom.pavlo.crypto.ui.SplashActivity
+import app.khom.pavlo.crypto.ui.main.MainActivity
 import app.khom.pavlo.crypto.utils.getChangeColor
 import java.util.concurrent.Executors
 
@@ -73,7 +74,7 @@ object FavoritesWidgetUpdater {
         val priceIds = getPriceIds(maxItems)
         val changeIds = getChangeIds(maxItems)
 
-        val launchIntent = Intent(context, SplashActivity::class.java)
+        val launchIntent = Intent(context, MainActivity::class.java)
         val launchPendingIntent = PendingIntent.getActivity(
             context,
             0,
@@ -128,7 +129,7 @@ object FavoritesWidgetUpdater {
 
     private fun loadCoins(context: Context): List<Coin> {
         val db = Room.databaseBuilder(context, CMDatabase::class.java, DATABASE_NAME)
-            .fallbackToDestructiveMigration()
+            .addMigrations(*ALL_MIGRATIONS)
             .build()
         return try {
             db.coinsDao().getAllCoinsSync()

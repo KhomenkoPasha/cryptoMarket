@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/black"
+    android:background="@drawable/bg_app_depth"
     android:focusableInTouchMode="true"
     tools:context=".ui.addCoin.AddCoinActivity">
 
@@ -20,8 +20,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:theme="@style/ToolbarColoredBackArrow"
-            app:titleTextColor="@color/grey_light"
-            android:background="@color/colorPrimary"/>
+            app:titleTextColor="@color/on_surface"
+            android:background="@drawable/bg_appbar_glass"/>
 
     </com.google.android.material.appbar.AppBarLayout>
     <com.github.mikephil.charting.charts.PieChart
@@ -31,7 +31,8 @@
         android:layout_height="250dp"
         android:layout_centerInParent="true"
         android:visibility="gone"
-        android:background="@color/grey_light" />
+        android:layout_margin="12dp"
+        android:background="@drawable/bg_card_surface" />
     <com.github.ybq.android.spinkit.SpinKitView
         android:layout_below="@id/coin_allocation_app_bar"
         android:id="@+id/coin_allocation_loading"
@@ -39,6 +40,7 @@
         android:layout_height="match_parent"
         android:layout_centerInParent="true"
         style="@style/SpinKitView.Wave"
-        app:SpinKit_Color="@color/yellow"/>
+        android:contentDescription="@string/loading"
+        app:SpinKit_Color="@color/brand_primary"/>
 
 </RelativeLayout>

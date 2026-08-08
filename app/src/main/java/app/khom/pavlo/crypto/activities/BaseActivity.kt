@@ -1,16 +1,27 @@
 package app.khom.pavlo.crypto.activities
 
 import android.content.Context
-import android.os.Build
+import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
 import app.khom.pavlo.crypto.model.LocaleManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
+import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
+import kotlin.math.max
 
 
 abstract class BaseActivity : AppCompatActivity() {
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        WindowCompat.setDecorFitsSystemWindows(window, false)
+        WindowCompat.getInsetsController(window, window.decorView).apply {
+            isAppearanceLightStatusBars = false
+            isAppearanceLightNavigationBars = false
+        }
+    }
 
     override fun attachBaseContext(newBase: Context?) {
         if (newBase != null) {
@@ -46,8 +57,6 @@ abstract class BaseActivity : AppCompatActivity() {
     }
 
     private fun applyNavigationBarInsets(root: View) {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.VANILLA_ICE_CREAM) return
-
         val initialLeft = root.paddingLeft
         val initialTop = root.paddingTop
         val initialRight = root.paddingRight
@@ -55,11 +64,12 @@ abstract class BaseActivity : AppCompatActivity() {
 
         ViewCompat.setOnApplyWindowInsetsListener(root) { view, insets ->
             val navigationBars = insets.getInsets(WindowInsetsCompat.Type.navigationBars())
+            val displayCutout = insets.getInsets(WindowInsetsCompat.Type.displayCutout())
             view.setPadding(
-                initialLeft + navigationBars.left,
+                initialLeft + max(navigationBars.left, displayCutout.left),
                 initialTop,
-                initialRight + navigationBars.right,
-                initialBottom + navigationBars.bottom
+                initialRight + max(navigationBars.right, displayCutout.right),
+                initialBottom + max(navigationBars.bottom, displayCutout.bottom)
             )
             insets
         }
