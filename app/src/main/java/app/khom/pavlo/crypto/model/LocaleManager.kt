@@ -1,15 +1,13 @@
 package app.khom.pavlo.crypto.model
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.content.res.Configuration
 import android.content.res.Resources
-import android.os.Build
-import java.util.*
+import androidx.core.os.ConfigurationCompat
+import java.util.Locale
 
 
 
-//todo refactor this with injected Preferences and Context
 class LocaleManager {
 
     companion object {
@@ -30,7 +28,6 @@ class LocaleManager {
             return prefs.language
         }
 
-        @SuppressLint("ApplySharedPref")
         private fun persistLanguage(context: Context, language: String) {
             val prefs = Preferences(context)
             prefs.language = language
@@ -38,7 +35,7 @@ class LocaleManager {
 
         private fun updateResources(context: Context, language: String): Context {
             var contextChange = context
-            val locale = Locale(language)
+            val locale = if (language.isBlank()) Locale.ROOT else Locale.forLanguageTag(language)
             Locale.setDefault(locale)
 
             val res = contextChange.resources
@@ -49,8 +46,7 @@ class LocaleManager {
         }
 
         fun getLocale(res: Resources): Locale {
-            val config = res.configuration
-            return if (Build.VERSION.SDK_INT >= 24) config.locales[0] else config.locale
+            return ConfigurationCompat.getLocales(res.configuration)[0] ?: Locale.getDefault()
         }
     }
 

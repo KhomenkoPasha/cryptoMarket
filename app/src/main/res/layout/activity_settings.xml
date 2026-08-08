@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_app_depth">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/toolbar_layout"
@@ -18,9 +19,9 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/colorPrimary"
+            android:background="@drawable/bg_appbar_glass"
             android:theme="@style/ToolbarColoredBackArrow"
-            app:titleTextColor="@color/white" />
+            app:titleTextColor="@color/on_surface" />
 
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -28,6 +29,8 @@
         android:id="@+id/language_layout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_margin="12dp"
+        android:background="@drawable/bg_card_surface"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/toolbar_layout">
@@ -50,7 +53,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
             android:text="@string/language"
-            android:textColor="@color/colorPrimary"
+            android:textColor="@color/on_surface"
             android:textStyle="bold"
             app:layout_constraintBottom_toTopOf="@+id/settings_language"
             app:layout_constraintStart_toEndOf="@id/language_icon"
@@ -62,7 +65,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
-            android:textColor="@color/colorPrimary"
+            android:textColor="@color/on_surface_variant"
             android:textSize="14sp"
             app:layout_constraintBottom_toTopOf="@+id/line_bottom_of_lang"
             app:layout_constraintStart_toEndOf="@id/language_icon"

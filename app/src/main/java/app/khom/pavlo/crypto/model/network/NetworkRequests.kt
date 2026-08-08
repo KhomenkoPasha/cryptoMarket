@@ -4,16 +4,28 @@ import app.khom.pavlo.crypto.BuildConfig
 import app.khom.pavlo.crypto.model.*
 import app.khom.pavlo.crypto.ui.news.NewsItem
 import app.khom.pavlo.crypto.utils.*
-import io.reactivex.Single
-import io.reactivex.schedulers.Schedulers
+import io.reactivex.rxjava3.core.Single
+import io.reactivex.rxjava3.schedulers.Schedulers
 
-class NetworkRequests(private val cryptoCompareAPI: CryptoCompareAPI,
-                      private val coinMarketCapApi: CoinMarketCapApi) {
+class NetworkRequests(private val cryptoCompareAPI: CryptoCompareAPI) {
 
-    fun getAllCoins(): Single<ArrayList<InfoCoin>>  {
-        return cryptoCompareAPI.getCoinsList(COINS_LIST_URL)
+    @Volatile
+    private var allCoinsRequest: Single<ArrayList<InfoCoin>>? = null
+
+    @Synchronized
+    fun getAllCoins(): Single<ArrayList<InfoCoin>> {
+        allCoinsRequest?.let { return it }
+        return cryptoCompareAPI.getCoinsList(true)
                 .subscribeOn(Schedulers.io())
                 .map { getAllCoinsFromJson(it) }
+                .doFinally { clearAllCoinsRequest() }
+                .cache()
+                .also { allCoinsRequest = it }
+    }
+
+    @Synchronized
+    private fun clearAllCoinsRequest() {
+        allCoinsRequest = null
     }
 
     fun getPrice(map: Map<String, ArrayList<String?>>): Single<ArrayList<Coin>> {
@@ -23,12 +35,12 @@ class NetworkRequests(private val cryptoCompareAPI: CryptoCompareAPI,
     }
 
     private fun getQuery(map: Map<String, ArrayList<String?>>, type: String): String {
-        var result = ""
-        map.forEach { (key, value) ->
-            if (key == type) value.forEach { result += """$it,""" }
-        }
-        if (result.isNotEmpty()) result = result.substring(0, result.length - 1)
-        return result
+        return map[type]
+                .orEmpty()
+                .filterNotNull()
+                .filter(String::isNotBlank)
+                .distinct()
+                .joinToString(",")
     }
 
     fun getPairs(from: String): Single<ArrayList<PairData>> {

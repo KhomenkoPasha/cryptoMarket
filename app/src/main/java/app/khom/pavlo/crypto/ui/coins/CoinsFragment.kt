@@ -2,10 +2,7 @@ package app.khom.pavlo.crypto.ui.coins
 
 import android.content.Intent
 import android.os.Bundle
-import androidx.core.content.ContextCompat
-import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -31,8 +28,7 @@ class CoinsFragment : Fragment(), ICoins.View {
 
     private var _binding: CoinsFragmentBinding? = null
     private val binding get() = _binding!!
-    private lateinit var recView: RecyclerView
-    private lateinit var adapter: CoinsListAdapter
+    private var adapter: CoinsListAdapter? = null
     private var coins: ArrayList<Coin> = ArrayList()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -55,18 +51,10 @@ class CoinsFragment : Fragment(), ICoins.View {
     }
 
     private fun setupRecView() {
-        recView = binding.coinsFragmentRecView
-        recView.layoutManager = LinearLayoutManager(activity)
+        binding.coinsFragmentRecView.layoutManager = LinearLayoutManager(requireContext())
         adapter = CoinsListAdapter(coins, resProvider, multiSelector, holdingsHandler,
                 clickListener = { presenter.onCoinClicked(it) })
-        recView.adapter = adapter
-        context?.let { safeContext ->
-            ContextCompat.getDrawable(safeContext, R.drawable.divider)?.let { divider ->
-                val itemDecorator = DividerItemDecoration(safeContext, DividerItemDecoration.VERTICAL)
-                itemDecorator.setDrawable(divider)
-                recView.addItemDecoration(itemDecorator)
-            }
-        }
+        binding.coinsFragmentRecView.adapter = adapter
     }
 
     private fun setupSwipeRefresh() {
@@ -88,11 +76,15 @@ class CoinsFragment : Fragment(), ICoins.View {
     }
 
     override fun updateRecyclerView() {
-        adapter.notifyDataSetChanged()
+        adapter?.notifyDataSetChanged()
     }
 
     override fun hideRefreshing() {
         binding.swipeRefresh.isRefreshing = false
+    }
+
+    override fun setLoadingVisibility(isLoading: Boolean) {
+        binding.coinsLoading.visibility = if (isLoading) View.VISIBLE else View.GONE
     }
 
     override fun enableSwipeToRefresh() {
@@ -161,7 +153,9 @@ class CoinsFragment : Fragment(), ICoins.View {
     }
 
     override fun onDestroyView() {
-        super.onDestroyView()
+        binding.coinsFragmentRecView.adapter = null
+        adapter = null
         _binding = null
+        super.onDestroyView()
     }
 }

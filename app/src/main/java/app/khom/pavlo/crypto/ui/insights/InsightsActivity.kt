@@ -21,10 +21,10 @@ import app.khom.pavlo.crypto.model.db.CMDatabase
 import app.khom.pavlo.crypto.utils.ResourceProvider
 import app.khom.pavlo.crypto.utils.toastShort
 import dagger.hilt.android.AndroidEntryPoint
-import io.reactivex.Single
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.schedulers.Schedulers
+import io.reactivex.rxjava3.core.Single
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.disposables.CompositeDisposable
+import io.reactivex.rxjava3.schedulers.Schedulers
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -65,15 +65,18 @@ class InsightsActivity : BaseActivity() {
 
     private fun loadInsights() {
         binding.insightsUpdated.text = getString(R.string.insights_loading)
+        binding.insightsLoadingIndicator.visibility = View.VISIBLE
         setContentEnabled(false)
         disposable.clear()
         disposable.add(Single.fromCallable { buildSnapshot() }
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ snapshot ->
+                    binding.insightsLoadingIndicator.visibility = View.GONE
                     setContentEnabled(true)
                     render(snapshot)
                 }, {
+                    binding.insightsLoadingIndicator.visibility = View.GONE
                     setContentEnabled(true)
                     renderError()
                 }))
@@ -386,17 +389,19 @@ class InsightsActivity : BaseActivity() {
                 minLines = 1
                 maxLines = 3
                 setSingleLine(false)
-                setTextColor(resProvider.getColor(R.color.colorPrimaryDark))
-                setHintTextColor(resProvider.getColor(R.color.grey))
+                setTextColor(resProvider.getColor(R.color.on_surface))
+                setHintTextColor(resProvider.getColor(R.color.on_surface_variant))
+                setBackgroundResource(R.drawable.bg_input_surface)
+                setPadding(dp(16), dp(12), dp(16), dp(12))
             }
 
     private fun resetSection(container: LinearLayout, title: String) {
         container.removeAllViews()
-        addLine(container, title, R.color.accent, 20f, Typeface.BOLD)
+        addLine(container, title, R.color.brand_primary, 20f, Typeface.BOLD)
     }
 
     private fun addTerm(term: String, definition: String) {
-        addLine(binding.glossaryContainer, term, R.color.colorPrimaryDark, 16f, Typeface.BOLD)
+        addLine(binding.glossaryContainer, term, R.color.on_surface, 16f, Typeface.BOLD)
         addLine(binding.glossaryContainer, definition)
     }
 

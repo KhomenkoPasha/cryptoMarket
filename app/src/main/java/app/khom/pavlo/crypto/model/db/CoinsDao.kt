@@ -2,7 +2,7 @@ package app.khom.pavlo.crypto.model.db
 
 import androidx.room.*
 import app.khom.pavlo.crypto.model.Coin
-import io.reactivex.Flowable
+import io.reactivex.rxjava3.core.Flowable
 
 @Dao
 interface CoinsDao {
@@ -13,7 +13,7 @@ interface CoinsDao {
     @Query("SELECT * FROM coins ORDER BY from_name ASC")
     fun getAllCoinsSync(): List<Coin>
 
-    @Query("SELECT * FROM coins WHERE from_name LIKE :from AND to_name LIKE :to LIMIT 1")
+    @Query("SELECT * FROM coins WHERE from_name = :from AND to_name = :to LIMIT 1")
     fun getCoin(from: String, to: String): Coin
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)

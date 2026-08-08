@@ -13,6 +13,7 @@ interface ICoinAllocation {
 
     interface Presenter {
         fun onCreate()
+        fun onStart()
         fun onStop()
     }
 }

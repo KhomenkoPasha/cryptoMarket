@@ -29,17 +29,16 @@ class PieMaker(val resProvider: ResourceProvider,
         val holding = holdingsHandler.isThereSuchHolding(coin.from, coin.to)
         if (holding != null) {
             val value = holdingsHandler.getTotalValueWithCurrentPriceByHoldingData(holding)
-            if (value > 0f && !value.isNaN() && !value.isInfinite()) {
-                pieEntryList.add(PieEntry(value, coin.from))
+            if (value.signum() > 0) {
+                pieEntryList.add(PieEntry(value.toFloat(), coin.from))
             }
-        } else {
-            println("No holding for $coin")
         }
     }
 
     private fun setupPieData(pieData: PieData) {
         with (pieData) {
             setValueTextSize(TEXT_SIZE_DP)
+            setValueTextColor(resProvider.getColor(R.color.on_surface))
             setValueFormatter(PercentFormatter())
         }
     }

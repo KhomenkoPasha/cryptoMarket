@@ -7,10 +7,11 @@ import app.khom.pavlo.crypto.model.network.NetworkRequests
 import app.khom.pavlo.crypto.model.rxbus.*
 import app.khom.pavlo.crypto.ui.main.SortDialog
 import app.khom.pavlo.crypto.utils.*
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.schedulers.Schedulers
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.disposables.CompositeDisposable
+import io.reactivex.rxjava3.schedulers.Schedulers
 import javax.inject.Inject
+import java.math.BigDecimal
 
 
 class CoinsPresenter @Inject constructor(private val view: ICoins.View,
@@ -36,8 +37,9 @@ class CoinsPresenter @Inject constructor(private val view: ICoins.View,
     }
 
     override fun onStart() {
+        view.setLoadingVisibility(coins.isEmpty())
         subscribeToObservables()
-        getAllCoinsInfo()
+        if (coinsController.allInfoCoinsIsEmpty()) getAllCoinsInfo()
         if (coins.isNotEmpty()) updatePrices()
         updateHoldings()
     }
@@ -53,10 +55,14 @@ class CoinsPresenter @Inject constructor(private val view: ICoins.View,
         disposable.add(db.coinsDao().getAllCoins()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({ onCoinsFromDbUpdates(it) }))
+                .subscribe({ onCoinsFromDbUpdates(it) }, {
+                    view.setLoadingVisibility(false)
+                    logger.logError("Observe coins: $it")
+                }))
     }
 
     private fun onCoinsFromDbUpdates(list: List<Coin>) {
+        view.setLoadingVisibility(false)
         if (list.isNotEmpty()) {
             val selectedCoins = alreadySelectedCoins()
             coins.clear()
@@ -97,11 +103,12 @@ class CoinsPresenter @Inject constructor(private val view: ICoins.View,
         disposable.add(db.holdingsDao().getAllHoldings()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({ onHoldingsUpdate(it) }))
+                .subscribe({ onHoldingsUpdate(it) }, { logger.logError("Observe holdings: $it") }))
     }
 
     private fun onHoldingsUpdate(updatedHoldings: List<HoldingData>) {
         holdings.clear()
+        holdingsHandler.setHoldingsSnapshot(updatedHoldings)
         if (updatedHoldings.isNotEmpty()) {
             holdings.addAll(updatedHoldings)
             updateHoldings()
@@ -136,11 +143,12 @@ class CoinsPresenter @Inject constructor(private val view: ICoins.View,
         setAllTimeProfitLossString(totalChangeValue)
     }
 
-    private fun setAllTimeProfitLossString(change: Float) {
+    private fun setAllTimeProfitLossString(change: BigDecimal) {
         view.setAllTimeProfitLossString(getProfitLossText(change))
     }
 
-    private fun getProfitLossText(change: Float) = if (change >= 0) resProvider.getString(R.string.profit) else  resProvider.getString(R.string.loss)
+    private fun getProfitLossText(change: BigDecimal) =
+            if (change.signum() >= 0) resProvider.getString(R.string.profit) else resProvider.getString(R.string.loss)
 
     private fun setupRxBusEventsListeners() {
         disposable.add(RxBus.listen(OnDeleteCoinsMenuItemClickedEvent::class.java)
@@ -157,11 +165,20 @@ class CoinsPresenter @Inject constructor(private val view: ICoins.View,
         val coinsToDelete = coins.filter { it.selected }
         if (coinsToDelete.isNotEmpty()) {
             disableSelected()
-            holdingsHandler.removeHoldings(coinsToDelete)
-            coinsController.deleteCoins(coinsToDelete)
-            RxBus.publish(MainCoinsListUpdatedEvent())
-            toaster.toastShort(if (coinsToDelete.size > 1) resProvider.getString(R.string.coins_deleted)
-                               else resProvider.getString(R.string.coin_deleted))
+            disposable.add(
+                    holdingsHandler.removeHoldings(coinsToDelete)
+                            .subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribe({
+                                coinsController.deleteCoins(coinsToDelete)
+                                RxBus.publish(MainCoinsListUpdatedEvent())
+                                toaster.toastShort(if (coinsToDelete.size > 1) resProvider.getString(R.string.coins_deleted)
+                                                   else resProvider.getString(R.string.coin_deleted))
+                            }, {
+                                logger.logError("Delete holdings for coins: $it")
+                                toaster.toastShort(resProvider.getString(R.string.error))
+                            })
+            )
         }
     }
 
@@ -227,12 +244,14 @@ class CoinsPresenter @Inject constructor(private val view: ICoins.View,
 
     private fun updatePrices() {
         val queryMap = createCoinsMapWithCurrencies(coins)
-        if (queryMap.isNotEmpty()) {
-            RxBus.publish(CoinsLoadingEvent(true))
-            disposable.add(networkRequests.getPrice(queryMap)
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe({ onPriceUpdated(it) }, { afterRefreshing() }))
+        if (queryMap.isEmpty()) {
+            afterRefreshing()
+            return
         }
+        RxBus.publish(CoinsLoadingEvent(true))
+        disposable.add(networkRequests.getPrice(queryMap)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({ onPriceUpdated(it) }, { afterRefreshing() }))
     }
 
     private fun onPriceUpdated(list: ArrayList<Coin>) {
@@ -261,6 +280,7 @@ class CoinsPresenter @Inject constructor(private val view: ICoins.View,
     override fun onStop() {
         disposable.clear()
         disableSelected()
+        view.setLoadingVisibility(false)
         RxBus.publish(CoinsLoadingEvent(false))
     }
 

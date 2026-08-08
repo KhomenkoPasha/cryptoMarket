@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.appcompat.widget.Toolbar
 import android.view.View
 import android.view.inputmethod.InputMethodManager
-import com.jakewharton.rxbinding2.widget.textChanges
+import com.jakewharton.rxbinding4.widget.textChanges
 import app.khom.pavlo.crypto.R
 import app.khom.pavlo.crypto.activities.BaseActivity
 import app.khom.pavlo.crypto.databinding.ActivityAddCoinBinding
@@ -49,10 +49,15 @@ class AddCoinActivity : BaseActivity(), IAddCoin.View {
     private fun setupRecView() {
         recView = binding.addCoinMatchesRecView
         recView.layoutManager = LinearLayoutManager(this)
-        adapter = AddCoinMatchesAdapter(matches, this) {
+        adapter = AddCoinMatchesAdapter(matches) {
             presenter.onFromItemClicked(it)
         }
         recView.adapter = adapter
+    }
+
+    override fun onStart() {
+        super.onStart()
+        presenter.onStart()
     }
 
     override fun onStop() {
@@ -101,5 +106,10 @@ class AddCoinActivity : BaseActivity(), IAddCoin.View {
 
     override fun clearFromEdt() {
         binding.addCoinFromEdt.setText("")
+    }
+
+    override fun onDestroy() {
+        recView.adapter = null
+        super.onDestroy()
     }
 }

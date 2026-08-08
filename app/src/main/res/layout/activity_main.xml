@@ -2,7 +2,8 @@
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_app_depth">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -12,39 +13,46 @@
         <com.google.android.material.appbar.AppBarLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@drawable/bg_appbar_glass"
+            app:elevation="6dp"
             android:fitsSystemWindows="true">
 
             <androidx.appcompat.widget.Toolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/colorPrimary"
+                android:background="@android:color/transparent"
                 android:theme="@style/ToolbarColoredBackArrow"
-                app:titleTextColor="@color/white" />
+                app:titleTextColor="@color/on_surface" />
 
             <com.google.android.material.tabs.TabLayout
                 android:id="@+id/tabs"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:tabGravity="fill"
-                app:tabMode="fixed"
-                app:tabIndicatorColor="@color/accent"
-                app:tabSelectedTextColor="@color/white"
-                app:tabTextColor="@color/white" />
+                android:background="@android:color/transparent"
+                app:tabGravity="start"
+                app:tabMode="scrollable"
+                app:tabIndicator="@drawable/tab_indicator"
+                app:tabIndicatorFullWidth="false"
+                app:tabIndicatorHeight="3dp"
+                app:tabRippleColor="@color/ripple"
+                app:tabSelectedTextColor="@color/brand_primary"
+                app:tabTextColor="@color/on_surface_variant" />
 
         </com.google.android.material.appbar.AppBarLayout>
 
-        <androidx.viewpager.widget.ViewPager
+        <androidx.viewpager2.widget.ViewPager2
             android:id="@+id/viewpager"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:background="@android:color/white" />
+            android:background="@android:color/transparent" />
 
         <FrameLayout
             android:id="@+id/ad_view_container"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:background="@color/surface_container_low" />
 
     </LinearLayout>
 

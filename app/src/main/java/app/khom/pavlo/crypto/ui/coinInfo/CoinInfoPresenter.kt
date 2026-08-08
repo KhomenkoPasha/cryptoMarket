@@ -4,10 +4,11 @@ import app.khom.pavlo.crypto.model.*
 import app.khom.pavlo.crypto.model.network.NetworkRequests
 import app.khom.pavlo.crypto.model.rxbus.RxBus
 import app.khom.pavlo.crypto.utils.*
-import io.reactivex.Single
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.schedulers.Schedulers
+import io.reactivex.rxjava3.core.Single
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.disposables.CompositeDisposable
+import io.reactivex.rxjava3.disposables.SerialDisposable
+import io.reactivex.rxjava3.schedulers.Schedulers
 import javax.inject.Inject
 
 class CoinInfoPresenter @Inject constructor(private val view: ICoinInfo.View,
@@ -19,9 +20,14 @@ class CoinInfoPresenter @Inject constructor(private val view: ICoinInfo.View,
                                             private val logger: Logger) : ICoinInfo.Presenter {
 
     private val disposable = CompositeDisposable()
+    private val histoDisposable = SerialDisposable()
     private var coin: Coin = Coin(from = "", to = "")
     private lateinit var from: String
     private lateinit var to: String
+
+    init {
+        disposable.add(histoDisposable)
+    }
 
     override fun onCreate(fromArg: String, toArg: String) {
         from = fromArg
@@ -94,9 +100,15 @@ class CoinInfoPresenter @Inject constructor(private val view: ICoinInfo.View,
     }
 
     private fun requestHisto(period: String) {
-        disposable.add(networkRequests.getHistoPeriod(period, coin.from, coin.to)
+        histoDisposable.set(networkRequests.getHistoPeriod(period, coin.from, coin.to)
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({ onHistoReceived(it, period) }, { view.disableGraphLoading() }))
+                .subscribe({ onHistoReceived(it, period) }, { onHistoError(it) }))
+    }
+
+    private fun onHistoError(error: Throwable) {
+        logger.logError("requestHisto $error")
+        view.disableGraphLoading()
+        view.enableEmptyGraphText()
     }
 
     private fun onHistoReceived(histoList: ArrayList<HistoData>, period: String) {

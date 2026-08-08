@@ -6,6 +6,7 @@ import app.khom.pavlo.crypto.model.db.CMDatabase
 import app.khom.pavlo.crypto.model.network.NetworkRequests
 import app.khom.pavlo.crypto.utils.ResourceProvider
 import app.khom.pavlo.crypto.utils.Toaster
+import app.khom.pavlo.crypto.utils.Logger
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -26,6 +27,7 @@ class AddCoinModule {
                          networkRequests: NetworkRequests,
                          resProvider: ResourceProvider,
                          db: CMDatabase,
-                         toaster: Toaster): IAddCoin.Presenter =
-            AddCoinPresenter(view, coinsController, networkRequests, resProvider, db, toaster)
+                         toaster: Toaster,
+                         logger: Logger): IAddCoin.Presenter =
+            AddCoinPresenter(view, coinsController, networkRequests, resProvider, db, toaster, logger)
 }

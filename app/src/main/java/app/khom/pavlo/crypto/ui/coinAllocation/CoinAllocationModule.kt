@@ -3,6 +3,7 @@ package app.khom.pavlo.crypto.ui.coinAllocation
 import android.app.Activity
 import app.khom.pavlo.crypto.model.PieMaker
 import app.khom.pavlo.crypto.model.db.CMDatabase
+import app.khom.pavlo.crypto.utils.Logger
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -22,5 +23,6 @@ class CoinAllocationModule {
     @ActivityScoped
     fun providePresenter(view: ICoinAllocation.View,
                          pieMaker: PieMaker,
-                         db: CMDatabase): ICoinAllocation.Presenter = CoinAllocationPresenter( view, pieMaker, db)
+                         db: CMDatabase,
+                         logger: Logger): ICoinAllocation.Presenter = CoinAllocationPresenter(view, pieMaker, db, logger)
 }

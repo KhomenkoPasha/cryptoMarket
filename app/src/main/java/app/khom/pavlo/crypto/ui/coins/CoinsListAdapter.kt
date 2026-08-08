@@ -40,9 +40,9 @@ class CoinsListAdapter(private val coins: ArrayList<Coin>,
                 multiSelector.onClick(coin, binding.mainItemLayout, coins)
             }
             if (coin.selected) {
-                binding.mainItemLayout.setBackgroundColor(resProvider.getColor(R.color.colorAccent))
+                binding.mainItemLayout.setBackgroundResource(R.drawable.bg_card_selected)
             } else {
-                binding.mainItemLayout.setBackgroundResource(0)
+                binding.mainItemLayout.setBackgroundResource(R.drawable.bg_card_surface)
             }
             binding.mainItemFrom.text = coin.from
             val to = " / ${coin.to}"
@@ -58,6 +58,9 @@ class CoinsListAdapter(private val coins: ArrayList<Coin>,
             if (coin.imgUrl.isNotEmpty()) {
                 Picasso.get()
                         .load(coin.imgUrl)
+                        .tag(this@CoinsListAdapter)
+                        .fit()
+                        .centerInside()
                         .into(binding.mainItemMarketLogo)
             }
 
@@ -75,6 +78,13 @@ class CoinsListAdapter(private val coins: ArrayList<Coin>,
                 binding.mainItemHoldingValue.visibility = View.GONE
             }
         }
+
+        fun recycle() {
+            Picasso.get().cancelRequest(binding.mainItemMarketLogo)
+            binding.mainItemMarketLogo.setImageDrawable(null)
+            binding.root.setOnClickListener(null)
+            binding.root.setOnLongClickListener(null)
+        }
     }
 
     private fun getChangeArrowDrawable(change: Float) = when {
@@ -86,7 +96,13 @@ class CoinsListAdapter(private val coins: ArrayList<Coin>,
 
     override fun getItemCount() = coins.size
 
-    override fun getItemId(position: Int) = position.toLong()
+    override fun onViewRecycled(holder: ViewHolder) {
+        holder.recycle()
+        super.onViewRecycled(holder)
+    }
 
-    override fun getItemViewType(position: Int) = position
+    override fun onDetachedFromRecyclerView(recyclerView: RecyclerView) {
+        Picasso.get().cancelTag(this)
+        super.onDetachedFromRecyclerView(recyclerView)
+    }
 }

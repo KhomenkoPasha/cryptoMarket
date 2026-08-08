@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/bg_app_depth"
     android:focusableInTouchMode="true"
     tools:context=".ui.addCoin.AddCoinActivity">
 
@@ -21,16 +22,16 @@
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/colorPrimary"
+                android:background="@drawable/bg_appbar_glass"
                 android:theme="@style/ToolbarColoredBackArrow"
-                app:titleTextColor="@color/white" />
+                app:titleTextColor="@color/on_surface" />
 
         </com.google.android.material.appbar.AppBarLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColorHint="@color/accent"
+            android:textColorHint="@color/on_surface_variant"
             android:layout_margin="8dp">
 
             <EditText
@@ -39,7 +40,9 @@
                 android:layout_height="wrap_content"
                 style="@style/EditTextBaseStyle"
                 android:hint="@string/add_coin_from_hint"
-                android:textColor="@color/black"
+                android:importantForAutofill="no"
+                android:inputType="textCapWords"
+                android:textColor="@color/on_surface"
                 android:maxLines="1"
                 android:singleLine="true" />
 
@@ -73,7 +76,8 @@
         android:id="@+id/loading_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:alpha="0.5"
+        android:alpha="0.96"
+        android:background="#D9080D17"
         android:visibility="gone"
         tools:visibility="visible">
 

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<lint>
+    <!-- Picasso ships a notification RemoteViews action, but this app only uses Picasso for images. -->
+    <issue id="NotificationPermission">
+        <ignore regexp="com\.squareup\.picasso\.RemoteViewsAction\.NotificationAction" />
+    </issue>
+</lint>

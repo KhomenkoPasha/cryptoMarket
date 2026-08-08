@@ -15,7 +15,7 @@ import app.khom.pavlo.crypto.databinding.ActivityHoldingsBinding
 import app.khom.pavlo.crypto.utils.getChangeColor
 import app.khom.pavlo.crypto.utils.getStringWithTwoDecimalsFromDouble
 import dagger.hilt.android.AndroidEntryPoint
-import kotlin.math.abs
+import java.math.BigDecimal
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -48,6 +48,11 @@ class HoldingsActivity : BaseActivity(), IHoldings.View {
         toolbar.setNavigationOnClickListener { finish() }
     }
 
+    override fun onStart() {
+        super.onStart()
+        presenter.onStart()
+    }
+
     private fun setupRecView() {
         recView = binding.holdingsRecView
         recView.layoutManager = LinearLayoutManager(this)
@@ -72,6 +77,10 @@ class HoldingsActivity : BaseActivity(), IHoldings.View {
         adapter.notifyDataSetChanged()
     }
 
+    override fun setLoadingVisibility(isLoading: Boolean) {
+        binding.holdingsLoading.visibility = if (isLoading) View.VISIBLE else View.GONE
+    }
+
     private fun updatePortfolioSummary() {
         val hasHoldings = holdings.isNotEmpty()
         binding.holdingsSummaryLayout.visibility = if (hasHoldings) View.VISIBLE else View.GONE
@@ -87,29 +96,34 @@ class HoldingsActivity : BaseActivity(), IHoldings.View {
         binding.holdingsSummaryDayPnl.setTextColor(resProvider.getColor(getChangeColor(summary.dayPnl)))
     }
 
-    private fun formatMoney(value: Float): String {
-        val formatted = getStringWithTwoDecimalsFromDouble(abs(value))
+    private fun formatMoney(value: BigDecimal): String {
+        val formatted = getStringWithTwoDecimalsFromDouble(value.abs())
         if (formatted.isEmpty()) return ""
-        val sign = if (value < 0f) "-" else ""
+        val sign = if (value.signum() < 0) "-" else ""
         return "$sign\$$formatted"
     }
 
-    private fun formatSignedMoney(value: Float): String {
-        val formatted = getStringWithTwoDecimalsFromDouble(abs(value))
+    private fun formatSignedMoney(value: BigDecimal): String {
+        val formatted = getStringWithTwoDecimalsFromDouble(value.abs())
         if (formatted.isEmpty()) return ""
-        val sign = if (value > 0f) "+" else if (value < 0f) "-" else ""
+        val sign = if (value.signum() > 0) "+" else if (value.signum() < 0) "-" else ""
         return "$sign\$$formatted"
     }
 
-    private fun formatPercent(value: Float): String {
-        val formatted = getStringWithTwoDecimalsFromDouble(abs(value))
+    private fun formatPercent(value: BigDecimal): String {
+        val formatted = getStringWithTwoDecimalsFromDouble(value.abs())
         if (formatted.isEmpty()) return ""
-        val sign = if (value > 0f) "+" else if (value < 0f) "-" else ""
+        val sign = if (value.signum() > 0) "+" else if (value.signum() < 0) "-" else ""
         return "$sign$formatted%"
     }
 
     override fun onStop() {
         super.onStop()
         presenter.onStop()
+    }
+
+    override fun onDestroy() {
+        recView.adapter = null
+        super.onDestroy()
     }
 }

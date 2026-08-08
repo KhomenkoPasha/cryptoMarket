@@ -3,6 +3,8 @@ package app.khom.pavlo.crypto.ui.coinInfo
 import android.os.Bundle
 import androidx.appcompat.widget.Toolbar
 import android.view.Menu
+import android.view.MenuItem
+import android.content.Intent
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
@@ -10,6 +12,7 @@ import app.khom.pavlo.crypto.R
 import app.khom.pavlo.crypto.activities.BaseActivity
 import app.khom.pavlo.crypto.model.NAME
 import app.khom.pavlo.crypto.model.TO
+import app.khom.pavlo.crypto.ui.holdings.AddTransactionActivity
 import app.khom.pavlo.crypto.utils.ResourceProvider
 import app.khom.pavlo.crypto.databinding.ActivityCoinInfoBinding
 import com.github.mikephil.charting.components.XAxis
@@ -64,6 +67,8 @@ class CoinInfoActivity : BaseActivity(), ICoinInfo.View {
         if (url.isNotEmpty()) {
             Picasso.get()
                     .load(url)
+                    .fit()
+                    .centerInside()
                     .into(binding.coinInfoLogo)
         }
     }
@@ -73,8 +78,12 @@ class CoinInfoActivity : BaseActivity(), ICoinInfo.View {
     }
 
     override fun onDestroy() {
-        super.onDestroy()
         presenter.onDestroy()
+        Picasso.get().cancelRequest(binding.coinInfoLogo)
+        binding.coinInfoLogo.setImageDrawable(null)
+        binding.coinInfoGraphPeriods.onItemSelectedListener = null
+        binding.coinInfoGraph.clear()
+        super.onDestroy()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -82,12 +91,43 @@ class CoinInfoActivity : BaseActivity(), ICoinInfo.View {
         return super.onCreateOptionsMenu(menu)
     }
 
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == R.id.coin_info_menu_add_trans) {
+            startActivity(
+                Intent(this, AddTransactionActivity::class.java)
+                    .putExtra(NAME, intent.getStringExtra(NAME))
+                    .putExtra(TO, intent.getStringExtra(TO))
+            )
+            return true
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
 
     override fun drawChart(line: CandleData) {
-        val xAxis = binding.coinInfoGraph.xAxis
-        xAxis.position = XAxis.XAxisPosition.BOTTOM
-        binding.coinInfoGraph.data = line
-        binding.coinInfoGraph.invalidate()
+        binding.coinInfoLoading.visibility = View.GONE
+        binding.coinInfoEmptyGraph.visibility = View.GONE
+        binding.coinInfoGraph.visibility = View.VISIBLE
+        val primaryText = resProvider.getColor(R.color.on_surface)
+        val secondaryText = resProvider.getColor(R.color.on_surface_variant)
+        val outline = resProvider.getColor(R.color.outline_variant)
+        with(binding.coinInfoGraph) {
+            xAxis.position = XAxis.XAxisPosition.BOTTOM
+            xAxis.textColor = secondaryText
+            xAxis.axisLineColor = outline
+            xAxis.gridColor = outline
+            axisLeft.textColor = secondaryText
+            axisLeft.axisLineColor = outline
+            axisLeft.gridColor = outline
+            axisRight.isEnabled = false
+            legend.textColor = primaryText
+            description.isEnabled = false
+            setNoDataTextColor(secondaryText)
+            setDrawBorders(false)
+            setExtraOffsets(6f, 8f, 8f, 6f)
+            data = line
+            invalidate()
+        }
     }
 
     override fun setOpen(open: String) {
@@ -121,15 +161,17 @@ class CoinInfoActivity : BaseActivity(), ICoinInfo.View {
     override fun enableGraphLoading() {
         binding.coinInfoLoading.visibility = View.VISIBLE
         binding.coinInfoGraph.visibility = View.GONE
+        binding.coinInfoEmptyGraph.visibility = View.GONE
     }
 
     override fun disableGraphLoading() {
         binding.coinInfoLoading.visibility = View.GONE
-        binding.coinInfoGraph.visibility = View.VISIBLE
     }
 
 
     override fun enableEmptyGraphText() {
+        binding.coinInfoLoading.visibility = View.GONE
+        binding.coinInfoGraph.visibility = View.GONE
         binding.coinInfoEmptyGraph.visibility = View.VISIBLE
     }
 

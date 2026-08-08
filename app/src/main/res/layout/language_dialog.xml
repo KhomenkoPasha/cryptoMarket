@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="@color/surface_container"
     android:orientation="vertical"
     android:padding="8dp">
 
@@ -11,7 +12,8 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:text="@string/language"
-        android:textColor="@color/colorPrimary"
+        android:textColor="@color/brand_primary"
+        android:textStyle="bold"
         android:textSize="18sp" />
 
     <RadioGroup

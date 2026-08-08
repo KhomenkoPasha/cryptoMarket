@@ -1,23 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#00BCD4</color>
-    <color name="colorPrimaryDark">#0097A7</color>
-    <color name="colorAccent">#B2EBF2</color>
-    <color name="accent">#FF5722</color>
-    <color name="primary_text">#212121</color>
-    <color name="secondary_text">#757575</color>
-    <color name="icons">#FFFFFF</color>
+    <!-- Midnight Aurora: Material 3 Expressive dark tonal palette. -->
+    <color name="app_background">#080D17</color>
+    <color name="surface_container_low">#0D1420</color>
+    <color name="surface_container">#121B29</color>
+    <color name="surface_container_high">#192538</color>
+    <color name="surface_container_highest">#223047</color>
+    <color name="on_background">#E7EEF9</color>
+    <color name="on_surface">#E7EEF9</color>
+    <color name="on_surface_variant">#9EACC2</color>
+    <color name="outline">#33445E</color>
+    <color name="outline_variant">#243249</color>
+    <color name="glass_surface_start">#E61B2A3D</color>
+    <color name="glass_surface_end">#B8121B29</color>
+    <color name="glass_surface_high">#D923344A</color>
+    <color name="glass_outline">#6672CAD6</color>
+    <color name="glass_highlight">#33FFFFFF</color>
+
+    <color name="brand_primary">#72CAD6</color>
+    <color name="on_brand_primary">#04343A</color>
+    <color name="primary_container">#173A42</color>
+    <color name="on_primary_container">#C1EDF2</color>
+    <color name="brand_secondary">#AEBBFF</color>
+    <color name="secondary_container">#29325D</color>
+    <color name="on_secondary_container">#E1E5FF</color>
+    <color name="brand_tertiary">#CBB8FF</color>
+    <color name="tertiary_container">#403365</color>
+    <color name="on_tertiary_container">#EBDDFF</color>
+
+    <color name="positive">#45DDA1</color>
+    <color name="negative">#FF7088</color>
+    <color name="warning">#FFCA72</color>
+    <color name="ripple">#3372CAD6</color>
+
+    <!-- Legacy names mapped to semantic roles while old Views are migrated. -->
+    <color name="colorPrimary">@color/brand_primary</color>
+    <color name="colorPrimaryDark">@color/on_surface</color>
+    <color name="colorAccent">@color/on_surface_variant</color>
+    <color name="accent">@color/brand_primary</color>
+    <color name="primary_text">@color/on_surface</color>
+    <color name="secondary_text">@color/on_surface_variant</color>
+    <color name="icons">@color/on_surface</color>
     <color name="white">#FFFFFF</color>
-    <color name="divider">#BDBDBD</color>
-    <color name="green">#388E3C</color>
-    <color name="colorPrimaryDarkB">#4000BCD4</color>
-    <color name="red">#F44336</color>
-    <color name="black">#000000</color>
-    <color name="grey_light">#A9B7C6</color>
-    <color name="grey">#808080</color>
-    <color name="orange_dark">#CB772F</color>
-    <color name="yellow">#FFFF00</color>
-    <color name="darker_gray">#1b1b1b</color>
-
-
+    <color name="divider">@color/outline_variant</color>
+    <color name="green">@color/positive</color>
+    <color name="colorPrimaryDarkB">#40223A4A</color>
+    <color name="red">@color/negative</color>
+    <color name="black">@color/app_background</color>
+    <color name="grey_light">#C5D0E0</color>
+    <color name="grey">@color/on_surface_variant</color>
+    <color name="orange_dark">@color/warning</color>
+    <color name="yellow">@color/warning</color>
+    <color name="darker_gray">@color/surface_container</color>
 </resources>

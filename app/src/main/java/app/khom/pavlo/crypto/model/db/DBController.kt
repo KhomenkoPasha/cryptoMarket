@@ -1,53 +1,46 @@
 package app.khom.pavlo.crypto.model.db
 
+import android.annotation.SuppressLint
 import app.khom.pavlo.crypto.model.*
-import io.reactivex.Single
-import io.reactivex.schedulers.Schedulers
+import app.khom.pavlo.crypto.utils.Logger
+import io.reactivex.rxjava3.core.Completable
+import io.reactivex.rxjava3.schedulers.Schedulers
 
 
-class DBController(val db: CMDatabase) {
+class DBController(val db: CMDatabase, private val logger: Logger) {
 
     fun saveCoin(coin: Coin) {
-        Single.fromCallable { db.coinsDao().insert(coin) }
-                .subscribeOn(Schedulers.io())
-                .subscribe()
+        runWrite("save coin") { db.coinsDao().insert(coin) }
     }
 
     fun saveCoinsList(list: List<Coin>) {
-        Single.fromCallable { db.coinsDao().insertList(list) }
-                .subscribeOn(Schedulers.io())
-                .subscribe()
+        runWrite("save coins") { db.coinsDao().insertList(list) }
     }
 
     fun getCoin(from: String, to: String) = db.coinsDao().getCoin(from, to)
 
     fun deleteCoin(coin: Coin) {
-        Single.fromCallable { db.coinsDao().deleteCoin(coin) }
-                .subscribeOn(Schedulers.io())
-                .subscribe()
+        runWrite("delete coin") { db.coinsDao().deleteCoin(coin) }
     }
 
     fun deleteCoins(coins: List<Coin>) {
-        Single.fromCallable { db.coinsDao().deleteCoins(coins) }
-                .subscribeOn(Schedulers.io())
-                .subscribe()
+        runWrite("delete coins") { db.coinsDao().deleteCoins(coins) }
     }
 
     fun saveAllCoinsInfo(allCoins: List<InfoCoin>) {
-        Single.fromCallable { db.allCoinsDao().insertList(allCoins) }
-                .subscribeOn(Schedulers.io())
-                .subscribe()
+        runWrite("save all coin info") { db.allCoinsDao().replaceAll(allCoins) }
     }
 
     fun saveTopCoinsList(list: List<TopCoinData>) {
-        Single.fromCallable { db.topCoinsDao().insertTopCoinsList(list) }
-                .subscribeOn(Schedulers.io())
-                .subscribe()
+        runWrite("save top coins") { db.topCoinsDao().replaceAll(list) }
     }
 
-    fun saveHoldingData(holdingData: HoldingData) {
-        Single.fromCallable { db.holdingsDao().insert(holdingData) }
-                .subscribeOn(Schedulers.io())
-                .subscribe()
+    @SuppressLint("CheckResult")
+    private fun runWrite(operation: String, block: () -> Unit) {
+        // Room writes are finite and application-scoped; retaining every completed Disposable
+        // in a CompositeDisposable would itself make repeated writes accumulate in memory.
+        Completable.fromAction(block)
+            .subscribeOn(Schedulers.io())
+            .subscribe({}, { logger.logError("Database $operation failed: $it") })
     }
 }

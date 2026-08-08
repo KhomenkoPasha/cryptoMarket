@@ -8,12 +8,15 @@ import app.khom.pavlo.crypto.widget.FavoritesWidgetScheduler
 import app.khom.pavlo.crypto.widget.FavoritesWidgetUpdater
 import com.google.android.gms.ads.MobileAds
 import dagger.hilt.android.HiltAndroidApp
+import android.util.Log
+import io.reactivex.rxjava3.plugins.RxJavaPlugins
 
 @HiltAndroidApp
 class CApp : Application() {
 
     override fun onCreate() {
         super.onCreate()
+        RxJavaPlugins.setErrorHandler { Log.e("CryptoMoon RxJava", "Undeliverable error", it) }
         Thread {
             MobileAds.initialize(this) {}
         }.start()
