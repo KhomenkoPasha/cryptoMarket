@@ -9,7 +9,7 @@ import app.khom.pavlo.crypto.model.network.NetworkRequests
 import app.khom.pavlo.crypto.utils.Logger
 import app.khom.pavlo.crypto.utils.ResourceProvider
 import app.khom.pavlo.crypto.utils.Toaster
-import app.khom.pavlo.crypto.utils.createCoinsMapWithCurrencies
+import app.khom.pavlo.crypto.utils.toFavoriteCoin
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.schedulers.Schedulers
@@ -180,27 +180,30 @@ class TopCoinsPresenter @Inject constructor(private val view: ITopCoins.View,
             toaster.toastShort(resProvider.getString(R.string.error))
             return
         }
+        if (coinsController.coinIsAdded(coin)) {
+            view.setCoinAdded(symbol)
+            return
+        }
+        val favoriteCoin = coin.toFavoriteCoin()
+        if (favoriteCoin == null) {
+            toaster.toastShort(resProvider.getString(R.string.error))
+            return
+        }
         if (!addingSymbols.add(symbol)) return
         view.setCoinAdding(symbol, true)
-        val coinFrom = Coin(from = symbol, to = USD)
-        disposable.add(networkRequests.getPrice(createCoinsMapWithCurrencies(listOf(coinFrom)))
+        disposable.add(coinsController.saveCoinAsync(favoriteCoin)
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({ onCoinAdded(symbol, it) }, { onAddError(symbol) }))
+                .subscribe({ onCoinAdded(symbol) }, { onAddError(symbol, it) }))
     }
 
-    private fun onCoinAdded(symbol: String, list: ArrayList<Coin>) {
-        if (list.isNotEmpty()) {
-            coinsController.saveCoinsList(list)
-            addingSymbols.remove(symbol)
-            view.setCoinAdded(symbol)
-            toaster.toastShort(resProvider.getString(R.string.coin_added))
-        } else {
-            finishAdding(symbol)
-            toaster.toastShort(resProvider.getString(R.string.error))
-        }
+    private fun onCoinAdded(symbol: String) {
+        addingSymbols.remove(symbol)
+        view.setCoinAdded(symbol)
+        toaster.toastShort(resProvider.getString(R.string.coin_added))
     }
 
-    private fun onAddError(symbol: String) {
+    private fun onAddError(symbol: String, error: Throwable) {
+        logger.logError("add favorite $symbol: $error")
         finishAdding(symbol)
         toaster.toastShort(resProvider.getString(R.string.error))
     }

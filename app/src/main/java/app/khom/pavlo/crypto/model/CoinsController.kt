@@ -3,8 +3,10 @@ package app.khom.pavlo.crypto.model
 import app.khom.pavlo.crypto.model.db.CMDatabase
 import app.khom.pavlo.crypto.model.db.DBController
 import io.reactivex.rxjava3.disposables.CompositeDisposable
+import io.reactivex.rxjava3.core.Completable
 import io.reactivex.rxjava3.schedulers.Schedulers
 import app.khom.pavlo.crypto.utils.Logger
+import java.util.Locale
 
 
 class CoinsController(private val dbController: DBController, db: CMDatabase, logger: Logger) {
@@ -16,12 +18,15 @@ class CoinsController(private val dbController: DBController, db: CMDatabase, lo
         subscriptions.add(db.allCoinsDao().getAllCoins()
                 .subscribeOn(Schedulers.io())
                 .subscribe({
-                    allInfoCoins = it.associateBy(InfoCoin::name)
+                    allInfoCoins = preferredCoinInfoBySymbol(it)
                     enrichSavedCoinsIfNeeded()
                 }, { logger.logError("Observe all coin info: $it") }))
         subscriptions.add(db.coinsDao().getAllCoins()
                 .subscribeOn(Schedulers.io())
-                .subscribe({ allCoins = it.toList() }, { logger.logError("Observe saved coins: $it") }))
+                .subscribe({
+                    allCoins = it.toList()
+                    enrichSavedCoinsIfNeeded()
+                }, { logger.logError("Observe saved coins: $it") }))
     }
 
     @Volatile private var allInfoCoins: Map<String, InfoCoin> = emptyMap()
@@ -29,10 +34,17 @@ class CoinsController(private val dbController: DBController, db: CMDatabase, lo
     private var hasEnrichedCoins = false
 
     fun saveCoin(coin: Coin) {
-        if (allInfoCoins.isNotEmpty()) {
-            addAdditionalInfoToCoin(coin)
-        }
+        prepareCoinForSaving(coin)
         dbController.saveCoin(coin)
+    }
+
+    fun saveCoinAsync(coin: Coin): Completable {
+        prepareCoinForSaving(coin)
+        return dbController.saveCoinAsync(coin)
+    }
+
+    private fun prepareCoinForSaving(coin: Coin) {
+        if (allInfoCoins.isNotEmpty()) addAdditionalInfoToCoin(coin)
     }
 
     fun addAdditionalInfoToCoin(coin: Coin) {
@@ -41,11 +53,17 @@ class CoinsController(private val dbController: DBController, db: CMDatabase, lo
     }
 
     private fun addImageUrlToCoin(coin: Coin) {
-        coin.imgUrl = allInfoCoins[coin.from]?.imageUrl ?: ""
+        allInfoCoins[coin.from.uppercase(Locale.US)]?.imageUrl
+                ?.takeIf { it.isNotEmpty() }
+                ?.let { coin.imgUrl = it }
     }
 
     private fun addFullNameToCoin(coin: Coin) {
-        coin.fullName = allInfoCoins[coin.from]?.coinName ?: ""
+        val info = allInfoCoins[coin.from.uppercase(Locale.US)] ?: return
+        info.coinName.takeIf { it.isNotEmpty() }
+                ?.let { coin.fullName = it }
+                ?: info.fullName.takeIf { it.isNotEmpty() }
+                        ?.let { coin.fullName = it }
     }
 
     fun saveCoinsList(list: List<Coin>) {
@@ -61,19 +79,26 @@ class CoinsController(private val dbController: DBController, db: CMDatabase, lo
     private fun enrichSavedCoinsIfNeeded() {
         if (hasEnrichedCoins) return
         if (allInfoCoins.isEmpty() || allCoins.isEmpty()) return
+        var metadataChanged = false
         val updated = allCoins.map {
-            if (it.imgUrl.isEmpty() || it.fullName.isEmpty()) {
-                addAdditionalInfoToCoin(it)
-            }
+            val previousImageUrl = it.imgUrl
+            val previousFullName = it.fullName
+            addAdditionalInfoToCoin(it)
+            metadataChanged = metadataChanged ||
+                    previousImageUrl != it.imgUrl || previousFullName != it.fullName
             it
         }
         hasEnrichedCoins = true
-        dbController.saveCoinsList(updated)
+        if (metadataChanged) dbController.saveCoinsList(updated)
     }
 
-    fun deleteCoin(coin: Coin) = dbController.deleteCoin(coin)
-
-    fun deleteCoins(coins: List<Coin>) = dbController.deleteCoins(coins)
+    fun deleteCoinsAsync(coins: List<Coin>): Completable {
+        val removedPairs = coins.mapTo(HashSet()) { it.from to it.to }
+        return dbController.deleteCoinsAsync(coins)
+                .doOnComplete {
+                    allCoins = allCoins.filterNot { it.from to it.to in removedPairs }
+                }
+    }
 
     fun saveAllCoinsInfo(allCoins: List<InfoCoin>) {
         dbController.saveAllCoinsInfo(allCoins)
@@ -83,7 +108,7 @@ class CoinsController(private val dbController: DBController, db: CMDatabase, lo
 
     fun saveTopCoinsList(list: List<TopCoinData>) {
         list.forEach { coin ->
-            val info = allInfoCoins[coin.symbol]
+            val info = allInfoCoins[coin.symbol.orEmpty().uppercase(Locale.US)]
             if (info != null && info.imageUrl.isNotEmpty()) {
                 coin.imgUrl = info.imageUrl
             }
@@ -98,7 +123,10 @@ class CoinsController(private val dbController: DBController, db: CMDatabase, lo
         return false
     }
 
-    fun coinAlreadyAdded(coin: String) = allCoins.find { it.from == coin } != null
+    fun coinAlreadyAdded(coin: String) = allCoins.any { it.from.equals(coin, ignoreCase = true) }
+
+    fun getStableCoinId(symbol: String): String =
+        allInfoCoins[symbol.uppercase(Locale.US)]?.coinId?.takeIf { it.isNotBlank() } ?: symbol
 
     fun allInfoCoinsIsEmpty() = allInfoCoins.isEmpty()
 }

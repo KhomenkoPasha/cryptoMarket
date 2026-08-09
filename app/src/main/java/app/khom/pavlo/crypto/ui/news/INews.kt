@@ -22,6 +22,7 @@ interface INews {
         fun onSwipeUpdate()
         fun onScrolled(dy: Int, childCount: Int, itemCount: Int, firstVisiblePosition: Int)
         fun onFabClicked()
+        fun onSearchQuery(query: String)
     }
 
 }

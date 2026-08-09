@@ -135,19 +135,64 @@
 
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/holdings_empty_text"
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/holdings_empty_card"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"
         android:layout_marginVertical="12dp"
-        android:background="@drawable/bg_card_surface"
-        android:gravity="center"
-        android:padding="24dp"
-        android:text="@string/portfolio_empty"
-        android:textColor="@color/grey_light"
-        android:textSize="18sp"
-        android:visibility="gone" />
+        android:visibility="gone"
+        app:cardBackgroundColor="@color/glass_surface_start"
+        app:cardCornerRadius="20dp"
+        app:cardElevation="3dp"
+        app:strokeColor="@color/glass_outline"
+        app:strokeWidth="1dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="24dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/portfolio_empty_title"
+                android:textColor="@color/on_surface"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/holdings_empty_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:gravity="center"
+                android:text="@string/portfolio_empty_body"
+                android:textColor="@color/on_surface_variant"
+                android:textSize="15sp" />
+
+        </LinearLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/portfolio_add_transaction"
+        android:layout_width="match_parent"
+        android:layout_height="52dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="10dp"
+        android:text="@string/portfolio_add_transaction"
+        android:textAllCaps="false"
+        android:textColor="@color/on_brand_primary"
+        app:backgroundTint="@color/brand_primary"
+        app:cornerRadius="16dp"
+        app:icon="@drawable/ic_portfolio_add"
+        app:iconGravity="textStart"
+        app:iconTint="@color/on_brand_primary" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/holdings_rec_view"

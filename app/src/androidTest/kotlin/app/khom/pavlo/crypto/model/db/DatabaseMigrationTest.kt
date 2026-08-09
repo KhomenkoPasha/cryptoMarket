@@ -39,7 +39,35 @@ class DatabaseMigrationTest {
         }
     }
 
+    @Test
+    fun migration5To6PreservesHoldingAndAddsPortfolioMetadata() {
+        helper.createDatabase(TEST_DB_V6, 5).apply {
+            execSQL(
+                """
+                INSERT INTO holdings(from_coin, to_currency, quantity, price, transaction_date)
+                VALUES ('BTC', 'USD', '0.25', '20000', 1700000000)
+                """.trimIndent()
+            )
+            close()
+        }
+
+        helper.runMigrationsAndValidate(TEST_DB_V6, 6, true, MIGRATION_5_6).use { db ->
+            db.query(
+                "SELECT from_coin, quantity, price, coin_id, coin_name, exchange FROM holdings"
+            ).use { cursor ->
+                assertEquals(true, cursor.moveToFirst())
+                assertEquals("BTC", cursor.getString(0))
+                assertEquals("0.25", cursor.getString(1))
+                assertEquals("20000", cursor.getString(2))
+                assertEquals("BTC", cursor.getString(3))
+                assertEquals("", cursor.getString(4))
+                assertEquals("", cursor.getString(5))
+            }
+        }
+    }
+
     private companion object {
         const val TEST_DB = "migration-test"
+        const val TEST_DB_V6 = "migration-test-v6"
     }
 }

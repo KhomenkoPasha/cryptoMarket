@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="app_name">Crypto InvestPulse</string><string name="_24h">24 h:</string><string name="news">Notícias</string><string name="notes">Notas</string>
+    <string name="cryptocurrency">criptomoeda</string><string name="exit">Sair</string><string name="exit_text">Sair do aplicativo?</string><string name="yes">Sim</string>
+    <string name="cancel">Cancelar</string><string name="refresh">Atualizar</string><string name="coins">Favoritos</string><string name="top100">Ranking</string>
+    <string name="sort_by">Ordenar por</string><string name="coin_name">Nome</string><string name="add_coin">Adicionar criptomoeda</string><string name="price">Preço</string>
+    <string name="price_changed_24h">Preço em 24 h</string><string name="add_coin_from_hint">Digite o nome da criptomoeda</string><string name="matches_found">resultados encontrados</string>
+    <string name="sort_menu_title">Ordenar</string><string name="searching_info">Buscando informações, aguarde</string><string name="coin_not_found">Criptomoeda não encontrada</string>
+    <string name="coin_added">Criptomoeda adicionada</string><string name="settings">Configurações</string><string name="remove_coin">Remover dos favoritos</string>
+    <string name="coins_deleted">Removidas dos favoritos</string><string name="coin_deleted">Removida dos favoritos</string>
+    <string name="favorite_remove_confirmation">Remover %1$s dos favoritos? As transações e notas serão mantidas.</string>
+    <string name="twenty_four_hours">Dados de 24 h</string><string name="open">Abertura</string><string name="high">Máxima</string><string name="low">Mínima</string>
+    <string name="change">Variação</string><string name="change_pct">Variação %</string><string name="supply">Oferta circulante</string><string name="cap">Capitalização</string>
+    <string name="volume_24h">Volume 24 h</string><string name="error">Erro</string><string name="current_price">Preço atual</string><string name="quantity">Quantidade</string>
+    <string name="trade_date">Data da operação</string><string name="add_transaction">Adicionar transação</string><string name="add_trans_fill_price">Informe o preço</string>
+    <string name="add_trans_fill_quantity">Informe a quantidade</string><string name="total_holdings">Total de ativos</string><string name="all_time">Todo o período</string>
+    <string name="profit">lucro</string><string name="loss">prejuízo</string><string name="holdings">Ativos</string><string name="transaction_added">Transação adicionada</string>
+    <string name="holdings_deleted">Ativos excluídos</string><string name="allocations">Alocação</string><string name="empty_text">Nenhuma notícia encontrada</string>
+    <string name="news_link_missing">Link da notícia ausente</string><string name="news_link_open_error">Não foi possível abrir o link</string><string name="news_search_title">Buscar notícias</string>
+    <string name="news_search_hint">Palavra, moeda ou #hashtag</string><string name="news_read_article">Ler artigo</string><string name="notes_news_notes">Notas de notícias</string>
+    <string name="notes_news_notes_hint">Guarde aqui links, manchetes ou eventos importantes.</string><string name="notes_coin_notes">Notas de moedas</string>
+    <string name="notes_empty_favorites">Adicione moedas favoritas para ver as notas aqui.</string><string name="notes_tracked_since">Acompanhada desde %s</string>
+    <string name="notes_hint">Adicionar nota</string><string name="notes_save_note">Salvar nota</string><string name="notes_note_saved">Nota salva</string>
+    <string name="portfolio_tracker">Rastreador de carteira</string><string name="portfolio_current_value">Valor atual</string><string name="portfolio_invested">Investido</string>
+    <string name="portfolio_total_pnl">Lucro/prejuízo total</string><string name="portfolio_day_pnl">Lucro/prejuízo em 24 h</string>
+    <string name="portfolio_empty">Adicione transações para acompanhar o desempenho da carteira.</string><string name="empty_coins">Você ainda não tem criptomoedas. Adicione pelo botão mais ou pelo ranking.</string>
+    <string name="language">Idioma</string><string name="empty_graph_text">Não foi possível carregar o gráfico</string>
+    <string-array name="histo_periods"><item>1 hora</item><item>12 horas</item><item>24 horas</item><item>3 dias</item><item>1 semana</item><item>1 mês</item><item>3 meses</item><item>6 meses</item><item>1 ano</item></string-array>
+    <string name="add_to_favorites">Aos favoritos</string><string name="widget_favorites_title_small">Favoritos</string><string name="widget_favorites_title_large">Favoritos</string>
+    <string name="widget_empty_favorites">Nenhuma moeda favorita</string><string name="widget_investments_title">Meus investimentos</string>
+    <string name="widget_investments_description">Acompanhe sua carteira</string><string name="widget_investments_current_value">Valor atual</string>
+    <string name="widget_investments_invested">Investido</string><string name="widget_investments_total_return">Retorno total</string><string name="widget_investments_positions">PRINCIPAIS POSIÇÕES</string>
+    <string name="widget_investments_empty">Nenhum investimento</string><string name="widget_investments_empty_hint">Toque para adicionar sua primeira transação</string>
+    <string name="widget_investments_price_unavailable">--</string><string name="insights">Análises</string><string name="insights_loading">Carregando análises…</string>
+    <string name="insights_updated">Atualizado %s</string><string name="insights_market_mood">Sentimento do mercado</string><string name="insights_daily_digest">Resumo diário</string>
+    <string name="insights_smart_alerts">Alertas inteligentes</string><string name="insights_watchlist_notes">Notas de acompanhamento</string><string name="insights_compare">Comparar moedas</string>
+    <string name="insights_anomalies">Anomalias do mercado</string><string name="insights_categories">Categorias</string><string name="insights_news_impact">Impacto das notícias</string>
+    <string name="insights_beginner_guide">Guia para iniciantes</string><string name="insights_glossary">Glossário</string><string name="insights_save_note">Salvar nota</string>
+    <string name="insights_note_hint">Adicionar nota</string><string name="insights_note_saved">Nota salva</string><string name="portfolio">Investimentos</string><string name="loading">Carregando</string>
+    <string name="top_coins_load_error">Não foi possível carregar o ranking</string><string name="retry">Tentar novamente</string><string name="notes_edit_note">Editar nota</string>
+    <string name="notes_delete_note">Excluir nota</string><string name="notes_save_changes">Salvar alterações</string><string name="notes_delete_confirmation">Excluir esta nota? Esta ação não pode ser desfeita.</string>
+    <string name="notes_note_updated">Nota atualizada</string><string name="notes_note_deleted">Nota excluída</string><string name="portfolio_transaction_details">Detalhes da transação</string>
+    <string name="portfolio_purchase_price">Preço de compra</string><string name="portfolio_exchange_optional">Corretora (opcional)</string><string name="portfolio_total_spent">Valor gasto</string>
+    <string name="portfolio_save_transaction">Salvar transação</string><string name="portfolio_edit_transaction">Editar transação</string><string name="portfolio_update_transaction">Atualizar transação</string>
+    <string name="portfolio_delete_transaction">Excluir transação</string><string name="portfolio_delete_confirmation">Excluir esta transação? Esta ação não pode ser desfeita.</string>
+    <string name="portfolio_transaction_updated">Transação atualizada</string><string name="portfolio_transaction_not_found">Transação não encontrada</string>
+    <string name="portfolio_no_coins">Não foi possível carregar a lista. Verifique a conexão e tente novamente.</string><string name="portfolio_price_unavailable">Preço indisponível</string>
+    <string name="portfolio_choose_coin">Escolha uma criptomoeda</string><string name="portfolio_empty_title">Sua carteira está vazia</string>
+    <string name="portfolio_empty_body">Adicione sua primeira transação para começar o acompanhamento.</string><string name="portfolio_add_transaction">Adicionar transação</string>
+    <string name="portfolio_purchase_date">Data da compra</string><string name="portfolio_exchange">Corretora</string><string name="portfolio_profit">Lucro / prejuízo</string>
+    <string name="backup_save_data">Salvar dados</string><string name="backup_restore_data">Carregar dados</string><string name="backup_saving">Salvando backup</string>
+    <string name="backup_restoring">Carregando backup</string><string name="backup_restore_title">Restaurar dados do aplicativo?</string>
+    <string name="backup_restore_warning">Favoritos, transações, notas e configurações atuais serão substituídos pelo backup selecionado.</string>
+    <string name="backup_saved" tools:ignore="PluralsCandidate">Backup salvo: %1$d favoritos e %2$d transações</string>
+    <string name="backup_restored" tools:ignore="PluralsCandidate">Dados restaurados: %1$d favoritos e %2$d transações</string>
+    <string name="backup_save_error">Não foi possível salvar o backup</string><string name="backup_restore_error">Não foi possível restaurar os dados. Selecione um backup válido do Crypto InvestPulse.</string>
+</resources>

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="app_name">Crypto InvestPulse</string><string name="_24h">24時間:</string><string name="news">ニュース</string><string name="notes">メモ</string><string name="cryptocurrency">暗号資産</string>
+    <string name="exit">終了</string><string name="exit_text">アプリを終了しますか？</string><string name="yes">はい</string><string name="cancel">キャンセル</string><string name="refresh">更新</string>
+    <string name="coins">お気に入り</string><string name="top100">ランキング</string><string name="sort_by">並べ替え</string><string name="coin_name">名前</string><string name="add_coin">暗号資産を追加</string>
+    <string name="price">価格</string><string name="price_changed_24h">24時間価格</string><string name="add_coin_from_hint">暗号資産名を入力</string><string name="matches_found">件の候補</string>
+    <string name="sort_menu_title">並べ替え</string><string name="searching_info">暗号資産の情報を検索中です</string><string name="coin_not_found">暗号資産が見つかりません</string>
+    <string name="coin_added">暗号資産を追加しました</string><string name="settings">設定</string><string name="remove_coin">お気に入りから削除</string>
+    <string name="coins_deleted">お気に入りから削除しました</string><string name="coin_deleted">お気に入りから削除しました</string>
+    <string name="favorite_remove_confirmation">%1$s をお気に入りから削除しますか？取引とメモは保持されます。</string>
+    <string name="twenty_four_hours">24時間データ</string><string name="open">始値</string><string name="high">高値</string><string name="low">安値</string><string name="change">変動</string>
+    <string name="change_pct">変動率 %</string><string name="supply">循環供給量</string><string name="cap">時価総額</string><string name="volume_24h">24時間出来高</string><string name="error">エラー</string>
+    <string name="current_price">現在価格</string><string name="quantity">数量</string><string name="trade_date">取引日</string><string name="add_transaction">取引を追加</string>
+    <string name="add_trans_fill_price">価格を入力してください</string><string name="add_trans_fill_quantity">数量を入力してください</string><string name="total_holdings">総資産</string>
+    <string name="all_time">全期間</string><string name="profit">利益</string><string name="loss">損失</string><string name="holdings">資産</string><string name="transaction_added">取引を追加しました</string>
+    <string name="holdings_deleted">資産を削除しました</string><string name="allocations">配分</string><string name="empty_text">ニュースが見つかりません</string><string name="news_link_missing">ニュースリンクがありません</string>
+    <string name="news_link_open_error">ニュースリンクを開けません</string><string name="news_search_title">ニュースを検索</string><string name="news_search_hint">キーワード、通貨、#ハッシュタグ</string>
+    <string name="news_read_article">記事を読む</string><string name="notes_news_notes">ニュースメモ</string><string name="notes_news_notes_hint">リンク、見出し、重要なイベントを保存できます。</string>
+    <string name="notes_coin_notes">通貨メモ</string><string name="notes_empty_favorites">お気に入りを追加するとメモがここに表示されます。</string><string name="notes_tracked_since">%s から追跡</string>
+    <string name="notes_hint">メモを追加</string><string name="notes_save_note">メモを保存</string><string name="notes_note_saved">メモを保存しました</string><string name="portfolio_tracker">ポートフォリオ追跡</string>
+    <string name="portfolio_current_value">現在価値</string><string name="portfolio_invested">投資額</string><string name="portfolio_total_pnl">総損益</string><string name="portfolio_day_pnl">24時間損益</string>
+    <string name="portfolio_empty">取引を追加するとポートフォリオの収益を追跡できます。</string><string name="empty_coins">暗号資産がありません。＋またはランキングから追加してください。</string>
+    <string name="language">言語</string><string name="empty_graph_text">チャートを読み込めませんでした</string>
+    <string-array name="histo_periods"><item>1時間</item><item>12時間</item><item>24時間</item><item>3日</item><item>1週間</item><item>1か月</item><item>3か月</item><item>6か月</item><item>1年</item></string-array>
+    <string name="add_to_favorites">お気に入りへ</string><string name="widget_favorites_title_small">お気に入り</string><string name="widget_favorites_title_large">お気に入り</string>
+    <string name="widget_empty_favorites">お気に入りはありません</string><string name="widget_investments_title">マイ投資</string><string name="widget_investments_description">投資ポートフォリオを追跡</string>
+    <string name="widget_investments_current_value">現在価値</string><string name="widget_investments_invested">投資額</string><string name="widget_investments_total_return">総リターン</string>
+    <string name="widget_investments_positions">上位ポジション</string><string name="widget_investments_empty">投資はありません</string><string name="widget_investments_empty_hint">タップして最初の取引を追加</string>
+    <string name="widget_investments_price_unavailable">--</string><string name="insights">インサイト</string><string name="insights_loading">インサイトを読み込み中…</string><string name="insights_updated">更新 %s</string>
+    <string name="insights_market_mood">市場心理</string><string name="insights_daily_digest">デイリーダイジェスト</string><string name="insights_smart_alerts">スマートアラート</string>
+    <string name="insights_watchlist_notes">ウォッチリストメモ</string><string name="insights_compare">通貨を比較</string><string name="insights_anomalies">市場の異常</string><string name="insights_categories">カテゴリー</string>
+    <string name="insights_news_impact">ニュースの影響</string><string name="insights_beginner_guide">初心者ガイド</string><string name="insights_glossary">用語集</string>
+    <string name="insights_save_note">メモを保存</string><string name="insights_note_hint">メモを追加</string><string name="insights_note_saved">メモを保存しました</string>
+    <string name="portfolio">投資</string><string name="loading">読み込み中</string><string name="top_coins_load_error">ランキングを読み込めませんでした</string><string name="retry">再試行</string>
+    <string name="notes_edit_note">メモを編集</string><string name="notes_delete_note">メモを削除</string><string name="notes_save_changes">変更を保存</string>
+    <string name="notes_delete_confirmation">このメモを削除しますか？元に戻せません。</string><string name="notes_note_updated">メモを更新しました</string><string name="notes_note_deleted">メモを削除しました</string>
+    <string name="portfolio_transaction_details">取引の詳細</string><string name="portfolio_purchase_price">購入価格</string><string name="portfolio_exchange_optional">取引所（任意）</string>
+    <string name="portfolio_total_spent">支出額</string><string name="portfolio_save_transaction">取引を保存</string><string name="portfolio_edit_transaction">取引を編集</string>
+    <string name="portfolio_update_transaction">取引を更新</string><string name="portfolio_delete_transaction">取引を削除</string><string name="portfolio_delete_confirmation">この取引を削除しますか？元に戻せません。</string>
+    <string name="portfolio_transaction_updated">取引を更新しました</string><string name="portfolio_transaction_not_found">取引が見つかりません</string><string name="portfolio_no_coins">通貨リストを読み込めません。接続を確認して再試行してください。</string>
+    <string name="portfolio_price_unavailable">価格を取得できません</string><string name="portfolio_choose_coin">暗号資産を選択</string><string name="portfolio_empty_title">ポートフォリオは空です</string>
+    <string name="portfolio_empty_body">最初の暗号資産取引を追加して追跡を開始しましょう。</string><string name="portfolio_add_transaction">取引を追加</string><string name="portfolio_purchase_date">購入日</string>
+    <string name="portfolio_exchange">取引所</string><string name="portfolio_profit">利益 / 損失</string><string name="backup_save_data">データを保存</string><string name="backup_restore_data">データを読み込む</string>
+    <string name="backup_saving">バックアップを保存中</string><string name="backup_restoring">バックアップを読み込み中</string><string name="backup_restore_title">アプリデータを復元しますか？</string>
+    <string name="backup_restore_warning">現在のお気に入り、取引、メモ、設定は選択したバックアップに置き換えられます。</string>
+    <string name="backup_saved" tools:ignore="PluralsCandidate">バックアップ済み：お気に入り %1$d 件、取引 %2$d 件</string><string name="backup_restored" tools:ignore="PluralsCandidate">復元済み：お気に入り %1$d 件、取引 %2$d 件</string>
+    <string name="backup_save_error">バックアップを保存できませんでした</string><string name="backup_restore_error">データを復元できませんでした。有効な Crypto InvestPulse バックアップを選択してください。</string>
+</resources>

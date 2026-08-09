@@ -46,15 +46,6 @@
         <item name="postSplashScreenTheme">@style/AppTheme</item>
     </style>
 
-    <style name="AppTheme.NoActionBar_dialog" parent="Theme.Material3Expressive.Dark.Dialog">
-        <item name="windowActionBar">false</item>
-        <item name="colorPrimary">@color/brand_primary</item>
-        <item name="colorAccent">@color/brand_primary</item>
-        <item name="android:textColor">@color/on_surface</item>
-        <item name="android:windowBackground">@color/surface_container</item>
-        <item name="windowNoTitle">true</item>
-    </style>
-
     <style name="EditTextBaseStyle" parent="Widget.AppCompat.EditText">
         <item name="android:textColor">@color/on_surface</item>
         <item name="android:textColorHint">@color/on_surface_variant</item>
@@ -90,5 +81,10 @@
 
     <style name="ShapeAppearance.Crypto.Large" parent="ShapeAppearance.Material3.Corner.ExtraLarge">
         <item name="cornerSize">28dp</item>
+    </style>
+
+    <style name="ShapeAppearanceOverlay.Crypto.NewsImage" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">16dp</item>
     </style>
 </resources>

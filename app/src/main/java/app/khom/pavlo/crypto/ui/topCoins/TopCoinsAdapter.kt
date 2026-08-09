@@ -5,21 +5,23 @@ import app.khom.pavlo.crypto.R
 import app.khom.pavlo.crypto.databinding.TopCoinItemBinding
 import app.khom.pavlo.crypto.model.CoinsController
 import app.khom.pavlo.crypto.model.TopCoinData
+import app.khom.pavlo.crypto.ui.common.TrackedListAdapter
 import app.khom.pavlo.crypto.utils.ResourceProvider
 import app.khom.pavlo.crypto.utils.addCommasToStringNumber
 import app.khom.pavlo.crypto.utils.getChangeColor
+import app.khom.pavlo.crypto.utils.getStringWithTwoDecimalsFromDouble
 import com.squareup.picasso.Picasso
 import androidx.recyclerview.widget.RecyclerView
+import android.view.View
 import android.view.ViewGroup
 import javax.inject.Inject
-import java.text.DecimalFormat
 
 class TopCoinsAdapter @Inject constructor(private val coins: ArrayList<TopCoinData>,
                                           private val resProvider: ResourceProvider,
                                           private val presenter: ITopCoins.Presenter,
                                           private val coinsController: CoinsController,
                                           private val clickListener: (TopCoinData) -> Unit) :
-        RecyclerView.Adapter<TopCoinsAdapter.ViewHolder>() {
+        TrackedListAdapter<TopCoinsAdapter.ViewHolder>(coins.size) {
 
     private val addingSymbols = mutableSetOf<String>()
     private val addedSymbols = mutableSetOf<String>()
@@ -30,20 +32,30 @@ class TopCoinsAdapter @Inject constructor(private val coins: ArrayList<TopCoinDa
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bindItems(coins[position], clickListener)
+        holder.bindItems(coins[position])
     }
 
     inner class ViewHolder(private val binding: TopCoinItemBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bindItems(coin: TopCoinData, listener: (TopCoinData) -> Unit) {
-            binding.root.setOnClickListener { listener(coin) }
+        private var boundCoin: TopCoinData? = null
+        private var canAddCoin = false
+        private val itemClickListener = View.OnClickListener {
+            boundCoin?.let(clickListener)
+        }
+        private val addClickListener = View.OnClickListener {
+            if (canAddCoin) boundCoin?.let { presenter.onAddCoinClicked(it) }
+        }
+
+        fun bindItems(coin: TopCoinData) {
+            boundCoin = coin
+            binding.root.setOnClickListener(itemClickListener)
             binding.topCoinRank.text = coin.rank.toString()
             binding.topCoinName.text = coin.name
             binding.topCoinPrice.text = addCommasToStringNumber(coin.price_usd)
             val pctCh24h: String = coin.percent_change_24h ?: ""
             val pctValue = pctCh24h.replace(",", "").toDoubleOrNull()
             if (pctValue != null && !pctValue.isNaN() && !pctValue.isInfinite()) {
-                val pctText = DecimalFormat("#.####").format(pctValue)
-                binding.topCoin24hPct.text = "$pctText%"
+                val pctText = getStringWithTwoDecimalsFromDouble(pctValue.toFloat())
+                binding.topCoin24hPct.text = resProvider.getString(R.string.display_percent, pctText)
                 binding.topCoin24hPct.setTextColor(resProvider.getColor(getChangeColor(pctValue.toFloat())))
             } else {
                 binding.topCoin24hPct.text = ""
@@ -67,19 +79,22 @@ class TopCoinsAdapter @Inject constructor(private val coins: ArrayList<TopCoinDa
                         .into(binding.topCoinLogo)
             }
             if (coinsController.coinIsAdded(coin) || symbol in addedSymbols) {
+                canAddCoin = false
                 binding.topCoinAddIcon.setImageDrawable(resProvider.getDrawable(R.drawable.ic_done))
                 binding.topCoinAddLayout.setOnClickListener(null)
             } else if (isAdding) {
+                canAddCoin = false
                 binding.topCoinAddLayout.setOnClickListener(null)
             } else {
+                canAddCoin = true
                 binding.topCoinAddIcon.setImageDrawable(resProvider.getDrawable(R.drawable.ic_add_circle))
-                binding.topCoinAddLayout.setOnClickListener {
-                    presenter.onAddCoinClicked(coin)
-                }
+                binding.topCoinAddLayout.setOnClickListener(addClickListener)
             }
         }
 
         fun recycle() {
+            boundCoin = null
+            canAddCoin = false
             Picasso.get().cancelRequest(binding.topCoinLogo)
             binding.topCoinLogo.setImageDrawable(null)
             binding.root.setOnClickListener(null)
@@ -88,6 +103,8 @@ class TopCoinsAdapter @Inject constructor(private val coins: ArrayList<TopCoinDa
     }
 
     override fun getItemCount() = coins.size
+
+    fun notifyItemsChanged() = dispatchTrackedListChanges(coins.size)
 
     fun setCoinAdding(symbol: String, isAdding: Boolean) {
         if (isAdding) addingSymbols.add(symbol) else addingSymbols.remove(symbol)

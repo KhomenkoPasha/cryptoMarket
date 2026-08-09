@@ -13,19 +13,19 @@ class DBController(val db: CMDatabase, private val logger: Logger) {
         runWrite("save coin") { db.coinsDao().insert(coin) }
     }
 
+    fun saveCoinAsync(coin: Coin): Completable =
+            Completable.fromAction { db.coinsDao().insert(coin) }
+                    .subscribeOn(Schedulers.io())
+
     fun saveCoinsList(list: List<Coin>) {
         runWrite("save coins") { db.coinsDao().insertList(list) }
     }
 
     fun getCoin(from: String, to: String) = db.coinsDao().getCoin(from, to)
 
-    fun deleteCoin(coin: Coin) {
-        runWrite("delete coin") { db.coinsDao().deleteCoin(coin) }
-    }
-
-    fun deleteCoins(coins: List<Coin>) {
-        runWrite("delete coins") { db.coinsDao().deleteCoins(coins) }
-    }
+    fun deleteCoinsAsync(coins: List<Coin>): Completable =
+            Completable.fromAction { db.coinsDao().deleteCoins(coins) }
+                    .subscribeOn(Schedulers.io())
 
     fun saveAllCoinsInfo(allCoins: List<InfoCoin>) {
         runWrite("save all coin info") { db.allCoinsDao().replaceAll(allCoins) }

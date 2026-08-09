@@ -10,9 +10,23 @@ import com.google.gson.JsonParser
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
+import java.util.Locale
 import kotlin.test.assertFailsWith
 
 class ParserTest {
+
+    @Test
+    fun `number formatting is locale independent and rejects invalid values`() {
+        val originalLocale = Locale.getDefault()
+        try {
+            Locale.setDefault(Locale.GERMANY)
+            assertEquals("12,345.6789", addCommasToStringNumber("12345.6789"))
+            assertEquals("12.3457", getStringWithTwoDecimalsFromDouble(12.34567f))
+            assertEquals("", addCommasToStringNumber("NaN"))
+        } finally {
+            Locale.setDefault(originalLocale)
+        }
+    }
 
     @Test
     fun `summary coin list maps symbol and full name`() {
@@ -116,6 +130,32 @@ class ParserTest {
     }
 
     @Test
+    fun `news RSS parser maps article text image and date`() {
+        val xml = """
+            <rss xmlns:media="http://search.yahoo.com/mrss/" xmlns:dc="http://purl.org/dc/elements/1.1/">
+              <channel>
+                <item>
+                  <title><![CDATA[Bitcoin &amp; markets]]></title>
+                  <description><![CDATA[<p>Market <b>update</b></p>]]></description>
+                  <link>https://example.com/story</link>
+                  <dc:creator>CoinDesk Markets</dc:creator>
+                  <pubDate>Sun, 09 Aug 2026 12:30:00 +0000</pubDate>
+                  <media:content url="https://example.com/image.jpg" />
+                </item>
+              </channel>
+            </rss>
+        """.trimIndent()
+
+        val item = getNewsFromRss(xml).single()
+
+        assertEquals("Bitcoin & markets", item.title)
+        assertEquals("Market update", item.body)
+        assertEquals("CoinDesk Markets", item.source)
+        assertEquals("https://example.com/image.jpg", item.imageUrl)
+        assertTrue(item.publishedOn > 0L)
+    }
+
+    @Test
     fun `top coins parser skips malformed entries and assigns contiguous ranks`() {
         val json = JsonParser.parseString(
             """
@@ -185,5 +225,146 @@ class ParserTest {
             "https://static.coinpaprika.com/coin/btc-bitcoin/logo.png",
             result.first().imgUrl
         )
+    }
+
+    @Test
+    fun `CoinPaprika ticker converts to a complete favorite coin`() {
+        val ticker = CoinPaprikaTicker(
+            id = "btc-bitcoin",
+            name = "Bitcoin",
+            symbol = "btc",
+            rank = 1,
+            total_supply = 21_000_000.0,
+            last_updated = "2026-08-09T00:00:00Z",
+            quotes = CoinPaprikaQuotes(
+                CoinPaprikaQuote(
+                    price = 100_000.0,
+                    volume_24h = 50_000_000_000.0,
+                    market_cap = 2_000_000_000_000.0,
+                    percent_change_24h = 2.5
+                )
+            )
+        )
+
+        val favorite = getCoinsFromCoinPaprika(listOf(ticker), listOf("BTC")).single()
+
+        assertEquals("BTC", favorite.from)
+        assertEquals("USD", favorite.to)
+        assertEquals("Bitcoin", favorite.fullName)
+        assertEquals(100_000f, favorite.priceRaw)
+        assertEquals(2.5f, favorite.changePct24hRaw)
+        assertEquals("https://static.coinpaprika.com/coin/btc-bitcoin/logo.png", favorite.imgUrl)
+    }
+
+    @Test
+    fun `CoinPaprika tickers provide searchable coin catalog`() {
+        val ticker = CoinPaprikaTicker(
+            id = "btc-bitcoin",
+            name = "Bitcoin",
+            symbol = "btc",
+            rank = 1
+        )
+
+        val info = getAllCoinsFromCoinPaprika(listOf(ticker)).single()
+
+        assertEquals("btc-bitcoin", info.coinId)
+        assertEquals("BTC", info.name)
+        assertEquals("Bitcoin", info.coinName)
+        assertEquals("https://static.coinpaprika.com/coin/btc-bitcoin/logo.png", info.imageUrl)
+    }
+
+    @Test
+    fun `price parser exposes CryptoCompare rate limit response`() {
+        val json = JsonParser.parseString(
+            """{"Response":"Error","Message":"You are over your rate limit"}"""
+        ).asJsonObject
+
+        val error = assertFailsWith<IllegalStateException> {
+            getCoinsFromJson(json, emptyMap())
+        }
+
+        assertEquals("You are over your rate limit", error.message)
+    }
+
+    @Test
+    fun `historical parser accepts CryptoCompare candles`() {
+        val json = JsonParser.parseString(
+            """
+            {
+              "Data": [
+                {
+                  "time": 1700000000,
+                  "open": 100.5,
+                  "high": 110.0,
+                  "low": 99.0,
+                  "close": 108.25,
+                  "volumefrom": 12.0,
+                  "volumeto": 1300.0
+                }
+              ]
+            }
+            """.trimIndent()
+        ).asJsonObject
+
+        val candle = getHistoListFromJson(json).single()
+
+        assertEquals(1700000000L, candle.time)
+        assertEquals(100.5f, candle.open)
+        assertEquals(108.25f, candle.close)
+    }
+
+    @Test
+    fun `historical parser accepts CoinDesk uppercase candles`() {
+        val json = JsonParser.parseString(
+            """
+            {
+              "Data": [
+                {
+                  "TIMESTAMP": 1700003600,
+                  "OPEN": 200.0,
+                  "HIGH": 220.0,
+                  "LOW": 190.0,
+                  "CLOSE": 215.0,
+                  "VOLUME": 42.0
+                }
+              ],
+              "Err": {}
+            }
+            """.trimIndent()
+        ).asJsonObject
+
+        val candle = getHistoListFromJson(json).single()
+
+        assertEquals(1700003600L, candle.time)
+        assertEquals(220f, candle.high)
+        assertEquals(190f, candle.low)
+        assertEquals(42f, candle.volumeFrom)
+    }
+
+    @Test
+    fun `Coinbase historical parser maps and sorts candles`() {
+        val candles = listOf(
+            listOf(1_700_003_600.0, 105.0, 115.0, 108.0, 112.0, 4.0),
+            listOf(1_700_000_000.0, 99.0, 110.0, 100.5, 108.25, 12.0)
+        )
+
+        val result = getHistoListFromCoinbase(candles)
+
+        assertEquals(listOf(1_700_000_000L, 1_700_003_600L), result.map { it.time })
+        assertEquals(100.5f, result.first().open)
+        assertEquals(108.25f, result.first().close)
+        assertEquals(1_299f, result.first().volumeTo)
+    }
+
+    @Test
+    fun `Coinbase historical parser ignores malformed candles`() {
+        val result = getHistoListFromCoinbase(
+            listOf(
+                listOf(1_700_000_000.0, 99.0),
+                listOf(1_700_000_000.0, 99.0, 110.0, Double.NaN, 108.25, 12.0)
+            )
+        )
+
+        assertTrue(result.isEmpty())
     }
 }

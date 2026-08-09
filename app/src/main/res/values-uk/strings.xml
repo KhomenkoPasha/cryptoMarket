@@ -1,35 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name"> КриптоКурс</string>
+    <string name="app_name">Crypto InvestPulse</string>
 
-    <string name="dollars">%s $</string>
 
-    <string name="active_currencies"> Криптовалюти:</string>
 
-    <string name="active_markets"> Ринки:</string>
 
-    <string name="total_market_cap_usd"> Капіталізация:</string>
 
-    <string name="total_24h_volume_usd"> Оберт 24 години:</string>
 
-    <string name="btc_dominance"> BTC частина:</string>
 
-    <string name="updated"> Обновлено:</string>
 
-    <string name="_7_days"> 7 днів:</string>
 
-    <string name="rank"> Рейтинг</string>
 
     <string name="_24h"> 24 години:</string>
     <string name="news">Новини</string>
 
-    <string name="btc_price"> BTC ціна:</string>
 
-    <string name="_1h"> 1 год:</string>
 
-    <string name="refreshed"> Обновление данных</string>
 
-    <string name="find"> Пошук</string>
 
     <string name="cryptocurrency"> криптовалют</string>
 
@@ -47,7 +34,6 @@
 
     <string name="top100"> Рейтинг</string>
 
-    <string name="market"> Ринок</string>
     <string name="sort_by"> Сортувати по</string>
 
     <string name="coin_name"> Назва</string>
@@ -69,14 +55,13 @@
 
     <string name="coin_added"> Криптовалюта добавлена ​​</string>
     <string name="searching_info">Searching for cryptocurrency info, please wait</string>
-    <string name="coin_already_added"> Криптовалюта вже додана</string>
-    <string name="finding">Find -</string>
     <string name="settings"> Настройки</string>
-    <string name="remove_coin"> Видалити криптовалюту</string>
+    <string name="remove_coin">Видалити з обраного</string>
 
-    <string name="coins_deleted"> Криптовалюта видалена</string>
+    <string name="coins_deleted">Видалено з обраного</string>
 
-    <string name="coin_deleted"> Криптовалюта видалена</string>
+    <string name="coin_deleted">Видалено з обраного</string>
+    <string name="favorite_remove_confirmation">Видалити %1$s з обраного? Транзакції та нотатки залишаться збереженими.</string>
 
     <string name="twenty_four_hours"> Інформація за 24ч</string>
 
@@ -94,7 +79,6 @@
 
     <string name="cap"> Ринкова капіталізація</string>
 
-    <string name="choose_currency"> Виберіть валюту</string>
 
     <string name="volume_24h"> Обсяг 24г</string>
 
@@ -102,21 +86,16 @@
 
     <string name="current_price"> Текуча цена</string>
 
-    <string name="trading_price"> Ціна при покупці</string>
 
     <string name="quantity"> Кількість</string>
 
     <string name="trade_date"> Дата обміну</string>
 
-    <string name="total_value"> Загальна сума</string>
 
-    <string name="confirm_transaction"> Підтвердити транзакцію</string>
 
     <string name="add_transaction"> Додати транзакцію</string>
 
-    <string name="add_trans_fill_all_fields"> Заповніть всі поля</string>
 
-    <string name="add_trans_fill_date"> Виберіть дату транзакції</string>
 
     <string name="add_trans_fill_price"> Заповніть поля ціни</string>
 
@@ -124,7 +103,6 @@
 
     <string name="total_holdings"> Сумма вкладів</string>
 
-    <string name="total_holdings_change"> Изменение за все время</string>
 
     <string name="all_time"> За весь час</string>
 
@@ -132,26 +110,13 @@
 
     <string name="loss"> убыток</string>
 
-    <string name="holdings_24h"> 24Ч</string>
 
     <string name="holdings"> Вклады</string>
 
     <string name="transaction_added"> Транзакция добавлена ​​</string>
 
-    <string name="current"> Текущие</string>
-    <string name="qty"> КОЛ</string>
-    <string name="val"> СУМ</string>
-    <string name="ch_pct"> ПЦТ ІЗМ</string>
-    <string name="prf"> ПРИБ</string>
-    <string name="ls"> УБЫТ</string>
-    <string name="profit_b"> Прибыль</string>
-    <string name="loss_b"> Втрати</string>
     <string name="holdings_deleted"> Вклад удален</string>
-    <string name="holdings_data"> ІНФОРМАЦІЯ ПО ВКЛАДУ</string>
-    <string name="change_percent"> Процент змін</string>
     <string name="allocations"> Распределение</string>
-    <string name="string_coins"> Криптовалюты</string>
-    <string name="enter_hashtag"> Введіть хэштег</string>
     <string name="empty_text"> Новости не найдены</string>
     <string name="empty_coins"> У вас немає криптовалют. Ви можете додати їх через знак "плюс" або через топ 100 криптовалют</string>
     <string name="language"> Язык</string>
@@ -160,8 +125,20 @@
     <string name="widget_favorites_title_small"> Вибране</string>
     <string name="widget_favorites_title_large"> Вибране</string>
     <string name="widget_empty_favorites"> Немає вибраних монет</string>
+    <string name="widget_investments_title">Мої інвестиції</string>
+    <string name="widget_investments_description">Відстеження інвестиційного портфеля</string>
+    <string name="widget_investments_current_value">Поточна вартість</string>
+    <string name="widget_investments_invested">Вкладено</string>
+    <string name="widget_investments_total_return">Загальний результат</string>
+    <string name="widget_investments_positions">НАЙБІЛЬШІ ПОЗИЦІЇ</string>
+    <string name="widget_investments_empty">Інвестицій поки немає</string>
+    <string name="widget_investments_empty_hint">Натисніть, щоб додати першу транзакцію</string>
+    <string name="widget_investments_price_unavailable">--</string>
     <string name="news_link_missing">Посилання на новину відсутнє</string>
     <string name="news_link_open_error">Не вдалося відкрити посилання на новину</string>
+    <string name="news_search_title">Пошук новин</string>
+    <string name="news_search_hint">Ключове слово, монета або #хештег</string>
+    <string name="news_read_article">Читати статтю</string>
     <string name="insights">Аналітика</string>
     <string name="insights_loading">Завантаження аналітики…</string>
     <string name="insights_updated">Оновлено %s</string>
@@ -204,12 +181,45 @@
     <string name="portfolio_invested">Вкладено</string>
     <string name="portfolio_total_pnl">Загальний PnL</string>
     <string name="portfolio_day_pnl">PnL за 24г</string>
-    <string name="portfolio_avg_buy">Середня купівля</string>
-    <string name="portfolio_allocation">Частка</string>
-    <string name="portfolio_holding_day_pnl">PnL 24г</string>
     <string name="portfolio_empty">Спочатку додайте транзакції. Трекінг прибутку буде тут.</string>
-    <string name="portfolio">Портфель</string>
+    <string name="portfolio">Інвестиції</string>
     <string name="loading">Завантаження</string>
     <string name="top_coins_load_error">Не вдалося завантажити рейтинг криптовалют</string>
     <string name="retry">Повторити</string>
+    <string name="notes_edit_note">Редагувати нотатку</string>
+    <string name="notes_delete_note">Видалити нотатку</string>
+    <string name="notes_save_changes">Зберегти зміни</string>
+    <string name="notes_delete_confirmation">Видалити цю нотатку? Цю дію неможливо скасувати.</string>
+    <string name="notes_note_updated">Нотатку змінено</string>
+    <string name="notes_note_deleted">Нотатку видалено</string>
+    <string name="portfolio_transaction_details">Дані транзакції</string>
+    <string name="portfolio_purchase_price">Ціна купівлі</string>
+    <string name="portfolio_exchange_optional">Біржа (необов’язково)</string>
+    <string name="portfolio_total_spent">Витрачена сума</string>
+    <string name="portfolio_save_transaction">Зберегти транзакцію</string>
+    <string name="portfolio_edit_transaction">Редагувати транзакцію</string>
+    <string name="portfolio_update_transaction">Оновити транзакцію</string>
+    <string name="portfolio_delete_transaction">Видалити транзакцію</string>
+    <string name="portfolio_delete_confirmation">Видалити цю транзакцію? Цю дію неможливо скасувати.</string>
+    <string name="portfolio_transaction_updated">Транзакцію оновлено</string>
+    <string name="portfolio_transaction_not_found">Транзакцію не знайдено</string>
+    <string name="portfolio_no_coins">Не вдалося завантажити список криптовалют. Перевірте підключення та повторіть спробу.</string>
+    <string name="portfolio_price_unavailable">Ціна недоступна</string>
+    <string name="portfolio_choose_coin">Виберіть криптовалюту</string>
+    <string name="portfolio_empty_title">Ваш портфель порожній</string>
+    <string name="portfolio_empty_body">Додайте першу криптотранзакцію, щоб почати відстеження портфеля.</string>
+    <string name="portfolio_add_transaction">Додати транзакцію</string>
+    <string name="portfolio_purchase_date">Дата купівлі</string>
+    <string name="portfolio_exchange">Біржа</string>
+    <string name="portfolio_profit">Прибуток / збиток</string>
+    <string name="backup_save_data">Зберегти дані</string>
+    <string name="backup_restore_data">Завантажити дані</string>
+    <string name="backup_saving">Збереження копії</string>
+    <string name="backup_restoring">Завантаження копії</string>
+    <string name="backup_restore_title">Відновити дані застосунку?</string>
+    <string name="backup_restore_warning">Поточне обране, транзакції, нотатки та налаштування буде замінено даними з вибраного файлу.</string>
+    <string name="backup_saved">Копію збережено: обране — %1$d, транзакції — %2$d</string>
+    <string name="backup_restored">Дані відновлено: обране — %1$d, транзакції — %2$d</string>
+    <string name="backup_save_error">Не вдалося зберегти резервну копію</string>
+    <string name="backup_restore_error">Не вдалося відновити дані. Виберіть коректну копію Crypto InvestPulse.</string>
 </resources>

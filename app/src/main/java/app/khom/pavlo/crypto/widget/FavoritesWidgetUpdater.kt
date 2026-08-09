@@ -8,25 +8,19 @@ import android.content.Intent
 import android.view.View
 import android.widget.RemoteViews
 import androidx.core.content.ContextCompat
-import androidx.room.Room
 import app.khom.pavlo.crypto.R
-import app.khom.pavlo.crypto.model.DATABASE_NAME
-import app.khom.pavlo.crypto.model.db.CMDatabase
-import app.khom.pavlo.crypto.model.db.ALL_MIGRATIONS
 import app.khom.pavlo.crypto.model.Coin
 import app.khom.pavlo.crypto.model.NAME
 import app.khom.pavlo.crypto.model.TO
 import app.khom.pavlo.crypto.ui.coinInfo.CoinInfoActivity
 import app.khom.pavlo.crypto.ui.main.MainActivity
 import app.khom.pavlo.crypto.utils.getChangeColor
-import java.util.concurrent.Executors
+import dagger.hilt.android.EntryPointAccessors
 
 object FavoritesWidgetUpdater {
 
-    private val executor = Executors.newSingleThreadExecutor()
-
     fun updateAllAsync(context: Context) {
-        executor.execute { updateAllSync(context) }
+        AppWidgetExecutor.instance.execute { updateAllSync(context) }
     }
 
     fun updateAllSync(context: Context) {
@@ -56,7 +50,9 @@ object FavoritesWidgetUpdater {
         layoutResId: Int,
         maxItems: Int
     ) {
-        executor.execute { updateWidgetsSync(context, appWidgetIds, layoutResId, maxItems, null) }
+        AppWidgetExecutor.instance.execute {
+            updateWidgetsSync(context, appWidgetIds, layoutResId, maxItems, null)
+        }
     }
 
     private fun updateWidgetsSync(
@@ -128,14 +124,11 @@ object FavoritesWidgetUpdater {
     }
 
     private fun loadCoins(context: Context): List<Coin> {
-        val db = Room.databaseBuilder(context, CMDatabase::class.java, DATABASE_NAME)
-            .addMigrations(*ALL_MIGRATIONS)
-            .build()
-        return try {
-            db.coinsDao().getAllCoinsSync()
-        } finally {
-            db.close()
-        }
+        val entryPoint = EntryPointAccessors.fromApplication(
+            context.applicationContext,
+            AppWidgetEntryPoint::class.java
+        )
+        return entryPoint.database().coinsDao().getAllCoinsSync()
     }
 
     private fun getRowIds(maxItems: Int): IntArray = if (maxItems == 2) {

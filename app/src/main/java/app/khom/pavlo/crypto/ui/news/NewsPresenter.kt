@@ -4,11 +4,8 @@ package app.khom.pavlo.crypto.ui.news
 import android.util.Log
 import app.khom.pavlo.crypto.model.Preferences
 import app.khom.pavlo.crypto.model.network.NetworkRequests
-import app.khom.pavlo.crypto.model.rxbus.RxBus
-import app.khom.pavlo.crypto.model.rxbus.SearchHashTagUpdated
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.disposables.CompositeDisposable
-import io.reactivex.rxjava3.schedulers.Schedulers
 import javax.inject.Inject
 
 
@@ -27,20 +24,20 @@ class NewsPresenter @Inject constructor(private val view: INews.View,
     }
 
     override fun onStart() {
-        if (items.isNotEmpty()) {
-            view.showRecView()
+        if (allItems.isNotEmpty()) {
+            applyFilterAndRender()
         } else {
             loadNews()
         }
-        disposable.add(RxBus.listen(SearchHashTagUpdated::class.java)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({ searchHashTagUpdated(it.hashTag) }))
     }
 
-    private fun searchHashTagUpdated(hashTag: String) {
-        preferences.searchHashTag = hashTag
-        applyFilterAndRender()
+    override fun onSearchQuery(query: String) {
+        preferences.searchHashTag = normalizeNewsQuery(query)
+        if (allItems.isEmpty()) {
+            loadNews()
+        } else {
+            applyFilterAndRender()
+        }
     }
 
     private fun afterRefresh() {
@@ -79,32 +76,46 @@ class NewsPresenter @Inject constructor(private val view: INews.View,
                     Log.w(logTag, "News load failed", error)
                     view.hideLoading()
                     view.showEmptyNews()
+                    view.showFab()
                     afterRefresh()
                 })
         )
     }
 
     private fun applyFilterAndRender() {
-        val query = preferences.searchHashTag.trim()
-        val filtered = if (query.isEmpty()) {
-            allItems
-        } else {
-            ArrayList(allItems.filter {
-                it.title.contains(query, ignoreCase = true) ||
-                        it.body.contains(query, ignoreCase = true)
-            })
-        }
+        val filtered = filterNewsItems(allItems, preferences.searchHashTag)
         items.clear()
         items.addAll(filtered)
         view.setItems(items)
         if (items.isEmpty()) {
             view.showEmptyNews()
-            view.hideFab()
+            view.showFab()
         } else {
             view.hideEmptyNews()
             view.showFab()
             view.showRecView()
         }
         afterRefresh()
+    }
+}
+
+private val newsQueryWhitespace = Regex("\\s+")
+
+internal fun normalizeNewsQuery(rawQuery: String): String = rawQuery
+    .trim()
+    .removePrefix("#")
+    .replace(newsQueryWhitespace, " ")
+
+internal fun filterNewsItems(items: List<NewsItem>, rawQuery: String): List<NewsItem> {
+    val query = normalizeNewsQuery(rawQuery)
+    if (query.isEmpty()) return items
+    val tokens = query.lowercase().split(' ').filter(String::isNotBlank)
+    return items.filter { item ->
+        tokens.all { token ->
+            item.title.contains(token, ignoreCase = true) ||
+                item.body.contains(token, ignoreCase = true) ||
+                item.source.contains(token, ignoreCase = true) ||
+                item.url.contains(token, ignoreCase = true)
+        }
     }
 }

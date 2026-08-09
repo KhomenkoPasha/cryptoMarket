@@ -2,7 +2,6 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/surface_container"
     android:orientation="vertical"
     android:padding="8dp">
 
@@ -16,41 +15,19 @@
         android:textStyle="bold"
         android:textSize="18sp" />
 
-    <RadioGroup
-        android:id="@+id/radio_group"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="360dp"
         android:layout_marginTop="10dp"
-        android:padding="8dp"
-        android:orientation="vertical">
+        android:fadeScrollbars="false">
 
-        <RadioButton
-            android:id="@+id/lang_dialog_english"
-            style="@style/MyRadioButton"
+        <RadioGroup
+            android:id="@+id/radio_group"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingStart="8dp"
-            android:text="@string/english" />
-
-        <RadioButton
-            android:id="@+id/lang_dialog_russian"
-            style="@style/MyRadioButton"
-            android:layout_marginTop="8dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingStart="8dp"
-            android:text="@string/russian" />
-
-        <RadioButton
-            android:id="@+id/lang_dialog_ukr"
-            style="@style/MyRadioButton"
-            android:layout_marginTop="8dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingStart="8dp"
-            android:text="Українська" />
-
-    </RadioGroup>
+            android:orientation="vertical"
+            android:padding="8dp" />
+    </ScrollView>
 
     <TextView
         android:id="@+id/lang_dialog_cancel"

@@ -1,23 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string name="app_name" >CryptoCap Market</string>
-    <string name="dollars" >%s$</string>
-    <string name="active_currencies" >Cryptocurrencies:</string>
-    <string name="active_markets">Markets:</string>
-    <string name="total_market_cap_usd">Markets Cap:</string>
-    <string name="total_24h_volume_usd" >24h Vol:</string>
-    <string name="btc_dominance" >BTC Dominance:</string>
-    <string name="updated" >Updated:</string>
-    <string name="_7_days">7 days:</string>
-    <string name="rank" >Rank</string>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="app_name">Crypto InvestPulse</string>
     <string name="_24h">24h:</string>
-    <string name="btc_price">BTC price:</string>
     <string name="news">News</string>
     <string name="notes">Notes</string>
-    <string name="_1h">1h:</string>
-    <string name="refreshed">Refreshed</string>
-    <string name="find">Find</string>
-    <string name="finding">Find -</string>
     <string name="cryptocurrency">cryptocurrency</string>
     <string name="exit">Exit</string>
     <string name="exit_text">Exit from application?</string>
@@ -26,7 +12,6 @@
     <string name="refresh">Refresh</string>
     <string name="coins">Favorite</string>
     <string name="top100">Rating</string>
-    <string name="market">Market</string>
     <string name="sort_by">Sort by</string>
     <string name="coin_name">Name</string>
     <string name="add_coin">Add cryptocurrency</string>
@@ -38,11 +23,11 @@
     <string name="searching_info">Searching for cryptocurrency info, please wait</string>
     <string name="coin_not_found">cryptocurrency not found</string>
     <string name="coin_added">cryptocurrency added</string>
-    <string name="coin_already_added">cryptocurrency already added</string>
     <string name="settings">Settings</string>
-    <string name="remove_coin">Remove cryptocurrency</string>
-    <string name="coins_deleted">cryptocurrency deleted</string>
-    <string name="coin_deleted">cryptocurrency deleted</string>
+    <string name="remove_coin">Remove from favorites</string>
+    <string name="coins_deleted">Removed from favorites</string>
+    <string name="coin_deleted">Removed from favorites</string>
+    <string name="favorite_remove_confirmation">Remove %1$s from favorites? Transactions and notes will remain saved.</string>
     <string name="twenty_four_hours">24h Data</string>
     <string name="open">Open</string>
     <string name="high">High</string>
@@ -51,45 +36,28 @@
     <string name="change_pct">Change %</string>
     <string name="supply">Circulating supply</string>
     <string name="cap">Market cap</string>
-    <string name="choose_currency">Choose currency</string>
     <string name="volume_24h">Volume 24h</string>
     <string name="error">Error</string>
     <string name="current_price">Current price</string>
-    <string name="trading_price">Trade price</string>
     <string name="quantity">Quantity</string>
     <string name="trade_date">Trade date</string>
-    <string name="total_value">Total value</string>
-    <string name="confirm_transaction">Confirm transaction</string>
     <string name="add_transaction">Add transaction</string>
-    <string name="add_trans_fill_all_fields">Fill in all fields</string>
-    <string name="add_trans_fill_date">Choose transaction date</string>
     <string name="add_trans_fill_price">Fill in price field</string>
     <string name="add_trans_fill_quantity">Fill in quantity field</string>
     <string name="total_holdings">Total holdings</string>
-    <string name="total_holdings_change">All time change</string>
     <string name="all_time">All time</string>
     <string name="profit">profit</string>
     <string name="loss">loss</string>
-    <string name="holdings_24h">24H</string>
     <string name="holdings">Holdings</string>
     <string name="transaction_added">Transaction added</string>
-    <string name="current">Current</string>
-    <string name="qty">QTY</string>
-    <string name="val">VAL</string>
-    <string name="ch_pct">CH PCT</string>
-    <string name="prf">PRF</string>
-    <string name="ls">LS</string>
-    <string name="profit_b">Profit</string>
-    <string name="loss_b">Loss</string>
     <string name="holdings_deleted">Holdings deleted</string>
-    <string name="holdings_data">HOLDINGS DATA</string>
-    <string name="change_percent">Change percent</string>
     <string name="allocations">Allocations</string>
-    <string name="string_coins">Cryptocurrency</string>
-    <string name="enter_hashtag">Enter hashtag</string>
     <string name="empty_text">No news found</string>
     <string name="news_link_missing">News link is missing</string>
     <string name="news_link_open_error">Cannot open news link</string>
+    <string name="news_search_title">Search news</string>
+    <string name="news_search_hint">Keyword, coin or #hashtag</string>
+    <string name="news_read_article">Read article</string>
     <string name="notes_news_notes">News notes</string>
     <string name="notes_news_notes_hint">Use this for links, headlines, or event notes you want to keep.</string>
     <string name="notes_coin_notes">Coin notes</string>
@@ -103,18 +71,12 @@
     <string name="portfolio_invested">Invested</string>
     <string name="portfolio_total_pnl">Total PnL</string>
     <string name="portfolio_day_pnl">24h PnL</string>
-    <string name="portfolio_avg_buy">Avg buy</string>
-    <string name="portfolio_allocation">Share</string>
-    <string name="portfolio_holding_day_pnl">24h PnL</string>
     <string name="portfolio_empty">Add transactions first. Portfolio profit tracking will appear here.</string>
     <string name="empty_coins">Oops, it seems you do not have any cryptocurrency. You can add them through a plus sign or in the top cryptocurrency</string>
     <string name="language">Language</string>
-    <string name="english" translatable="false">English</string>
-    <string name="russian" translatable="false">Русский</string>
     <string name="empty_graph_text">Something went wrong with chart loading</string>
     <string name="admob_app_id" translatable="false">ca-app-pub-7371958965084168~3069069282</string>
     <string name="admob_banner_main" translatable="false">ca-app-pub-7371958965084168/1234719877</string>
-    <string name="admob_banner_test" translatable="false">ca-app-pub-3940256099942544/9214589741</string>
 
     <string-array name="histo_periods">
         <item>1 hour</item>
@@ -129,14 +91,30 @@
     </string-array>
 
     <!--Non-translatable-->
-    <string name="coin_logo_transition_name" translatable="false">coinLogo</string>
     <string name="dollar_sign" translatable="false">$</string>
-    <string name="pct_sign" translatable="false">%</string>
     <string name="ok" translatable="false">OK</string>
+    <string name="display_name_symbol" translatable="false">%1$s (%2$s)</string>
+    <string name="display_label_value" translatable="false">%1$s: %2$s</string>
+    <string name="display_amount_symbol" translatable="false">%1$s %2$s</string>
+    <string name="display_profit_percent" translatable="false">%1$s  (%2$s)</string>
+    <string name="display_summary_values" translatable="false">%1$s  %2$s</string>
+    <string name="display_percent" translatable="false">%1$s%%</string>
     <string name="add_to_favorites">To favorites</string>
     <string name="widget_favorites_title_small">Favorites</string>
     <string name="widget_favorites_title_large">Favorites</string>
     <string name="widget_empty_favorites">No favorite coins yet</string>
+    <string name="widget_investments_title">My investments</string>
+    <string name="widget_investments_description">Track your investment portfolio</string>
+    <string name="widget_investments_current_value">Current value</string>
+    <string name="widget_investments_invested">Invested</string>
+    <string name="widget_investments_total_return">Total return</string>
+    <string name="widget_investments_positions">TOP POSITIONS</string>
+    <string name="widget_investments_empty">No investments yet</string>
+    <string name="widget_investments_empty_hint">Tap to add your first transaction</string>
+    <string name="widget_investments_price_unavailable">--</string>
+    <string name="widget_investments_open" translatable="false">›</string>
+    <string name="widget_investments_zero_value" translatable="false">$0.00</string>
+    <string name="widget_investments_zero_return" translatable="false">$0.00  0.00%</string>
     <string name="insights">Insights</string>
     <string name="insights_loading">Loading insights…</string>
     <string name="insights_updated">Updated %s</string>
@@ -153,8 +131,45 @@
     <string name="insights_save_note">Save note</string>
     <string name="insights_note_hint">Add a note</string>
     <string name="insights_note_saved">Note saved</string>
-    <string name="portfolio">Portfolio</string>
+    <string name="portfolio">Investments</string>
     <string name="loading">Loading</string>
     <string name="top_coins_load_error">Couldn’t load the cryptocurrency rating</string>
     <string name="retry">Try again</string>
+    <string name="notes_edit_note">Edit note</string>
+    <string name="notes_delete_note">Delete note</string>
+    <string name="notes_save_changes">Save changes</string>
+    <string name="notes_delete_confirmation">Delete this note? This action cannot be undone.</string>
+    <string name="notes_note_updated">Note updated</string>
+    <string name="notes_note_deleted">Note deleted</string>
+    <string name="portfolio_transaction_details">Transaction details</string>
+    <string name="portfolio_purchase_price">Purchase price</string>
+    <string name="portfolio_exchange_optional">Exchange (optional)</string>
+    <string name="portfolio_total_spent">Amount spent</string>
+    <string name="portfolio_save_transaction">Save transaction</string>
+    <string name="portfolio_edit_transaction">Edit transaction</string>
+    <string name="portfolio_update_transaction">Update transaction</string>
+    <string name="portfolio_delete_transaction">Delete transaction</string>
+    <string name="portfolio_delete_confirmation">Delete this transaction? This action cannot be undone.</string>
+    <string name="portfolio_transaction_updated">Transaction updated</string>
+    <string name="portfolio_transaction_not_found">Transaction not found</string>
+    <string name="portfolio_no_coins">Could not load the cryptocurrency list. Check your connection and try again.</string>
+    <string name="portfolio_price_unavailable">Price unavailable</string>
+    <string name="portfolio_choose_coin">Choose a cryptocurrency</string>
+    <string name="portfolio_empty_title">Your portfolio is empty</string>
+    <string name="portfolio_empty_body">Add your first crypto transaction to start tracking your portfolio.</string>
+    <string name="portfolio_add_transaction">Add transaction</string>
+    <string name="portfolio_purchase_date">Purchase date</string>
+    <string name="portfolio_exchange">Exchange</string>
+    <string name="portfolio_profit">Profit / loss</string>
+    <string name="backup_save_data">Save data</string>
+    <string name="backup_restore_data">Load data</string>
+    <string name="backup_saving">Saving backup</string>
+    <string name="backup_restoring">Loading backup</string>
+    <string name="backup_restore_title">Restore application data?</string>
+    <string name="backup_restore_warning">Current favorites, transactions, notes and settings will be replaced with data from the selected backup file.</string>
+    <!-- Two independent quantities cannot be represented by a single plurals resource. -->
+    <string name="backup_saved" tools:ignore="PluralsCandidate">Backup saved: %1$d favorites and %2$d transactions</string>
+    <string name="backup_restored" tools:ignore="PluralsCandidate">Data restored: %1$d favorites and %2$d transactions</string>
+    <string name="backup_save_error">Could not save the backup file</string>
+    <string name="backup_restore_error">Could not restore data. Select a valid Crypto InvestPulse backup file.</string>
 </resources>

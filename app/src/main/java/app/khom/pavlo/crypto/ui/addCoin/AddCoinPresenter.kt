@@ -43,7 +43,7 @@ class AddCoinPresenter @Inject constructor(private val view: IAddCoin.View,
     }
 
     private fun onAllCoinsUpdates(coinsList: List<InfoCoin>) {
-        allCoins = coinsList.toList()
+        allCoins = preferredCoinInfoBySymbol(coinsList).values.toList()
     }
 
     private fun addCoinsChangesObservable() {

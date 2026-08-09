@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="app_name">Crypto InvestPulse</string><string name="_24h">24小时：</string><string name="news">新闻</string><string name="notes">笔记</string>
+    <string name="cryptocurrency">加密货币</string><string name="exit">退出</string><string name="exit_text">退出应用？</string><string name="yes">是</string><string name="cancel">取消</string>
+    <string name="refresh">刷新</string><string name="coins">收藏</string><string name="top100">排行</string><string name="sort_by">排序方式</string><string name="coin_name">名称</string>
+    <string name="add_coin">添加加密货币</string><string name="price">价格</string><string name="price_changed_24h">24小时价格</string><string name="add_coin_from_hint">输入加密货币名称</string>
+    <string name="matches_found">个匹配项</string><string name="sort_menu_title">排序</string><string name="searching_info">正在查找加密货币信息，请稍候</string>
+    <string name="coin_not_found">未找到加密货币</string><string name="coin_added">已添加加密货币</string><string name="settings">设置</string>
+    <string name="remove_coin">取消收藏</string><string name="coins_deleted">已取消收藏</string><string name="coin_deleted">已取消收藏</string>
+    <string name="favorite_remove_confirmation">要取消收藏 %1$s 吗？交易和笔记将继续保留。</string>
+    <string name="twenty_four_hours">24小时数据</string><string name="open">开盘</string><string name="high">最高</string><string name="low">最低</string><string name="change">涨跌</string>
+    <string name="change_pct">涨跌幅 %</string><string name="supply">流通供应量</string><string name="cap">市值</string><string name="volume_24h">24小时成交量</string>
+    <string name="error">错误</string><string name="current_price">当前价格</string><string name="quantity">数量</string><string name="trade_date">交易日期</string>
+    <string name="add_transaction">添加交易</string><string name="add_trans_fill_price">请输入价格</string><string name="add_trans_fill_quantity">请输入数量</string>
+    <string name="total_holdings">总资产</string><string name="all_time">全部时间</string><string name="profit">盈利</string><string name="loss">亏损</string><string name="holdings">资产</string>
+    <string name="transaction_added">已添加交易</string><string name="holdings_deleted">已删除资产</string><string name="allocations">配置</string><string name="empty_text">未找到新闻</string>
+    <string name="news_link_missing">新闻链接缺失</string><string name="news_link_open_error">无法打开新闻链接</string><string name="news_search_title">搜索新闻</string>
+    <string name="news_search_hint">关键词、币种或 #话题</string><string name="news_read_article">阅读文章</string><string name="notes_news_notes">新闻笔记</string>
+    <string name="notes_news_notes_hint">在这里保存链接、标题或重要事件。</string><string name="notes_coin_notes">币种笔记</string><string name="notes_empty_favorites">请先添加收藏币种，笔记会显示在这里。</string>
+    <string name="notes_tracked_since">自 %s 起关注</string><string name="notes_hint">添加笔记</string><string name="notes_save_note">保存笔记</string><string name="notes_note_saved">笔记已保存</string>
+    <string name="portfolio_tracker">投资组合跟踪</string><string name="portfolio_current_value">当前价值</string><string name="portfolio_invested">已投入</string>
+    <string name="portfolio_total_pnl">总盈亏</string><string name="portfolio_day_pnl">24小时盈亏</string><string name="portfolio_empty">添加交易后即可跟踪投资组合表现。</string>
+    <string name="empty_coins">暂无加密货币。可通过加号或排行添加。</string><string name="language">语言</string><string name="empty_graph_text">图表加载失败</string>
+    <string-array name="histo_periods"><item>1小时</item><item>12小时</item><item>24小时</item><item>3天</item><item>1周</item><item>1个月</item><item>3个月</item><item>6个月</item><item>1年</item></string-array>
+    <string name="add_to_favorites">添加到收藏</string><string name="widget_favorites_title_small">收藏</string><string name="widget_favorites_title_large">收藏</string><string name="widget_empty_favorites">暂无收藏币种</string>
+    <string name="widget_investments_title">我的投资</string><string name="widget_investments_description">跟踪投资组合</string><string name="widget_investments_current_value">当前价值</string>
+    <string name="widget_investments_invested">已投入</string><string name="widget_investments_total_return">总回报</string><string name="widget_investments_positions">主要持仓</string>
+    <string name="widget_investments_empty">暂无投资</string><string name="widget_investments_empty_hint">点击添加第一笔交易</string><string name="widget_investments_price_unavailable">--</string>
+    <string name="insights">洞察</string><string name="insights_loading">正在加载洞察…</string><string name="insights_updated">更新于 %s</string><string name="insights_market_mood">市场情绪</string>
+    <string name="insights_daily_digest">每日摘要</string><string name="insights_smart_alerts">智能提醒</string><string name="insights_watchlist_notes">关注列表笔记</string>
+    <string name="insights_compare">币种比较</string><string name="insights_anomalies">市场异常</string><string name="insights_categories">分类</string><string name="insights_news_impact">新闻影响</string>
+    <string name="insights_beginner_guide">新手指南</string><string name="insights_glossary">术语表</string><string name="insights_save_note">保存笔记</string>
+    <string name="insights_note_hint">添加笔记</string><string name="insights_note_saved">笔记已保存</string><string name="portfolio">投资</string><string name="loading">加载中</string>
+    <string name="top_coins_load_error">无法加载加密货币排行</string><string name="retry">重试</string><string name="notes_edit_note">编辑笔记</string><string name="notes_delete_note">删除笔记</string>
+    <string name="notes_save_changes">保存更改</string><string name="notes_delete_confirmation">删除此笔记？此操作无法撤销。</string><string name="notes_note_updated">笔记已更新</string>
+    <string name="notes_note_deleted">笔记已删除</string><string name="portfolio_transaction_details">交易详情</string><string name="portfolio_purchase_price">买入价格</string>
+    <string name="portfolio_exchange_optional">交易所（可选）</string><string name="portfolio_total_spent">花费金额</string><string name="portfolio_save_transaction">保存交易</string>
+    <string name="portfolio_edit_transaction">编辑交易</string><string name="portfolio_update_transaction">更新交易</string><string name="portfolio_delete_transaction">删除交易</string>
+    <string name="portfolio_delete_confirmation">删除此交易？此操作无法撤销。</string><string name="portfolio_transaction_updated">交易已更新</string>
+    <string name="portfolio_transaction_not_found">未找到交易</string><string name="portfolio_no_coins">无法加载币种列表。请检查网络后重试。</string>
+    <string name="portfolio_price_unavailable">价格不可用</string><string name="portfolio_choose_coin">选择加密货币</string><string name="portfolio_empty_title">投资组合为空</string>
+    <string name="portfolio_empty_body">添加第一笔加密货币交易，开始跟踪投资组合。</string><string name="portfolio_add_transaction">添加交易</string>
+    <string name="portfolio_purchase_date">购买日期</string><string name="portfolio_exchange">交易所</string><string name="portfolio_profit">盈利 / 亏损</string>
+    <string name="backup_save_data">保存数据</string><string name="backup_restore_data">加载数据</string><string name="backup_saving">正在保存备份</string><string name="backup_restoring">正在加载备份</string>
+    <string name="backup_restore_title">恢复应用数据？</string><string name="backup_restore_warning">当前的收藏、交易、笔记和设置将被所选备份替换。</string>
+    <string name="backup_saved" tools:ignore="PluralsCandidate">备份已保存：%1$d 个收藏，%2$d 笔交易</string><string name="backup_restored" tools:ignore="PluralsCandidate">数据已恢复：%1$d 个收藏，%2$d 笔交易</string>
+    <string name="backup_save_error">无法保存备份文件</string><string name="backup_restore_error">无法恢复数据。请选择有效的 Crypto InvestPulse 备份。</string>
+</resources>

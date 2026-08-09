@@ -6,6 +6,7 @@ import android.content.res.Configuration
 import app.khom.pavlo.crypto.model.LocaleManager
 import app.khom.pavlo.crypto.widget.FavoritesWidgetScheduler
 import app.khom.pavlo.crypto.widget.FavoritesWidgetUpdater
+import app.khom.pavlo.crypto.widget.InvestmentsWidgetUpdater
 import com.google.android.gms.ads.MobileAds
 import dagger.hilt.android.HiltAndroidApp
 import android.util.Log
@@ -16,12 +17,13 @@ class CApp : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        RxJavaPlugins.setErrorHandler { Log.e("CryptoMoon RxJava", "Undeliverable error", it) }
+        RxJavaPlugins.setErrorHandler { Log.e("pavlo.crypto RxJava", "Undeliverable error", it) }
         Thread {
             MobileAds.initialize(this) {}
         }.start()
         FavoritesWidgetScheduler.ensureScheduled(this)
         FavoritesWidgetUpdater.updateAllAsync(this)
+        InvestmentsWidgetUpdater.updateAllAsync(this)
     }
 
     override fun attachBaseContext(base: Context?) {

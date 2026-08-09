@@ -5,15 +5,24 @@ import com.google.gson.JsonElement
 import com.google.gson.JsonObject
 import app.khom.pavlo.crypto.R
 import app.khom.pavlo.crypto.model.*
-import app.khom.pavlo.crypto.ui.news.NewsItem
+import app.khom.pavlo.crypto.model.NewsItem
 import java.text.DecimalFormat
-import java.text.SimpleDateFormat
+import java.text.DecimalFormatSymbols
 import java.math.BigDecimal
 import java.util.*
+import java.util.concurrent.ConcurrentHashMap
 
 private val parserGson = Gson()
+private val groupedDecimalFormat = decimalFormat("#,###.####")
+private val plainDecimalFormat = decimalFormat("#.####")
+
+private fun decimalFormat(pattern: String): ThreadLocal<DecimalFormat> =
+    ThreadLocal.withInitial {
+        DecimalFormat(pattern, DecimalFormatSymbols.getInstance(Locale.US))
+    }
 
 fun getCoinsFromJson(jsonObject: JsonObject, map: Map<String, ArrayList<String?>>): ArrayList<Coin> {
+    jsonObject.throwIfCryptoCompareError("CryptoCompare price request failed")
     val result: ArrayList<Coin> = ArrayList()
     var displayJson: JsonElement? = null
     if (jsonObject.has(DISPLAY)) displayJson = jsonObject[DISPLAY]
@@ -92,20 +101,93 @@ fun getAllCoinsFromJson(response: AllCoinsResponse): ArrayList<InfoCoin> {
     return result
 }
 
+fun getAllCoinsFromCoinPaprika(tickers: List<CoinPaprikaTicker>): ArrayList<InfoCoin> = ArrayList(
+        tickers.asSequence()
+                .filter { !it.id.isNullOrBlank() && !it.name.isNullOrBlank() && !it.symbol.isNullOrBlank() }
+                .sortedBy { it.rank ?: Int.MAX_VALUE }
+                .map { ticker ->
+                    InfoCoin(
+                            coinId = ticker.id.orEmpty(),
+                            imageUrl = ticker.id
+                                    ?.takeIf { it.isNotBlank() }
+                                    ?.let { "$COINPAPRIKA_IMAGE_BASE_URL$it/logo.png" }
+                                    .orEmpty(),
+                            name = ticker.symbol.orEmpty().uppercase(Locale.US),
+                            coinName = ticker.name.orEmpty(),
+                            fullName = ticker.name.orEmpty(),
+                            sortOrder = ticker.rank?.toString().orEmpty())
+                }
+                .toList()
+)
+
 fun getHistoListFromJson(jsonObject: JsonObject): ArrayList<HistoData> {
     val result: ArrayList<HistoData> = ArrayList()
     val data = jsonObject.get(DATA)
-    if (data != null && data.isJsonArray) {
-        data.asJsonArray.forEach {
-            try {
-                result.add(parserGson.fromJson(it, HistoData::class.java))
-            } catch (ex: Exception) {
-                println(ex)
-            }
+    val dataArray = when {
+        data?.isJsonArray == true -> data.asJsonArray
+        data?.isJsonObject == true -> data.asJsonObject.get(DATA)?.takeIf { it.isJsonArray }?.asJsonArray
+        else -> null
+    } ?: return result
+
+    dataArray.forEach { item ->
+        if (!item.isJsonObject) return@forEach
+        val candle = item.asJsonObject
+        val time = candle.getLong("time", "TIMESTAMP")
+        val open = candle.getFiniteFloat("open", "OPEN")
+        val high = candle.getFiniteFloat("high", "HIGH")
+        val low = candle.getFiniteFloat("low", "LOW")
+        val close = candle.getFiniteFloat("close", "CLOSE")
+        if (time <= 0L || open == null || high == null || low == null || close == null) {
+            return@forEach
         }
+        result.add(
+                HistoData(
+                        time = time,
+                        close = close,
+                        high = high,
+                        low = low,
+                        open = open,
+                        volumeFrom = candle.getFiniteFloat(
+                                "volumefrom",
+                                "BASE_VOLUME",
+                                "VOLUME"
+                        ) ?: 0f,
+                        volumeTo = candle.getFiniteFloat(
+                                "volumeto",
+                                "QUOTE_VOLUME",
+                                "VOLUME"
+                        ) ?: 0f
+                )
+        )
     }
     return result
 }
+
+fun getHistoListFromCoinbase(candles: List<List<Double>>): ArrayList<HistoData> = ArrayList(
+    candles.asSequence()
+        .mapNotNull { candle ->
+            if (candle.size < 6 || candle.any { !it.isUsableNumber() }) return@mapNotNull null
+            val time = candle[0].toLong()
+            if (time <= 0L) return@mapNotNull null
+            val low = candle[1].toFloat()
+            val high = candle[2].toFloat()
+            val open = candle[3].toFloat()
+            val close = candle[4].toFloat()
+            val volume = candle[5].toFloat()
+            HistoData(
+                time = time,
+                close = close,
+                high = high,
+                low = low,
+                open = open,
+                volumeFrom = volume,
+                volumeTo = volume * close
+            )
+        }
+        .distinctBy { it.time }
+        .sortedBy { it.time }
+        .toList()
+)
 
 fun getPairsListFromJson(jsonObject: JsonObject): ArrayList<PairData> {
     val result: ArrayList<PairData> = ArrayList()
@@ -123,12 +205,7 @@ fun getPairsListFromJson(jsonObject: JsonObject): ArrayList<PairData> {
 }
 
 fun getTopCoinsFromJson(jsonObject: JsonObject): ArrayList<TopCoinData> {
-    if (jsonObject.getString("Response").equals("Error", ignoreCase = true)) {
-        val message = jsonObject.getString("Message")
-                .takeIf { it.isNotBlank() }
-                ?: "CryptoCompare top coins request failed"
-        throw IllegalStateException(message)
-    }
+    jsonObject.throwIfCryptoCompareError("CryptoCompare top coins request failed")
     val result: ArrayList<TopCoinData> = ArrayList()
     val data = jsonObject.get(DATA)
     if (data == null || !data.isJsonArray) return result
@@ -201,6 +278,87 @@ fun getNewsFromJson(jsonObject: JsonObject): ArrayList<NewsItem> {
     return result
 }
 
+private val rssItemRegex = Regex("<item\\b[^>]*>(.*?)</item>", setOf(RegexOption.IGNORE_CASE, RegexOption.DOT_MATCHES_ALL))
+private val rssHtmlTagRegex = Regex("<[^>]+>")
+private val rssWhitespaceRegex = Regex("\\s+")
+private val rssTagPatterns = ConcurrentHashMap<String, Regex>()
+private val rssAttributePatterns = ConcurrentHashMap<String, Regex>()
+private val rssDateFormats = ThreadLocal.withInitial {
+    arrayOf(
+        java.text.SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss Z", Locale.US),
+        java.text.SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss z", Locale.US)
+    ).onEach { it.isLenient = false }
+}
+
+fun getNewsFromRss(xml: String): ArrayList<NewsItem> = ArrayList(
+    rssItemRegex.findAll(xml).mapNotNull { match ->
+        val item = match.groupValues[1]
+        val title = rssTagValue(item, "title").cleanRssText()
+        val url = rssTagValue(item, "link").cleanRssText()
+        if (title.isBlank() || url.isBlank()) return@mapNotNull null
+        val description = rssTagValue(item, "description").cleanRssText()
+        val source = sequenceOf("creator", "author", "source")
+            .map { rssTagValue(item, it).cleanRssText() }
+            .firstOrNull(String::isNotBlank)
+            ?: "CoinDesk"
+        val imageUrl = rssAttribute(item, "media:content", "url")
+            .ifBlank { rssAttribute(item, "enclosure", "url") }
+            .cleanRssText()
+        val publishedOn = parseRssDate(rssTagValue(item, "pubDate").cleanRssText())
+        NewsItem(title, description, url, source, publishedOn, imageUrl)
+    }.take(50).toList()
+)
+
+private fun rssTagValue(item: String, tag: String): String {
+    val pattern = rssTagPatterns.getOrPut(tag.lowercase(Locale.US)) {
+        val qualifiedTag = "(?:[A-Za-z0-9_-]+:)?${Regex.escape(tag)}"
+        Regex(
+            "<$qualifiedTag\\b[^>]*>(.*?)</$qualifiedTag>",
+            setOf(RegexOption.IGNORE_CASE, RegexOption.DOT_MATCHES_ALL)
+        )
+    }
+    return pattern.find(item)?.groupValues?.get(1).orEmpty()
+}
+
+private fun rssAttribute(item: String, tag: String, attribute: String): String {
+    val key = "${tag.lowercase(Locale.US)}|${attribute.lowercase(Locale.US)}"
+    val pattern = rssAttributePatterns.getOrPut(key) {
+        val tagPattern = Regex.escape(tag)
+        val attributePattern = Regex.escape(attribute)
+        Regex(
+            "<$tagPattern\\b[^>]*\\b$attributePattern\\s*=\\s*[\"']([^\"']+)[\"'][^>]*>",
+            setOf(RegexOption.IGNORE_CASE, RegexOption.DOT_MATCHES_ALL)
+        )
+    }
+    return pattern.find(item)?.groupValues?.get(1).orEmpty()
+}
+
+private fun String.cleanRssText(): String = this
+    .removePrefix("<![CDATA[")
+    .removeSuffix("]]>")
+    .replace(rssHtmlTagRegex, " ")
+    .replace("&nbsp;", " ", ignoreCase = true)
+    .replace("&amp;", "&", ignoreCase = true)
+    .replace("&quot;", "\"", ignoreCase = true)
+    .replace("&#39;", "'", ignoreCase = true)
+    .replace("&apos;", "'", ignoreCase = true)
+    .replace("&lt;", "<", ignoreCase = true)
+    .replace("&gt;", ">", ignoreCase = true)
+    .replace(rssWhitespaceRegex, " ")
+    .trim()
+
+private fun parseRssDate(value: String): Long {
+    if (value.isBlank()) return 0L
+    rssDateFormats.get()!!.forEach { format ->
+        try {
+            return format.parse(value)?.time?.div(1000L) ?: 0L
+        } catch (_: java.text.ParseException) {
+            // Try the next supported RSS date shape.
+        }
+    }
+    return 0L
+}
+
 fun getTopCoinsFromCoinPaprika(
         tickers: List<CoinPaprikaTicker>,
         limit: Int = 100
@@ -235,6 +393,69 @@ fun getTopCoinsFromCoinPaprika(
                 .toList()
 )
 
+fun getCoinsFromCoinPaprika(
+        tickers: List<CoinPaprikaTicker>,
+        symbols: List<String?>
+): ArrayList<Coin> {
+    val requestedSymbols = symbols
+            .filterNotNull()
+            .map { it.uppercase(Locale.US) }
+            .filter { it.isNotBlank() }
+            .distinct()
+    val topCoinBySymbol = linkedMapOf<String, TopCoinData>()
+    getTopCoinsFromCoinPaprika(tickers, tickers.size).forEach { topCoin ->
+        val symbol = topCoin.symbol.orEmpty().uppercase(Locale.US)
+        if (symbol in requestedSymbols && symbol !in topCoinBySymbol) {
+            topCoinBySymbol[symbol] = topCoin
+        }
+    }
+    return ArrayList(requestedSymbols.mapNotNull { topCoinBySymbol[it]?.toFavoriteCoin() })
+}
+
+fun TopCoinData.toFavoriteCoin(): Coin? {
+    val favoriteSymbol = symbol
+            ?.trim()
+            ?.uppercase(Locale.US)
+            ?.takeIf { it.isNotEmpty() }
+            ?: return null
+    val priceValue = price_usd.toSafeDoubleOrNull() ?: 0.0
+    val volumeValue = vol24Usd.toSafeDoubleOrNull() ?: 0.0
+    val supplyValue = total_supply.toSafeDoubleOrNull() ?: 0.0
+    val marketCapValue = market_cap_usd.toSafeDoubleOrNull() ?: 0.0
+    val changePctValue = percent_change_24h.toSafeDoubleOrNull() ?: 0.0
+    return Coin(
+            from = favoriteSymbol,
+            to = USD,
+            imgUrl = imgUrl.orEmpty(),
+            fullName = name,
+            fromSymbol = favoriteSymbol,
+            toSymbol = "\$",
+            market = "CoinPaprika",
+            price = priceValue.toDisplayMoney(),
+            priceRaw = priceValue.toFloat(),
+            lastUpdate = last_updated.orEmpty(),
+            volume24h = volumeValue.toDisplayNumber(),
+            volume24hRaw = volumeValue.toFloat(),
+            volume24hTo = volumeValue.toDisplayNumber(),
+            volume24hToRaw = volumeValue.toFloat(),
+            changePct24h = changePctValue.toDisplayNumber(),
+            changePct24hRaw = changePctValue.toFloat(),
+            supply = supplyValue.toDisplayNumber(),
+            supplyRaw = supplyValue.toFloat(),
+            mktCap = marketCapValue.toDisplayMoney(),
+            mktCapRaw = marketCapValue.toFloat())
+}
+
+private fun JsonObject.throwIfCryptoCompareError(defaultMessage: String) {
+    if (getString("Response").equals("Error", ignoreCase = true)) {
+        throw IllegalStateException(getString("Message").takeIf { it.isNotBlank() } ?: defaultMessage)
+    }
+}
+
+private fun Double.toDisplayNumber(): String = groupedDecimalFormat.get()!!.format(this)
+
+private fun Double.toDisplayMoney(): String = if (this > 0.0) "\$ ${toDisplayNumber()}" else ""
+
 private fun JsonObject.getString(vararg names: String): String {
     names.forEach { name ->
         val value = get(name)
@@ -268,15 +489,29 @@ private fun JsonObject.getLong(vararg names: String): Long {
     return 0L
 }
 
+private fun JsonObject.getFiniteFloat(vararg names: String): Float? {
+    names.forEach { name ->
+        val value = get(name)
+        if (value != null && !value.isJsonNull) {
+            val number = try {
+                value.asFloat
+            } catch (ex: Exception) {
+                null
+            }
+            if (number != null && number.isUsableNumber()) return number
+        }
+    }
+    return null
+}
+
 fun createCoinsMapWithCurrencies(coinsList: List<Coin>): HashMap<String, ArrayList<String?>> {
-    val map: HashMap<String, ArrayList<String?>> = HashMap()
-    val fromList: ArrayList<String?> = ArrayList()
-    coinsList.forEach { fromList.add(it.from) }
-    map.put(FSYMS, fromList)
-    val toList: ArrayList<String?> = ArrayList()
-    coinsList.forEach { toList.add(it.to) }
-    map.put(TSYMS, toList)
-    return map
+    val fromList = ArrayList<String?>(coinsList.size)
+    val toList = ArrayList<String?>(coinsList.size)
+    coinsList.forEach { coin ->
+        fromList.add(coin.from)
+        toList.add(coin.to)
+    }
+    return hashMapOf(FSYMS to fromList, TSYMS to toList)
 }
 
 fun getChangeColor(change: Float) = when {
@@ -294,29 +529,16 @@ fun getChangeColor(change: BigDecimal) = when (change.signum()) {
 
 fun addCommasToStringNumber(number: String?): String {
     val value = number.toSafeDoubleOrNull() ?: return ""
-    val formatter = DecimalFormat("#,###.####")
-    return formatter.format(value)
+    return groupedDecimalFormat.get()!!.format(value)
 }
 
 fun getStringWithTwoDecimalsFromDouble(value: Float): String {
     if (!value.isUsableNumber()) return ""
-    val formatter = DecimalFormat("#.####")
-    return formatter.format(value.toDouble())
+    return plainDecimalFormat.get()!!.format(value.toDouble())
 }
 
-fun getStringWithTwoDecimalsFromDouble(value: BigDecimal): String {
-    val formatter = DecimalFormat("#.####")
-    return formatter.format(value)
-}
-
-fun formatLongDateToString(date: Long?, format: String): String {
-    if (date == null || date <= 0L) return ""
-    return try {
-        SimpleDateFormat(format, Locale.getDefault()).format(Date(date))
-    } catch (ex: Exception) {
-        ""
-    }
-}
+fun getStringWithTwoDecimalsFromDouble(value: BigDecimal): String =
+    plainDecimalFormat.get()!!.format(value)
 
 private fun String?.toSafeDoubleOrNull(): Double? {
     val value = this
@@ -330,22 +552,3 @@ private fun String?.toSafeDoubleOrNull(): Double? {
 private fun Double.isUsableNumber() = !isNaN() && !isInfinite()
 
 private fun Float.isUsableNumber() = !isNaN() && !isInfinite()
-
-fun getNumberSignByValue(value: Double) = when {
-    !value.isUsableNumber() -> ""
-    value >= 0 -> "+"
-    else -> "-"
-}
-
-fun getProfitLossText(change: Float, resProvider: ResourceProvider) =
-        if (!change.isUsableNumber() || change >= 0) resProvider.getString(R.string.prf)
-        else  resProvider.getString(R.string.ls)
-
-fun getProfitLossText(change: BigDecimal, resProvider: ResourceProvider) =
-        if (change.signum() >= 0) resProvider.getString(R.string.prf)
-        else resProvider.getString(R.string.ls)
-
-fun getProfitLossTextBig(change: Float, resProvider: ResourceProvider) =
-        if (!change.isUsableNumber() || change >= 0) resProvider.getString(R.string.profit_b)
-        else  resProvider.getString(R.string.loss_b)
-

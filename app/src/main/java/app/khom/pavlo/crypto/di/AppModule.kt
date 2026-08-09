@@ -4,11 +4,15 @@ import android.app.Application
 import androidx.room.Room
 import android.content.Context
 import app.khom.pavlo.crypto.model.*
+import app.khom.pavlo.crypto.model.backup.AppBackupRepository
+import app.khom.pavlo.crypto.model.backup.BackupChangeNotifier
 import app.khom.pavlo.crypto.model.db.CMDatabase
 import app.khom.pavlo.crypto.model.db.DBController
 import app.khom.pavlo.crypto.model.db.ALL_MIGRATIONS
 import app.khom.pavlo.crypto.model.db.PortfolioRepository
 import app.khom.pavlo.crypto.model.db.CoinsRepository
+import app.khom.pavlo.crypto.widget.InvestmentsWidgetUpdater
+import app.khom.pavlo.crypto.widget.FavoritesWidgetUpdater
 import app.khom.pavlo.crypto.utils.Logger
 import app.khom.pavlo.crypto.utils.ResourceProvider
 import app.khom.pavlo.crypto.utils.Toaster
@@ -35,7 +39,37 @@ class AppModule {
     fun provideDBController(db: CMDatabase, logger: Logger) = DBController(db, logger)
 
     @Provides @Singleton
-    fun providePortfolioRepository(db: CMDatabase) = PortfolioRepository(db)
+    fun providePortfolioRepository(
+            db: CMDatabase,
+            changeNotifier: PortfolioChangeNotifier
+    ) = PortfolioRepository(db, changeNotifier)
+
+    @Provides @Singleton
+    fun providePortfolioChangeNotifier(application: Application) =
+            PortfolioChangeNotifier {
+                InvestmentsWidgetUpdater.updateAllAsync(application)
+            }
+
+    @Provides @Singleton
+    fun provideFavoritesChangeNotifier(application: Application) =
+            FavoritesChangeNotifier {
+                FavoritesWidgetUpdater.updateAllAsync(application)
+                InvestmentsWidgetUpdater.updateAllAsync(application)
+            }
+
+    @Provides @Singleton
+    fun provideBackupChangeNotifier(application: Application) =
+            BackupChangeNotifier {
+                FavoritesWidgetUpdater.updateAllAsync(application)
+                InvestmentsWidgetUpdater.updateAllAsync(application)
+            }
+
+    @Provides @Singleton
+    fun provideAppBackupRepository(
+            application: Application,
+            db: CMDatabase,
+            changeNotifier: BackupChangeNotifier
+    ) = AppBackupRepository(application, db, changeNotifier)
 
     @Provides @Singleton
     fun provideCoinsRepository(db: CMDatabase) = CoinsRepository(db)

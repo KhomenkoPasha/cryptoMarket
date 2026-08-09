@@ -26,14 +26,13 @@
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_marginEnd="5dp"
-            android:layout_marginRight="5dp" />
+            android:contentDescription="@null" />
 
         <TextView
             android:id="@+id/add_coin_short_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="5dp"
-            android:layout_marginRight="5dp"
             android:textColor="@color/brand_primary"
             android:textStyle="bold"
             android:textSize="18sp"

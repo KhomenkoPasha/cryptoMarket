@@ -11,6 +11,7 @@ import app.khom.pavlo.crypto.R
 import app.khom.pavlo.crypto.model.*
 import app.khom.pavlo.crypto.ui.coinInfo.CoinInfoActivity
 import app.khom.pavlo.crypto.utils.ResourceProvider
+import app.khom.pavlo.crypto.utils.applyCryptoRefreshStyle
 import app.khom.pavlo.crypto.databinding.TopCoinsFragmentBinding
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -53,17 +54,14 @@ class TopCoinsFragment : Fragment(), ITopCoins.View {
     }
 
     private fun setupSwipeRefresh() {
-        binding.topCoinsFragmentSwipeRefresh.setColorSchemeResources(
-                R.color.colorPrimaryDark,
-                R.color.colorPrimaryDark,
-                R.color.colorPrimaryDark)
+        binding.topCoinsFragmentSwipeRefresh.applyCryptoRefreshStyle()
         binding.topCoinsFragmentSwipeRefresh.setOnRefreshListener {
             presenter.onSwipeUpdate()
         }
     }
 
     override fun updateRecyclerView() {
-        adapter?.notifyDataSetChanged()
+        adapter?.notifyItemsChanged()
     }
 
     override fun onStart() {

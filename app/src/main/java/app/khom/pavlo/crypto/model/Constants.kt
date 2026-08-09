@@ -3,6 +3,9 @@ package app.khom.pavlo.crypto.model
 
 val BASE_CRYPTOCOMPARE_URL = "https://min-api.cryptocompare.com/data/"
 val COINDESK_NEWS_URL = "https://data-api.coindesk.com/news/v1/article/list"
+val COINDESK_NEWS_RSS_URL = "https://www.coindesk.com/arc/outboundfeeds/rss/"
+val COINDESK_HISTO_BASE_URL = "https://data-api.coindesk.com/index/cc/v1/historical/"
+val COINBASE_EXCHANGE_CANDLES_BASE_URL = "https://api.exchange.coinbase.com/products/"
 val COINPAPRIKA_TICKERS_URL = "https://api.coinpaprika.com/v1/tickers"
 val COINPAPRIKA_IMAGE_BASE_URL = "https://static.coinpaprika.com/coin/"
 val CRYPTOCOMPARE_IMAGE_BASE_URL = "https://www.cryptocompare.com"
@@ -21,7 +24,8 @@ val ETH = "ETH"
 val SNT = "SNT"
 
 val COINS_FRAGMENT_PAGE_POSITION = 0
-val TOP_COINS_FRAGMENT_PAGE_POSITION = 1
+val PORTFOLIO_FRAGMENT_PAGE_POSITION = 1
+val TOP_COINS_FRAGMENT_PAGE_POSITION = 2
 val NAME = "name"
 val FROM = "from"
 val TO = "to"

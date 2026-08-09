@@ -12,8 +12,11 @@ import app.khom.pavlo.crypto.ui.coinAllocation.CoinAllocationActivity
 import app.khom.pavlo.crypto.ui.coinInfo.CoinInfoActivity
 import app.khom.pavlo.crypto.ui.holdings.HoldingsActivity
 import app.khom.pavlo.crypto.utils.ResourceProvider
+import app.khom.pavlo.crypto.utils.applyCryptoRefreshStyle
 import androidx.fragment.app.Fragment
+import androidx.appcompat.app.AlertDialog
 import app.khom.pavlo.crypto.databinding.CoinsFragmentBinding
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -29,6 +32,7 @@ class CoinsFragment : Fragment(), ICoins.View {
     private var _binding: CoinsFragmentBinding? = null
     private val binding get() = _binding!!
     private var adapter: CoinsListAdapter? = null
+    private var removeFavoriteDialog: AlertDialog? = null
     private var coins: ArrayList<Coin> = ArrayList()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -53,15 +57,13 @@ class CoinsFragment : Fragment(), ICoins.View {
     private fun setupRecView() {
         binding.coinsFragmentRecView.layoutManager = LinearLayoutManager(requireContext())
         adapter = CoinsListAdapter(coins, resProvider, multiSelector, holdingsHandler,
-                clickListener = { presenter.onCoinClicked(it) })
+                clickListener = { presenter.onCoinClicked(it) },
+                removeFavoriteListener = { presenter.onRemoveFavoriteClicked(it) })
         binding.coinsFragmentRecView.adapter = adapter
     }
 
     private fun setupSwipeRefresh() {
-        binding.swipeRefresh.setColorSchemeResources(
-                R.color.colorPrimaryDark,
-                R.color.colorPrimaryDark,
-                R.color.colorPrimaryDark)
+        binding.swipeRefresh.applyCryptoRefreshStyle()
         binding.swipeRefresh.setOnRefreshListener { presenter.onSwipeUpdate() }
     }
 
@@ -76,7 +78,7 @@ class CoinsFragment : Fragment(), ICoins.View {
     }
 
     override fun updateRecyclerView() {
-        adapter?.notifyDataSetChanged()
+        adapter?.notifyItemsChanged()
     }
 
     override fun hideRefreshing() {
@@ -152,7 +154,21 @@ class CoinsFragment : Fragment(), ICoins.View {
         binding.coinsFragmentEmptyText.visibility = View.GONE
     }
 
+    override fun showRemoveFavoriteConfirmation(coin: Coin) {
+        removeFavoriteDialog?.dismiss()
+        removeFavoriteDialog = MaterialAlertDialogBuilder(requireContext())
+                .setTitle(R.string.remove_coin)
+                .setMessage(getString(R.string.favorite_remove_confirmation, coin.from))
+                .setNegativeButton(R.string.cancel, null)
+                .setPositiveButton(R.string.remove_coin) { _, _ ->
+                    presenter.onRemoveFavoriteConfirmed(coin)
+                }
+                .show()
+    }
+
     override fun onDestroyView() {
+        removeFavoriteDialog?.dismiss()
+        removeFavoriteDialog = null
         binding.coinsFragmentRecView.adapter = null
         adapter = null
         _binding = null

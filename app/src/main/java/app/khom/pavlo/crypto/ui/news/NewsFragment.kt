@@ -11,12 +11,13 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import app.khom.pavlo.crypto.R
 import app.khom.pavlo.crypto.databinding.NewsFragmentBinding
+import app.khom.pavlo.crypto.utils.applyCryptoRefreshStyle
 import app.khom.pavlo.crypto.utils.toastShort
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class NewsFragment : Fragment(), INews.View {
+class NewsFragment : Fragment(), INews.View, SearchDialog.ResultListener {
 
     @Inject
     lateinit var presenter: INews.Presenter
@@ -54,10 +55,7 @@ class NewsFragment : Fragment(), INews.View {
     }
 
     private fun setupSwipeRefresh() {
-        binding.newsSwipeRefresh.setColorSchemeResources(
-                R.color.colorPrimaryDark,
-                R.color.colorPrimaryDark,
-                R.color.colorPrimaryDark)
+        binding.newsSwipeRefresh.applyCryptoRefreshStyle()
         binding.newsSwipeRefresh.setOnRefreshListener {
             presenter.onSwipeUpdate() }
     }
@@ -94,7 +92,7 @@ class NewsFragment : Fragment(), INews.View {
     }
 
     override fun setItems(items: List<NewsItem>) {
-        adapter?.notifyDataSetChanged()
+        adapter?.notifyItemsChanged()
     }
 
     override fun showLoading() {
@@ -110,11 +108,17 @@ class NewsFragment : Fragment(), INews.View {
     }
 
     override fun showSearchDialog(query: String) {
-        val dialog = SearchDialog()
+        val dialog = SearchDialog().apply {
+            onSearch = ::onNewsSearchResult
+        }
         val bundle = Bundle()
         bundle.putString("query", query)
         dialog.arguments = bundle
         dialog.show(childFragmentManager, "searchDialog")
+    }
+
+    override fun onNewsSearchResult(query: String) {
+        presenter.onSearchQuery(query)
     }
 
     override fun showEmptyNews() {

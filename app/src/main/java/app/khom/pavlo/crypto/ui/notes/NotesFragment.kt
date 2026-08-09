@@ -1,6 +1,7 @@
 package app.khom.pavlo.crypto.ui.notes
 
 import android.content.res.ColorStateList
+import android.graphics.Color
 import android.graphics.Typeface
 import android.os.Bundle
 import android.text.InputType
@@ -8,9 +9,13 @@ import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import android.widget.EditText
+import android.widget.FrameLayout
 import android.widget.LinearLayout
+import android.widget.ProgressBar
 import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import app.khom.pavlo.crypto.R
 import app.khom.pavlo.crypto.databinding.NotesFragmentBinding
@@ -18,9 +23,11 @@ import app.khom.pavlo.crypto.model.Coin
 import app.khom.pavlo.crypto.model.Preferences
 import app.khom.pavlo.crypto.model.db.CMDatabase
 import app.khom.pavlo.crypto.utils.ResourceProvider
+import app.khom.pavlo.crypto.utils.applyCryptoRefreshStyle
 import app.khom.pavlo.crypto.utils.toastShort
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.card.MaterialCardView
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Single
@@ -42,6 +49,8 @@ class NotesFragment : Fragment() {
     private val binding get() = _binding!!
     private val disposable = CompositeDisposable()
     private val dateFormat = SimpleDateFormat("MMM d, yyyy", Locale.US)
+    private var coinNotesContainer: LinearLayout? = null
+    private var noteDialog: AlertDialog? = null
 
     override fun onCreateView(
             inflater: LayoutInflater,
@@ -54,17 +63,14 @@ class NotesFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.notesSwipeRefresh.setColorSchemeResources(
-                R.color.brand_primary,
-                R.color.brand_secondary,
-                R.color.brand_tertiary
-        )
-        binding.notesSwipeRefresh.setOnRefreshListener { loadNotes() }
+        binding.notesSwipeRefresh.applyCryptoRefreshStyle()
+        renderNotesShell()
+        binding.notesSwipeRefresh.setOnRefreshListener { loadNotes(showRefreshIndicator = true) }
     }
 
     override fun onStart() {
         super.onStart()
-        loadNotes()
+        loadNotes(showRefreshIndicator = false)
     }
 
     override fun onStop() {
@@ -72,39 +78,63 @@ class NotesFragment : Fragment() {
         super.onStop()
     }
 
-    private fun loadNotes() {
+    private fun loadNotes(showRefreshIndicator: Boolean) {
         if (_binding == null) return
-        binding.notesSwipeRefresh.isRefreshing = true
+        if (showRefreshIndicator) {
+            binding.notesSwipeRefresh.isRefreshing = true
+        } else {
+            showCoinNotesLoading()
+        }
         disposable.clear()
         disposable.add(
                 Single.fromCallable {
                     db.coinsDao().getAllCoinsSync().also { coins ->
-                        coins.forEach { preferences.ensureCoinTracking(it.from, it.priceRaw) }
+                        preferences.ensureCoinTracking(coins)
                     }
                 }
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(
-                                { coins -> render(coins.sortedBy { it.from }) },
-                                { renderError() }
+                                { coins -> renderCoinNotes(coins.sortedBy { it.from }) },
+                                { renderCoinNotesError() }
                         )
         )
     }
 
-    private fun render(coins: List<Coin>) {
+    private fun renderNotesShell() {
         if (_binding == null) return
         binding.notesSwipeRefresh.isRefreshing = false
         binding.notesContent.removeAllViews()
 
         addTitle(getString(R.string.notes_news_notes))
         addText(getString(R.string.notes_news_notes_hint), topMarginDp = 4)
-        addNoteEditor(preferences.newsNotes) {
-            preferences.newsNotes = it
-        }
+        addNoteEditor(
+                notes = preferences.getNewsNoteEntries(),
+                onSave = preferences::addNewsNote,
+                onUpdate = preferences::updateNewsNote,
+                onDelete = preferences::deleteNewsNote
+        )
 
         addTitle(getString(R.string.notes_coin_notes), 26)
+        coinNotesContainer = LinearLayout(requireContext()).apply {
+            orientation = LinearLayout.VERTICAL
+        }.also { binding.notesContent.addView(it, wrapParams()) }
+        showCoinNotesLoading()
+    }
+
+    private fun renderCoinNotes(coins: List<Coin>) {
+        if (_binding == null) return
+        binding.notesSwipeRefresh.isRefreshing = false
+        val container = coinNotesContainer ?: return
+        container.removeAllViews()
         if (coins.isEmpty()) {
-            addText(getString(R.string.notes_empty_favorites), R.color.on_surface_variant, 18f, topMarginDp = 10)
+            addText(
+                    container,
+                    getString(R.string.notes_empty_favorites),
+                    R.color.on_surface_variant,
+                    18f,
+                    topMarginDp = 10
+            )
             return
         }
 
@@ -112,7 +142,7 @@ class NotesFragment : Fragment() {
     }
 
     private fun addCoinNotes(coin: Coin) {
-        val cardContent = addCard(12)
+        val cardContent = addCard(coinNotesContainer ?: return, 12)
         addText(
                 cardContent,
                 coinTitle(coin),
@@ -140,31 +170,73 @@ class NotesFragment : Fragment() {
             )
         }
 
-        addNoteEditor(cardContent, preferences.getCoinNote(coin.from)) {
-            preferences.setCoinNote(coin.from, it)
-        }
+        addNoteEditor(
+                parent = cardContent,
+                notes = preferences.getCoinNoteEntries(coin.from),
+                onSave = { preferences.addCoinNote(coin.from, it) },
+                onUpdate = { index, note ->
+                    preferences.updateCoinNote(coin.from, index, note)
+                },
+                onDelete = { index -> preferences.deleteCoinNote(coin.from, index) }
+        )
     }
 
-    private fun addNoteEditor(note: String, onSave: (String) -> Unit) {
-        addNoteEditor(addCard(10), note, onSave)
+    private fun addNoteEditor(
+            notes: List<String>,
+            onSave: (String) -> Unit,
+            onUpdate: (Int, String) -> Boolean,
+            onDelete: (Int) -> Boolean
+    ) {
+        addNoteEditor(addCard(10), notes, onSave, onUpdate, onDelete)
     }
 
-    private fun addNoteEditor(parent: LinearLayout, note: String, onSave: (String) -> Unit) {
-        val editText = EditText(requireContext()).apply {
-            setText(note)
-            hint = getString(R.string.notes_hint)
-            inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_MULTI_LINE
-            gravity = Gravity.TOP or Gravity.START
-            minLines = 2
-            maxLines = 5
-            minHeight = dp(92)
-            setSingleLine(false)
-            textSize = 16f
-            setTextColor(resProvider.getColor(R.color.on_surface))
-            setHintTextColor(resProvider.getColor(R.color.on_surface_variant))
-            setBackgroundResource(R.drawable.bg_input_surface)
-            setPadding(dp(16), dp(14), dp(16), dp(14))
+    private fun addNoteEditor(
+            parent: LinearLayout,
+            notes: List<String>,
+            onSave: (String) -> Unit,
+            onUpdate: (Int, String) -> Boolean,
+            onDelete: (Int) -> Boolean
+    ) {
+        val currentNotes = notes.toMutableList()
+        val notesContainer = LinearLayout(requireContext()).apply {
+            orientation = LinearLayout.VERTICAL
         }
+        parent.addView(notesContainer, wrapParams(if (parent.childCount == 0) 0 else 12))
+
+        fun renderSavedNotes() {
+            notesContainer.removeAllViews()
+            currentNotes.forEachIndexed { index, note ->
+                addSavedNote(
+                        parent = notesContainer,
+                        note = note,
+                        onEdit = {
+                            showEditNoteDialog(note) { updatedNote ->
+                                if (onUpdate(index, updatedNote)) {
+                                    currentNotes[index] = updatedNote
+                                    renderSavedNotes()
+                                    requireContext().toastShort(
+                                            getString(R.string.notes_note_updated)
+                                    )
+                                }
+                            }
+                        },
+                        onDelete = {
+                            showDeleteNoteDialog {
+                                if (onDelete(index)) {
+                                    currentNotes.removeAt(index)
+                                    renderSavedNotes()
+                                    requireContext().toastShort(
+                                            getString(R.string.notes_note_deleted)
+                                    )
+                                }
+                            }
+                        }
+                )
+            }
+        }
+        renderSavedNotes()
+
+        val editText = createNoteInput()
         parent.addView(editText, wrapParams(if (parent.childCount == 0) 0 else 12))
 
         parent.addView(
@@ -180,7 +252,15 @@ class NotesFragment : Fragment() {
                     )
                     setTextColor(resProvider.getColor(R.color.on_brand_primary))
                     setOnClickListener {
-                        onSave(editText.text.toString())
+                        val note = editText.text.toString().trim()
+                        if (note.isEmpty()) {
+                            editText.error = getString(R.string.notes_hint)
+                            return@setOnClickListener
+                        }
+                        onSave(note)
+                        currentNotes += note
+                        renderSavedNotes()
+                        editText.text.clear()
                         editText.clearFocus()
                         context.toastShort(getString(R.string.notes_note_saved))
                     }
@@ -189,7 +269,173 @@ class NotesFragment : Fragment() {
         )
     }
 
+    private fun createNoteInput(note: String = ""): EditText = EditText(requireContext()).apply {
+        hint = getString(R.string.notes_hint)
+        inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_MULTI_LINE
+        gravity = Gravity.TOP or Gravity.START
+        minLines = 2
+        maxLines = 5
+        minHeight = dp(92)
+        setSingleLine(false)
+        textSize = 16f
+        setTextColor(resProvider.getColor(R.color.on_surface))
+        setHintTextColor(resProvider.getColor(R.color.on_surface_variant))
+        setBackgroundResource(R.drawable.bg_input_surface)
+        setPadding(dp(16), dp(14), dp(16), dp(14))
+        setText(note)
+        setSelection(text.length)
+    }
+
+    private fun addSavedNote(
+            parent: LinearLayout,
+            note: String,
+            onEdit: () -> Unit,
+            onDelete: () -> Unit
+    ) {
+        val noteText = TextView(requireContext()).apply {
+            text = note
+            textSize = 15f
+            setTextColor(resProvider.getColor(R.color.on_surface))
+            setLineSpacing(dp(2).toFloat(), 1f)
+            setPadding(dp(14), dp(12), dp(6), dp(12))
+        }
+        val actions = LinearLayout(requireContext()).apply {
+            orientation = LinearLayout.HORIZONTAL
+            gravity = Gravity.CENTER_VERTICAL
+            addView(
+                    noteActionButton(
+                            R.drawable.ic_note_edit,
+                            getString(R.string.notes_edit_note),
+                            R.color.brand_primary,
+                            onEdit
+                    ),
+                    LinearLayout.LayoutParams(dp(40), dp(40))
+            )
+            addView(
+                    noteActionButton(
+                            R.drawable.ic_note_delete,
+                            getString(R.string.notes_delete_note),
+                            R.color.negative,
+                            onDelete
+                    ),
+                    LinearLayout.LayoutParams(dp(40), dp(40))
+            )
+        }
+        val noteRow = LinearLayout(requireContext()).apply {
+            orientation = LinearLayout.HORIZONTAL
+            gravity = Gravity.CENTER_VERTICAL
+            addView(
+                    noteText,
+                    LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f)
+            )
+            addView(
+                    actions,
+                    LinearLayout.LayoutParams(
+                            LinearLayout.LayoutParams.WRAP_CONTENT,
+                            LinearLayout.LayoutParams.WRAP_CONTENT
+                    ).apply { marginEnd = dp(4) }
+            )
+        }
+        val noteCard = MaterialCardView(requireContext()).apply {
+            radius = dp(14).toFloat()
+            cardElevation = 0f
+            strokeWidth = dp(1)
+            strokeColor = resProvider.getColor(R.color.glass_outline)
+            setCardBackgroundColor(resProvider.getColor(R.color.glass_surface_high))
+            addView(
+                    noteRow,
+                    ViewGroup.LayoutParams(
+                            ViewGroup.LayoutParams.MATCH_PARENT,
+                            ViewGroup.LayoutParams.WRAP_CONTENT
+                    )
+            )
+        }
+        parent.addView(noteCard, wrapParams(if (parent.childCount == 0) 0 else 8))
+    }
+
+    private fun noteActionButton(
+            iconRes: Int,
+            description: String,
+            iconColorRes: Int,
+            onClick: () -> Unit
+    ): MaterialButton = MaterialButton(requireContext()).apply {
+        text = ""
+        contentDescription = description
+        setIconResource(iconRes)
+        iconTint = ColorStateList.valueOf(resProvider.getColor(iconColorRes))
+        iconSize = dp(20)
+        iconPadding = 0
+        insetTop = 0
+        insetBottom = 0
+        minWidth = 0
+        minimumWidth = 0
+        minHeight = 0
+        minimumHeight = 0
+        setPadding(dp(10), dp(10), dp(10), dp(10))
+        backgroundTintList = ColorStateList.valueOf(Color.TRANSPARENT)
+        rippleColor = ColorStateList.valueOf(resProvider.getColor(R.color.ripple))
+        setOnClickListener { onClick() }
+    }
+
+    private fun showEditNoteDialog(note: String, onSave: (String) -> Unit) {
+        noteDialog?.dismiss()
+        val editText = createNoteInput(note)
+        val dialogContent = FrameLayout(requireContext()).apply {
+            setPadding(dp(24), dp(8), dp(24), 0)
+            addView(
+                    editText,
+                    FrameLayout.LayoutParams(
+                            FrameLayout.LayoutParams.MATCH_PARENT,
+                            FrameLayout.LayoutParams.WRAP_CONTENT
+                    )
+            )
+        }
+        val dialog = MaterialAlertDialogBuilder(requireContext())
+                .setTitle(R.string.notes_edit_note)
+                .setView(dialogContent)
+                .setNegativeButton(R.string.cancel, null)
+                .setPositiveButton(R.string.notes_save_changes, null)
+                .create()
+        dialog.setOnShowListener {
+            dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
+                val updatedNote = editText.text.toString().trim()
+                if (updatedNote.isEmpty()) {
+                    editText.error = getString(R.string.notes_hint)
+                } else {
+                    onSave(updatedNote)
+                    dialog.dismiss()
+                }
+            }
+            editText.requestFocus()
+            dialog.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE)
+        }
+        trackNoteDialog(dialog)
+    }
+
+    private fun showDeleteNoteDialog(onDelete: () -> Unit) {
+        noteDialog?.dismiss()
+        val dialog = MaterialAlertDialogBuilder(requireContext())
+                .setTitle(R.string.notes_delete_note)
+                .setMessage(R.string.notes_delete_confirmation)
+                .setNegativeButton(R.string.cancel, null)
+                .setPositiveButton(R.string.notes_delete_note) { _, _ -> onDelete() }
+                .create()
+        trackNoteDialog(dialog)
+    }
+
+    private fun trackNoteDialog(dialog: AlertDialog) {
+        noteDialog = dialog
+        dialog.setOnDismissListener {
+            if (noteDialog === dialog) noteDialog = null
+        }
+        dialog.show()
+    }
+
     private fun addCard(topMarginDp: Int): LinearLayout {
+        return addCard(binding.notesContent, topMarginDp)
+    }
+
+    private fun addCard(parent: LinearLayout, topMarginDp: Int): LinearLayout {
         val content = LinearLayout(requireContext()).apply {
             orientation = LinearLayout.VERTICAL
             setPadding(dp(16), dp(16), dp(16), dp(16))
@@ -208,7 +454,7 @@ class NotesFragment : Fragment() {
                     )
             )
         }
-        binding.notesContent.addView(card, wrapParams(topMarginDp))
+        parent.addView(card, wrapParams(topMarginDp))
         return content
     }
 
@@ -246,11 +492,30 @@ class NotesFragment : Fragment() {
         )
     }
 
-    private fun renderError() {
+    private fun showCoinNotesLoading() {
+        val container = coinNotesContainer ?: return
+        container.removeAllViews()
+        container.addView(
+                ProgressBar(requireContext()).apply {
+                    isIndeterminate = true
+                    indeterminateTintList = ColorStateList.valueOf(
+                            resProvider.getColor(R.color.brand_primary)
+                    )
+                    contentDescription = getString(R.string.loading)
+                },
+                LinearLayout.LayoutParams(dp(36), dp(36)).apply {
+                    gravity = Gravity.CENTER_HORIZONTAL
+                    topMargin = dp(12)
+                }
+        )
+    }
+
+    private fun renderCoinNotesError() {
         if (_binding == null) return
         binding.notesSwipeRefresh.isRefreshing = false
-        binding.notesContent.removeAllViews()
-        addText(getString(R.string.error), R.color.negative, 20f, Typeface.BOLD)
+        val container = coinNotesContainer ?: return
+        container.removeAllViews()
+        addText(container, getString(R.string.error), R.color.negative, 20f, Typeface.BOLD, 12)
     }
 
     private fun coinTitle(coin: Coin): String =
@@ -289,6 +554,10 @@ class NotesFragment : Fragment() {
 
     override fun onDestroyView() {
         disposable.clear()
+        noteDialog?.setOnDismissListener(null)
+        noteDialog?.dismiss()
+        noteDialog = null
+        coinNotesContainer = null
         super.onDestroyView()
         _binding = null
     }

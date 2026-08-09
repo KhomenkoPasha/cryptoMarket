@@ -72,36 +72,30 @@
 
     </LinearLayout>
 
-    <FrameLayout
+    <LinearLayout
         android:id="@+id/loading_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:alpha="0.96"
         android:background="#D9080D17"
+        android:gravity="center"
+        android:orientation="vertical"
         android:visibility="gone"
         tools:visibility="visible">
 
-        <LinearLayout
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/searching_info" />
+
+        <com.github.ybq.android.spinkit.SpinKitView
+            style="@style/SpinKitView.FadingCircle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:orientation="vertical">
+            android:layout_marginTop="10dp"
+            app:SpinKit_Color="@color/accent" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/searching_info" />
-
-            <com.github.ybq.android.spinkit.SpinKitView
-                style="@style/SpinKitView.FadingCircle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="10dp"
-                app:SpinKit_Color="@color/accent" />
-
-        </LinearLayout>
-
-    </FrameLayout>
+    </LinearLayout>
 
 </RelativeLayout>
