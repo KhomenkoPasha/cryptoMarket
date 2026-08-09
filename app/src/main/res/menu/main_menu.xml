@@ -8,7 +8,7 @@
         android:visible="false"
         app:showAsAction="ifRoom" />
     <item
-        android:id="@+id/main_menu_add_coin"
+        android:id="@+id/main_menu_add"
         android:icon="@drawable/ic_add"
         android:title="@string/add_coin"
         app:showAsAction="ifRoom" />
@@ -16,6 +16,16 @@
         android:id="@+id/main_menu_sort"
         android:icon="@drawable/ic_sort"
         android:title="@string/sort_menu_title"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/main_menu_backup_save"
+        android:icon="@drawable/ic_backup_save"
+        android:title="@string/backup_save_data"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/main_menu_backup_restore"
+        android:icon="@drawable/ic_backup_restore"
+        android:title="@string/backup_restore_data"
         app:showAsAction="ifRoom" />
     <item
         android:id="@+id/main_menu_insights"

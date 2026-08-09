@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="app_name">Crypto InvestPulse</string><string name="_24h">24시간:</string><string name="news">뉴스</string><string name="notes">메모</string><string name="cryptocurrency">암호화폐</string>
+    <string name="exit">종료</string><string name="exit_text">앱을 종료할까요?</string><string name="yes">예</string><string name="cancel">취소</string><string name="refresh">새로고침</string>
+    <string name="coins">즐겨찾기</string><string name="top100">순위</string><string name="sort_by">정렬 기준</string><string name="coin_name">이름</string><string name="add_coin">암호화폐 추가</string>
+    <string name="price">가격</string><string name="price_changed_24h">24시간 가격</string><string name="add_coin_from_hint">암호화폐 이름 입력</string><string name="matches_found">개 결과</string>
+    <string name="sort_menu_title">정렬</string><string name="searching_info">암호화폐 정보를 검색 중입니다</string><string name="coin_not_found">암호화폐를 찾을 수 없습니다</string>
+    <string name="coin_added">암호화폐가 추가되었습니다</string><string name="settings">설정</string><string name="remove_coin">즐겨찾기에서 삭제</string>
+    <string name="coins_deleted">즐겨찾기에서 삭제됨</string><string name="coin_deleted">즐겨찾기에서 삭제됨</string><string name="favorite_remove_confirmation">%1$s을(를) 즐겨찾기에서 삭제할까요? 거래와 메모는 유지됩니다.</string>
+    <string name="twenty_four_hours">24시간 데이터</string><string name="open">시가</string><string name="high">고가</string><string name="low">저가</string><string name="change">변동</string>
+    <string name="change_pct">변동률 %</string><string name="supply">유통 공급량</string><string name="cap">시가총액</string><string name="volume_24h">24시간 거래량</string><string name="error">오류</string>
+    <string name="current_price">현재 가격</string><string name="quantity">수량</string><string name="trade_date">거래일</string><string name="add_transaction">거래 추가</string>
+    <string name="add_trans_fill_price">가격을 입력하세요</string><string name="add_trans_fill_quantity">수량을 입력하세요</string><string name="total_holdings">총 보유 자산</string>
+    <string name="all_time">전체 기간</string><string name="profit">수익</string><string name="loss">손실</string><string name="holdings">자산</string><string name="transaction_added">거래가 추가되었습니다</string>
+    <string name="holdings_deleted">자산이 삭제되었습니다</string><string name="allocations">배분</string><string name="empty_text">뉴스가 없습니다</string><string name="news_link_missing">뉴스 링크가 없습니다</string>
+    <string name="news_link_open_error">뉴스 링크를 열 수 없습니다</string><string name="news_search_title">뉴스 검색</string><string name="news_search_hint">키워드, 코인 또는 #해시태그</string>
+    <string name="news_read_article">기사 읽기</string><string name="notes_news_notes">뉴스 메모</string><string name="notes_news_notes_hint">링크, 제목 또는 중요 이벤트를 저장하세요.</string>
+    <string name="notes_coin_notes">코인 메모</string><string name="notes_empty_favorites">즐겨찾기 코인을 추가하면 메모가 여기에 표시됩니다.</string><string name="notes_tracked_since">%s부터 추적</string>
+    <string name="notes_hint">메모 추가</string><string name="notes_save_note">메모 저장</string><string name="notes_note_saved">메모가 저장되었습니다</string><string name="portfolio_tracker">포트폴리오 추적</string>
+    <string name="portfolio_current_value">현재 가치</string><string name="portfolio_invested">투자액</string><string name="portfolio_total_pnl">총 손익</string><string name="portfolio_day_pnl">24시간 손익</string>
+    <string name="portfolio_empty">거래를 추가하면 포트폴리오 수익을 추적할 수 있습니다.</string><string name="empty_coins">암호화폐가 없습니다. + 버튼이나 순위에서 추가하세요.</string>
+    <string name="language">언어</string><string name="empty_graph_text">차트를 불러올 수 없습니다</string>
+    <string-array name="histo_periods"><item>1시간</item><item>12시간</item><item>24시간</item><item>3일</item><item>1주</item><item>1개월</item><item>3개월</item><item>6개월</item><item>1년</item></string-array>
+    <string name="add_to_favorites">즐겨찾기에 추가</string><string name="widget_favorites_title_small">즐겨찾기</string><string name="widget_favorites_title_large">즐겨찾기</string>
+    <string name="widget_empty_favorites">즐겨찾기 코인이 없습니다</string><string name="widget_investments_title">내 투자</string><string name="widget_investments_description">투자 포트폴리오 추적</string>
+    <string name="widget_investments_current_value">현재 가치</string><string name="widget_investments_invested">투자액</string><string name="widget_investments_total_return">총 수익률</string>
+    <string name="widget_investments_positions">주요 포지션</string><string name="widget_investments_empty">투자 내역이 없습니다</string><string name="widget_investments_empty_hint">탭하여 첫 거래 추가</string>
+    <string name="widget_investments_price_unavailable">--</string><string name="insights">인사이트</string><string name="insights_loading">인사이트 로드 중…</string><string name="insights_updated">업데이트 %s</string>
+    <string name="insights_market_mood">시장 심리</string><string name="insights_daily_digest">일일 요약</string><string name="insights_smart_alerts">스마트 알림</string><string name="insights_watchlist_notes">관심 목록 메모</string>
+    <string name="insights_compare">코인 비교</string><string name="insights_anomalies">시장 이상 징후</string><string name="insights_categories">카테고리</string><string name="insights_news_impact">뉴스 영향</string>
+    <string name="insights_beginner_guide">초보자 가이드</string><string name="insights_glossary">용어집</string><string name="insights_save_note">메모 저장</string><string name="insights_note_hint">메모 추가</string>
+    <string name="insights_note_saved">메모가 저장되었습니다</string><string name="portfolio">투자</string><string name="loading">로딩 중</string><string name="top_coins_load_error">암호화폐 순위를 불러올 수 없습니다</string>
+    <string name="retry">다시 시도</string><string name="notes_edit_note">메모 편집</string><string name="notes_delete_note">메모 삭제</string><string name="notes_save_changes">변경 저장</string>
+    <string name="notes_delete_confirmation">이 메모를 삭제할까요? 이 작업은 취소할 수 없습니다.</string><string name="notes_note_updated">메모가 업데이트되었습니다</string><string name="notes_note_deleted">메모가 삭제되었습니다</string>
+    <string name="portfolio_transaction_details">거래 세부정보</string><string name="portfolio_purchase_price">구매 가격</string><string name="portfolio_exchange_optional">거래소(선택)</string><string name="portfolio_total_spent">사용 금액</string>
+    <string name="portfolio_save_transaction">거래 저장</string><string name="portfolio_edit_transaction">거래 편집</string><string name="portfolio_update_transaction">거래 업데이트</string><string name="portfolio_delete_transaction">거래 삭제</string>
+    <string name="portfolio_delete_confirmation">이 거래를 삭제할까요? 이 작업은 취소할 수 없습니다.</string><string name="portfolio_transaction_updated">거래가 업데이트되었습니다</string>
+    <string name="portfolio_transaction_not_found">거래를 찾을 수 없습니다</string><string name="portfolio_no_coins">코인 목록을 불러올 수 없습니다. 연결을 확인하고 다시 시도하세요.</string>
+    <string name="portfolio_price_unavailable">가격 정보 없음</string><string name="portfolio_choose_coin">암호화폐 선택</string><string name="portfolio_empty_title">포트폴리오가 비어 있습니다</string>
+    <string name="portfolio_empty_body">첫 암호화폐 거래를 추가하여 포트폴리오 추적을 시작하세요.</string><string name="portfolio_add_transaction">거래 추가</string><string name="portfolio_purchase_date">구매일</string>
+    <string name="portfolio_exchange">거래소</string><string name="portfolio_profit">수익 / 손실</string><string name="backup_save_data">데이터 저장</string><string name="backup_restore_data">데이터 불러오기</string>
+    <string name="backup_saving">백업 저장 중</string><string name="backup_restoring">백업 불러오는 중</string><string name="backup_restore_title">앱 데이터를 복원할까요?</string>
+    <string name="backup_restore_warning">현재 즐겨찾기, 거래, 메모 및 설정이 선택한 백업으로 대체됩니다.</string>
+    <string name="backup_saved" tools:ignore="PluralsCandidate">백업 저장됨: 즐겨찾기 %1$d개, 거래 %2$d개</string><string name="backup_restored" tools:ignore="PluralsCandidate">데이터 복원됨: 즐겨찾기 %1$d개, 거래 %2$d개</string>
+    <string name="backup_save_error">백업 파일을 저장할 수 없습니다</string><string name="backup_restore_error">데이터를 복원할 수 없습니다. 올바른 Crypto InvestPulse 백업을 선택하세요.</string>
+</resources>

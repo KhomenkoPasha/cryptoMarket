@@ -58,6 +58,35 @@ class PortfolioCalculatorTest {
         assertDecimal("0", result.totalPnlPercent)
     }
 
+    @Test
+    fun `transaction stats calculate spent current value and profit independently`() {
+        val transaction = holding("BTC", quantity = "0.025", price = "95000")
+
+        val stats = PortfolioCalculator.transactionStats(
+            transaction,
+            listOf(Coin(from = "BTC", to = USD, priceRaw = 101000f))
+        )
+
+        assertDecimal("2375", stats.totalSpent)
+        assertDecimal("101000", stats.currentPrice)
+        assertDecimal("2525", stats.currentValue)
+        assertDecimal("150", stats.profit)
+        assertDecimal("6.315789473684210526315789473684211", stats.profitPercent)
+    }
+
+    @Test
+    fun `transaction stats support negative profit`() {
+        val transaction = holding("ETH", quantity = "2", price = "2500")
+
+        val stats = PortfolioCalculator.transactionStats(
+            transaction,
+            listOf(Coin(from = "ETH", to = USD, priceRaw = 2000f))
+        )
+
+        assertDecimal("-1000", stats.profit)
+        assertDecimal("-20", stats.profitPercent)
+    }
+
     private fun holding(
         from: String,
         quantity: String,

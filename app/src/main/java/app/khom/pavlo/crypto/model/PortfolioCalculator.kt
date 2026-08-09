@@ -54,13 +54,29 @@ object PortfolioCalculator {
         )
     }
 
+    fun transactionStats(
+        holding: HoldingData,
+        coins: List<Coin>
+    ): PortfolioTransactionStats {
+        val currentPrice = currentPrice(holding, coins)
+        val totalSpent = holding.quantity.multiply(holding.price)
+        val currentValue = holding.quantity.multiply(currentPrice)
+        val profit = currentValue - totalSpent
+        return PortfolioTransactionStats(
+            currentPrice = currentPrice,
+            totalSpent = totalSpent,
+            currentValue = currentValue,
+            profit = profit,
+            profitPercent = changePercent(totalSpent, currentValue)
+        )
+    }
+
     fun investedValue(holdings: List<HoldingData>): BigDecimal =
         holdings.sumOf { it.quantity.multiply(it.price) }
 
     fun currentValue(holdings: List<HoldingData>, coins: List<Coin>): BigDecimal =
         holdings.sumOf { holding ->
-            val currentPrice = coinFor(holding, coins)?.priceRaw?.toDecimal() ?: zero
-            holding.quantity.multiply(currentPrice)
+            holding.quantity.multiply(currentPrice(holding, coins))
         }
 
     fun currentValue(holding: HoldingData, coins: List<Coin>): BigDecimal =
@@ -110,6 +126,9 @@ object PortfolioCalculator {
     private fun coinFor(holding: HoldingData, coins: List<Coin>): Coin? =
         coins.find { it.from == holding.from && it.to == holding.to }
             ?: coins.find { it.from == holding.from }
+
+    private fun currentPrice(holding: HoldingData, coins: List<Coin>): BigDecimal =
+        coinFor(holding, coins)?.priceRaw?.toDecimal() ?: zero
 
     private fun Float.toDecimal(): BigDecimal = BigDecimal.valueOf(toDouble())
 }

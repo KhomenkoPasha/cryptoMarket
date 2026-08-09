@@ -14,10 +14,10 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/news_rec_view"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:clipToPadding="false"
             android:paddingTop="8dp"
-            android:paddingBottom="8dp"
+            android:paddingBottom="88dp"
             android:visibility="gone"
             tools:visibility="visible" />
 
@@ -39,7 +39,10 @@
             android:layout_gravity="bottom|end"
             android:layout_marginBottom="16dp"
             android:layout_marginEnd="16dp"
-            android:src="@drawable/ic_search" />
+            android:contentDescription="@string/news_search_title"
+            android:src="@drawable/ic_search"
+            app:backgroundTint="@color/primary_container"
+            app:tint="@color/on_primary_container" />
 
         <TextView
             android:id="@+id/news_empty_text"

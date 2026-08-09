@@ -75,5 +75,4 @@ abstract class BaseActivity : AppCompatActivity() {
         }
         ViewCompat.requestApplyInsets(root)
     }
-
 }

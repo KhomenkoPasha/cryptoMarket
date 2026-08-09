@@ -1,0 +1,61 @@
+ext.cryptoMarketAppConfig = [
+        namespace     : 'app.khom.pavlo.crypto',
+        applicationId : 'app.khom.pavlo.crypto',
+        compileSdk    : 36,
+        minSdk        : 26,
+        targetSdk     : 36,
+        versionCode   : 24,
+        versionName   : '2.0.1',
+        testRunner    : 'androidx.test.runner.AndroidJUnitRunner'
+]
+
+ext.loadCryptoMarketEnvironment = { Project target ->
+    def localProperties = new Properties()
+    def localPropertiesFile = target.rootProject.file('local.properties')
+    if (localPropertiesFile.isFile()) {
+        localPropertiesFile.withInputStream(localProperties.&load)
+    }
+
+    def readValue = { String name ->
+        localProperties.getProperty(name)
+                ?: target.providers.gradleProperty(name).orNull
+                ?: target.providers.environmentVariable(name).orNull
+                ?: ''
+    }
+    def quotedBuildConfigString = { Object value ->
+        def escaped = value.toString()
+                .replace('\\', '\\\\')
+                .replace('"', '\\"')
+        "\"${escaped}\""
+    }
+
+    def storeFilePath = readValue('RELEASE_STORE_FILE')
+    def storeFile = storeFilePath ? target.rootProject.file(storeFilePath) : null
+    def storePassword = readValue('RELEASE_STORE_PASSWORD')
+    def keyAlias = readValue('RELEASE_KEY_ALIAS')
+    def keyPassword = readValue('RELEASE_KEY_PASSWORD')
+    def missingSigningValues = []
+    if (!storeFilePath) {
+        missingSigningValues += 'RELEASE_STORE_FILE'
+    } else if (!storeFile?.isFile()) {
+        missingSigningValues += 'RELEASE_STORE_FILE (file not found)'
+    }
+    if (!storePassword) missingSigningValues += 'RELEASE_STORE_PASSWORD'
+    if (!keyAlias) missingSigningValues += 'RELEASE_KEY_ALIAS'
+    if (!keyPassword) missingSigningValues += 'RELEASE_KEY_PASSWORD'
+
+    [
+            apiKeys: [
+                    coindesk     : quotedBuildConfigString(readValue('COINDESK_API_KEY')),
+                    cryptoCompare: quotedBuildConfigString(readValue('CRYPTOCOMPARE_API_KEY'))
+            ],
+            signing: [
+                    configured : missingSigningValues.isEmpty(),
+                    storeFile  : storeFile,
+                    storePassword: storePassword,
+                    keyAlias   : keyAlias,
+                    keyPassword: keyPassword,
+                    missing    : missingSigningValues.asImmutable()
+            ]
+    ]
+}

@@ -22,6 +22,15 @@ interface CoinsDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertList(list: List<Coin>)
 
+    @Query("DELETE FROM coins")
+    fun clearCoins()
+
+    @Transaction
+    fun replaceAll(list: List<Coin>) {
+        clearCoins()
+        insertList(list)
+    }
+
     @Delete
     fun deleteCoin(coin: Coin)
 

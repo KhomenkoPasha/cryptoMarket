@@ -11,7 +11,7 @@ import app.khom.pavlo.crypto.model.*
         Coin::class,
         InfoCoin::class,
         TopCoinData::class,
-        HoldingData::class], version = 5)
+        HoldingData::class], version = 6)
 @TypeConverters(DecimalConverters::class)
 abstract class CMDatabase : RoomDatabase() {
 

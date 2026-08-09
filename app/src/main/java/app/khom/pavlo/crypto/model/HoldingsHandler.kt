@@ -3,7 +3,6 @@ package app.khom.pavlo.crypto.model
 import app.khom.pavlo.crypto.model.db.CMDatabase
 import app.khom.pavlo.crypto.model.db.PortfolioRepository
 import app.khom.pavlo.crypto.utils.Logger
-import io.reactivex.rxjava3.core.Completable
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.schedulers.Schedulers
 import java.math.BigDecimal
@@ -22,6 +21,14 @@ data class PortfolioHoldingStats(
     val allocationPercent: BigDecimal,
     val dayPnl: BigDecimal,
     val dayPnlPercent: BigDecimal
+)
+
+data class PortfolioTransactionStats(
+    val currentPrice: BigDecimal,
+    val totalSpent: BigDecimal,
+    val currentValue: BigDecimal,
+    val profit: BigDecimal,
+    val profitPercent: BigDecimal
 )
 
 class HoldingsHandler(
@@ -61,10 +68,17 @@ class HoldingsHandler(
         holdings = updatedHoldings.toList()
     }
 
+    fun setCoinsSnapshot(updatedCoins: List<Coin>) {
+        coins = updatedCoins.toList()
+    }
+
     fun getPortfolioSummary(): PortfolioSummary = PortfolioCalculator.summary(holdings, coins)
 
     fun getStatsByHoldingData(holdingData: HoldingData): PortfolioHoldingStats =
         PortfolioCalculator.statsFor(holdingData, holdings, coins)
+
+    fun getTransactionStats(holdingData: HoldingData): PortfolioTransactionStats =
+        PortfolioCalculator.transactionStats(holdingData, coins)
 
     fun getTotalChangePercent(): BigDecimal = getPortfolioSummary().totalPnlPercent
 
@@ -89,13 +103,15 @@ class HoldingsHandler(
     fun getCurrentPriceByHolding(holdingData: HoldingData) =
         getCoinByHolding(holdingData)?.price ?: ""
 
+    fun getCoinNameByHolding(holdingData: HoldingData): String =
+        holdingData.coinName.ifBlank {
+            getCoinByHolding(holdingData)?.fullName.orEmpty().ifBlank { holdingData.from }
+        }
+
     fun isThereSuchHolding(from: String?, to: String?): HoldingData? {
         val holding = holdings.find { it.from == from && it.to == to } ?: return null
         return PortfolioCalculator.aggregatePair(holding, holdings)
     }
-
-    fun removeHoldings(coins: List<Coin>): Completable =
-        portfolioRepository.deleteHoldingsForCoins(coins)
 
     private fun getCoinByHolding(holdingData: HoldingData) =
         coins.find { it.from == holdingData.from && it.to == holdingData.to }

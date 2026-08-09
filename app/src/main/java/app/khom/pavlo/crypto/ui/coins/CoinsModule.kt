@@ -30,9 +30,11 @@ class CoinsModule {
                          pageController: PageController,
                          multiSelector: MultiSelector,
                          holdingsHandler: HoldingsHandler,
+                         favoritesChangeNotifier: FavoritesChangeNotifier,
                          logger: Logger,
                          toaster: Toaster,
                          preferences: Preferences): ICoins.Presenter =
             CoinsPresenter(view, networkRequests, coinsController, db, resProvider,
-                    pageController, multiSelector, holdingsHandler, logger, toaster, preferences)
+                    pageController, multiSelector, holdingsHandler, favoritesChangeNotifier,
+                    logger, toaster, preferences)
 }

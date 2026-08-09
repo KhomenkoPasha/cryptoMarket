@@ -66,7 +66,7 @@ class AddCoinActivity : BaseActivity(), IAddCoin.View {
     }
 
     override fun updateRecyclerView() {
-        adapter.notifyDataSetChanged()
+        adapter.notifyItemsChanged()
     }
 
     override fun setMatchesResultSize(matchesCount: String) {

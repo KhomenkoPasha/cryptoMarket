@@ -3,80 +3,68 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/surface_container"
-    android:orientation="vertical">
+    android:background="@drawable/bg_card_surface"
+    android:orientation="vertical"
+    android:padding="20dp">
 
     <TextView
         android:id="@+id/search_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="10dp"
-        android:text="@string/enter_hashtag"
-        android:textSize="18sp"
-        android:background="@color/primary_container"
-        android:textColor="@color/on_primary_container"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:text="@string/news_search_title"
+        android:textColor="@color/brand_primary"
+        android:textSize="20sp"
+        android:textStyle="bold" />
 
-    <EditText
-        android:id="@+id/search_text"
+    <com.google.android.material.textfield.TextInputLayout
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:hint="@string/enter_hashtag"
-        android:importantForAutofill="no"
-        android:inputType="text"
-        android:background="@drawable/bg_input_surface"
-        android:padding="16dp"
-        android:textColor="@color/on_surface"
-        android:textColorHint="@color/on_surface_variant"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/search_title" />
+        android:layout_marginTop="16dp"
+        android:hint="@string/news_search_hint"
+        app:boxStrokeColor="@color/brand_primary">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/search_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:imeOptions="actionSearch"
+            android:importantForAutofill="no"
+            android:inputType="text"
+            android:maxLines="1"
+            android:selectAllOnFocus="true"
+            android:textColor="@color/on_surface"
+            android:textColorHint="@color/on_surface_variant" />
+
+    </com.google.android.material.textfield.TextInputLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/surface_container"
-        android:layout_marginTop="10dp"
-        android:gravity="right"
-        android:layout_gravity="right"
+        android:layout_marginTop="12dp"
+        android:gravity="end"
         android:orientation="horizontal">
-    <Button
-        android:id="@+id/search_cancel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:textColor="@color/on_surface_variant"
-        android:layout_marginEnd="4dp"
-        android:background="?android:attr/selectableItemBackground"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:minWidth="130dp"
-        android:text="@string/cancel"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/search_ok"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/search_text" />
 
-    <Button
-        android:id="@+id/search_ok"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="4dp"
-        android:background="?android:attr/selectableItemBackground"
-        android:layout_marginTop="8dp"
-        android:minWidth="130dp"
-        android:text="@string/ok"
-        android:textColor="@color/brand_primary"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/search_cancel"
-        app:layout_constraintTop_toBottomOf="@+id/search_text" />
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/search_cancel"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:text="@string/cancel"
+            android:textAllCaps="false"
+            android:textColor="@color/on_surface_variant" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/search_ok"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:layout_marginStart="8dp"
+            android:text="@string/news_search_title"
+            android:textAllCaps="false"
+            android:textColor="@color/on_brand_primary"
+            app:backgroundTint="@color/brand_primary"
+            app:cornerRadius="14dp" />
+
     </LinearLayout>
+
 </LinearLayout>

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="app_name">Crypto InvestPulse</string><string name="_24h">24 jam:</string><string name="news">Berita</string><string name="notes">Catatan</string>
+    <string name="cryptocurrency">mata uang kripto</string><string name="exit">Keluar</string><string name="exit_text">Keluar dari aplikasi?</string><string name="yes">Ya</string>
+    <string name="cancel">Batal</string><string name="refresh">Segarkan</string><string name="coins">Favorit</string><string name="top100">Peringkat</string>
+    <string name="sort_by">Urutkan berdasarkan</string><string name="coin_name">Nama</string><string name="add_coin">Tambah mata uang kripto</string><string name="price">Harga</string>
+    <string name="price_changed_24h">Harga 24 jam</string><string name="add_coin_from_hint">Masukkan nama mata uang kripto</string><string name="matches_found">hasil ditemukan</string>
+    <string name="sort_menu_title">Urutkan</string><string name="searching_info">Mencari informasi, harap tunggu</string><string name="coin_not_found">Mata uang kripto tidak ditemukan</string>
+    <string name="coin_added">Mata uang kripto ditambahkan</string><string name="settings">Pengaturan</string><string name="remove_coin">Hapus dari favorit</string>
+    <string name="coins_deleted">Dihapus dari favorit</string><string name="coin_deleted">Dihapus dari favorit</string>
+    <string name="favorite_remove_confirmation">Hapus %1$s dari favorit? Transaksi dan catatan tetap tersimpan.</string>
+    <string name="twenty_four_hours">Data 24 jam</string><string name="open">Buka</string><string name="high">Tertinggi</string><string name="low">Terendah</string>
+    <string name="change">Perubahan</string><string name="change_pct">Perubahan %</string><string name="supply">Suplai beredar</string><string name="cap">Kapitalisasi pasar</string>
+    <string name="volume_24h">Volume 24 jam</string><string name="error">Kesalahan</string><string name="current_price">Harga saat ini</string><string name="quantity">Jumlah</string>
+    <string name="trade_date">Tanggal transaksi</string><string name="add_transaction">Tambah transaksi</string><string name="add_trans_fill_price">Isi harga</string>
+    <string name="add_trans_fill_quantity">Isi jumlah</string><string name="total_holdings">Total aset</string><string name="all_time">Sepanjang waktu</string>
+    <string name="profit">untung</string><string name="loss">rugi</string><string name="holdings">Aset</string><string name="transaction_added">Transaksi ditambahkan</string>
+    <string name="holdings_deleted">Aset dihapus</string><string name="allocations">Alokasi</string><string name="empty_text">Berita tidak ditemukan</string>
+    <string name="news_link_missing">Tautan berita tidak tersedia</string><string name="news_link_open_error">Tidak dapat membuka tautan</string><string name="news_search_title">Cari berita</string>
+    <string name="news_search_hint">Kata kunci, koin, atau #tagar</string><string name="news_read_article">Baca artikel</string><string name="notes_news_notes">Catatan berita</string>
+    <string name="notes_news_notes_hint">Simpan tautan, judul, atau peristiwa penting di sini.</string><string name="notes_coin_notes">Catatan koin</string>
+    <string name="notes_empty_favorites">Tambahkan koin favorit agar catatannya muncul di sini.</string><string name="notes_tracked_since">Dipantau sejak %s</string>
+    <string name="notes_hint">Tambah catatan</string><string name="notes_save_note">Simpan catatan</string><string name="notes_note_saved">Catatan disimpan</string>
+    <string name="portfolio_tracker">Pelacak portofolio</string><string name="portfolio_current_value">Nilai saat ini</string><string name="portfolio_invested">Diinvestasikan</string>
+    <string name="portfolio_total_pnl">Total untung/rugi</string><string name="portfolio_day_pnl">Untung/rugi 24 jam</string>
+    <string name="portfolio_empty">Tambahkan transaksi untuk mulai memantau portofolio.</string><string name="empty_coins">Belum ada mata uang kripto. Tambahkan lewat tombol plus atau peringkat.</string>
+    <string name="language">Bahasa</string><string name="empty_graph_text">Grafik tidak dapat dimuat</string>
+    <string-array name="histo_periods"><item>1 jam</item><item>12 jam</item><item>24 jam</item><item>3 hari</item><item>1 minggu</item><item>1 bulan</item><item>3 bulan</item><item>6 bulan</item><item>1 tahun</item></string-array>
+    <string name="add_to_favorites">Ke favorit</string><string name="widget_favorites_title_small">Favorit</string><string name="widget_favorites_title_large">Favorit</string>
+    <string name="widget_empty_favorites">Belum ada koin favorit</string><string name="widget_investments_title">Investasi saya</string><string name="widget_investments_description">Pantau portofolio investasi</string>
+    <string name="widget_investments_current_value">Nilai saat ini</string><string name="widget_investments_invested">Diinvestasikan</string><string name="widget_investments_total_return">Total imbal hasil</string>
+    <string name="widget_investments_positions">POSISI TERATAS</string><string name="widget_investments_empty">Belum ada investasi</string><string name="widget_investments_empty_hint">Ketuk untuk menambah transaksi pertama</string>
+    <string name="widget_investments_price_unavailable">--</string><string name="insights">Wawasan</string><string name="insights_loading">Memuat wawasan…</string><string name="insights_updated">Diperbarui %s</string>
+    <string name="insights_market_mood">Sentimen pasar</string><string name="insights_daily_digest">Ringkasan harian</string><string name="insights_smart_alerts">Peringatan pintar</string>
+    <string name="insights_watchlist_notes">Catatan pantauan</string><string name="insights_compare">Bandingkan koin</string><string name="insights_anomalies">Anomali pasar</string>
+    <string name="insights_categories">Kategori</string><string name="insights_news_impact">Dampak berita</string><string name="insights_beginner_guide">Panduan pemula</string>
+    <string name="insights_glossary">Glosarium</string><string name="insights_save_note">Simpan catatan</string><string name="insights_note_hint">Tambah catatan</string>
+    <string name="insights_note_saved">Catatan disimpan</string><string name="portfolio">Investasi</string><string name="loading">Memuat</string>
+    <string name="top_coins_load_error">Peringkat tidak dapat dimuat</string><string name="retry">Coba lagi</string><string name="notes_edit_note">Edit catatan</string>
+    <string name="notes_delete_note">Hapus catatan</string><string name="notes_save_changes">Simpan perubahan</string><string name="notes_delete_confirmation">Hapus catatan ini? Tindakan ini tidak dapat dibatalkan.</string>
+    <string name="notes_note_updated">Catatan diperbarui</string><string name="notes_note_deleted">Catatan dihapus</string><string name="portfolio_transaction_details">Detail transaksi</string>
+    <string name="portfolio_purchase_price">Harga beli</string><string name="portfolio_exchange_optional">Bursa (opsional)</string><string name="portfolio_total_spent">Jumlah dibelanjakan</string>
+    <string name="portfolio_save_transaction">Simpan transaksi</string><string name="portfolio_edit_transaction">Edit transaksi</string><string name="portfolio_update_transaction">Perbarui transaksi</string>
+    <string name="portfolio_delete_transaction">Hapus transaksi</string><string name="portfolio_delete_confirmation">Hapus transaksi ini? Tindakan ini tidak dapat dibatalkan.</string>
+    <string name="portfolio_transaction_updated">Transaksi diperbarui</string><string name="portfolio_transaction_not_found">Transaksi tidak ditemukan</string>
+    <string name="portfolio_no_coins">Daftar tidak dapat dimuat. Periksa koneksi lalu coba lagi.</string><string name="portfolio_price_unavailable">Harga tidak tersedia</string>
+    <string name="portfolio_choose_coin">Pilih mata uang kripto</string><string name="portfolio_empty_title">Portofolio Anda kosong</string><string name="portfolio_empty_body">Tambahkan transaksi pertama untuk mulai memantau portofolio.</string>
+    <string name="portfolio_add_transaction">Tambah transaksi</string><string name="portfolio_purchase_date">Tanggal pembelian</string><string name="portfolio_exchange">Bursa</string><string name="portfolio_profit">Untung / rugi</string>
+    <string name="backup_save_data">Simpan data</string><string name="backup_restore_data">Muat data</string><string name="backup_saving">Menyimpan cadangan</string><string name="backup_restoring">Memuat cadangan</string>
+    <string name="backup_restore_title">Pulihkan data aplikasi?</string><string name="backup_restore_warning">Favorit, transaksi, catatan, dan pengaturan saat ini akan diganti oleh cadangan terpilih.</string>
+    <string name="backup_saved" tools:ignore="PluralsCandidate">Cadangan disimpan: %1$d favorit dan %2$d transaksi</string><string name="backup_restored" tools:ignore="PluralsCandidate">Data dipulihkan: %1$d favorit dan %2$d transaksi</string>
+    <string name="backup_save_error">Cadangan tidak dapat disimpan</string><string name="backup_restore_error">Data tidak dapat dipulihkan. Pilih cadangan Crypto InvestPulse yang valid.</string>
+</resources>

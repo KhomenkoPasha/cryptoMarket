@@ -186,4 +186,7 @@ data class HoldingData(@PrimaryKey(autoGenerate = true) var id: Long = 0,
                        @ColumnInfo(name = "to_currency") var to: String,
                        var quantity: BigDecimal = BigDecimal.ZERO,
                        var price: BigDecimal = BigDecimal.ZERO,
-                       @ColumnInfo(name = "transaction_date") var date: Long)
+                       @ColumnInfo(name = "transaction_date") var date: Long,
+                       @ColumnInfo(name = "coin_id") var coinId: String = "",
+                       @ColumnInfo(name = "coin_name") var coinName: String = "",
+                       var exchange: String = "")

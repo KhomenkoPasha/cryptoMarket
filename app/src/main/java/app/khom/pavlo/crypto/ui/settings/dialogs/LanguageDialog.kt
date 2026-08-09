@@ -6,9 +6,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
+import android.widget.RadioButton
 import app.khom.pavlo.crypto.R
 import app.khom.pavlo.crypto.databinding.LanguageDialogBinding
-import app.khom.pavlo.crypto.model.LocaleManager
+import app.khom.pavlo.crypto.model.SupportedLanguages
 import app.khom.pavlo.crypto.model.rxbus.LanguageChanged
 import app.khom.pavlo.crypto.model.rxbus.RxBus
 
@@ -37,21 +38,30 @@ class LanguageDialog : DialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.langDialogCancel.setOnClickListener { dismiss() }
-        setCheckedBtn()
+        populateLanguages()
         binding.radioGroup.setOnCheckedChangeListener { _, id ->
-            when (id) {
-                R.id.lang_dialog_english -> onLanguageSelected(LocaleManager.ENGLISH)
-                R.id.lang_dialog_russian -> onLanguageSelected(LocaleManager.RUSSIAN)
-                R.id.lang_dialog_ukr -> onLanguageSelected(LocaleManager.UKR)
-            }
+            binding.radioGroup.findViewById<RadioButton>(id)
+                ?.tag
+                ?.toString()
+                ?.let(::onLanguageSelected)
         }
     }
 
-    private fun setCheckedBtn() {
-        when (selectedLang) {
-            LocaleManager.ENGLISH -> binding.langDialogEnglish.isChecked = true
-            LocaleManager.RUSSIAN -> binding.langDialogRussian.isChecked = true
-            LocaleManager.UKR -> binding.langDialogUkr.isChecked = true
+    private fun populateLanguages() {
+        val selected = SupportedLanguages.normalize(selectedLang) ?: SupportedLanguages.ENGLISH
+        SupportedLanguages.all.forEachIndexed { index, language ->
+            val button = layoutInflater.inflate(
+                R.layout.language_dialog_item,
+                binding.radioGroup,
+                false
+            ) as RadioButton
+            button.id = View.generateViewId()
+            button.tag = language.tag
+            button.text = SupportedLanguages.nativeDisplayName(language.tag)
+            button.isChecked = language.tag == selected
+            val params = button.layoutParams as LinearLayout.LayoutParams
+            if (index > 0) params.topMargin = resources.getDimensionPixelSize(R.dimen.spacing_small)
+            binding.radioGroup.addView(button)
         }
     }
 

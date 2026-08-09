@@ -1,22 +1,34 @@
 package app.khom.pavlo.crypto.ui.holdings
 
 import android.view.LayoutInflater
+import android.view.View
 import app.khom.pavlo.crypto.R
 import app.khom.pavlo.crypto.databinding.HoldingsItemBinding
-import app.khom.pavlo.crypto.model.DEFAULT_DATE_FORMAT
 import app.khom.pavlo.crypto.model.HoldingData
 import app.khom.pavlo.crypto.model.HoldingsHandler
+import app.khom.pavlo.crypto.model.LocaleManager
+import app.khom.pavlo.crypto.ui.common.TrackedListAdapter
+import app.khom.pavlo.crypto.utils.PortfolioValueFormatter
 import app.khom.pavlo.crypto.utils.*
 import com.squareup.picasso.Picasso
 import androidx.recyclerview.widget.RecyclerView
 import android.view.ViewGroup
-import java.math.BigDecimal
+import java.time.Instant
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
+import java.util.Locale
 
 
 class HoldingsAdapter(private val holdings: ArrayList<HoldingData>,
                       private val holdingsHandler: HoldingsHandler,
                       private val resProvider: ResourceProvider,
-                      val clickListener: (HoldingData) -> Unit) : RecyclerView.Adapter<HoldingsAdapter.ViewHolder>() {
+                      private val editListener: (HoldingData) -> Unit,
+                      private val deleteListener: (HoldingData) -> Unit) :
+        TrackedListAdapter<HoldingsAdapter.ViewHolder>(holdings.size) {
+
+    private val purchaseDateFormatter: DateTimeFormatter = DateTimeFormatter
+        .ofPattern("dd MMM yyyy", portfolioLocale())
+        .withZone(ZoneId.systemDefault())
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
             ViewHolder(HoldingsItemBinding.inflate(LayoutInflater.from(parent.context), parent, false))
@@ -26,33 +38,56 @@ class HoldingsAdapter(private val holdings: ArrayList<HoldingData>,
     }
 
     inner class ViewHolder(private val binding: HoldingsItemBinding) : RecyclerView.ViewHolder(binding.root) {
+        private var boundHolding: HoldingData? = null
+        private val editClickListener = View.OnClickListener {
+            boundHolding?.let(editListener)
+        }
+        private val deleteClickListener = View.OnClickListener {
+            boundHolding?.let(deleteListener)
+        }
+
         fun bindItems(holdingData: HoldingData) {
-            binding.root.setOnClickListener { clickListener(holdingData) }
-            val fromTo = "${holdingData.from} / ${holdingData.to}"
-            binding.holdingsItemFromTo.text = fromTo
-            val price = formatMoney(holdingData.price)
-            binding.holdingsItemTradePrice.text = price
-            binding.holdingsItemTradeDate.text = formatLongDateToString(holdingData.date, DEFAULT_DATE_FORMAT)
-            binding.holdingsItemQuantity.text = "${resProvider.getString(R.string.qty)} ${getStringWithTwoDecimalsFromDouble(holdingData.quantity)}"
-            val total = formatMoney(holdingsHandler.getTotalValueWithCurrentPriceByHoldingData(holdingData))
-            binding.holdingsItemCurrentTotal.text = "${resProvider.getString(R.string.`val`)} $total"
+            boundHolding = holdingData
+            binding.root.setOnClickListener(editClickListener)
+            binding.holdingsItemEdit.setOnClickListener(editClickListener)
+            binding.holdingsItemDelete.setOnClickListener(deleteClickListener)
+            val coinName = holdingsHandler.getCoinNameByHolding(holdingData)
+            binding.holdingsItemTitle.text = if (coinName.equals(holdingData.from, ignoreCase = true)) {
+                holdingData.from
+            } else {
+                resProvider.getString(R.string.display_name_symbol, coinName, holdingData.from)
+            }
+            binding.holdingsItemPurchaseDate.text = resProvider.getString(
+                R.string.display_label_value,
+                resProvider.getString(R.string.portfolio_purchase_date),
+                formatPurchaseDate(holdingData.date)
+            )
+            binding.holdingsItemExchange.visibility =
+                if (holdingData.exchange.isBlank()) View.GONE else View.VISIBLE
+            binding.holdingsItemExchange.text = resProvider.getString(
+                R.string.display_label_value,
+                resProvider.getString(R.string.portfolio_exchange),
+                holdingData.exchange
+            )
+            binding.holdingsItemQuantity.text = resProvider.getString(
+                R.string.display_amount_symbol,
+                holdingData.quantity.stripTrailingZeros().toPlainString(),
+                holdingData.from
+            )
+            binding.holdingsItemPurchasePrice.text = PortfolioValueFormatter.price(holdingData.price)
 
-            val changePercent = holdingsHandler.getChangePercentByHoldingData(holdingData)
-            val chPct = formatPercent(changePercent)
-            binding.holdingsItemChangePercent.text = chPct
-            binding.holdingsItemChangePercent.setTextColor(resProvider.getColor(getChangeColor(changePercent)))
-
-            val changeValue = holdingsHandler.getChangeValueByHoldingData(holdingData)
-            val chValue = formatSignedMoney(changeValue)
-            binding.holdingsItemChangeValue.text = chValue
-            binding.holdingsItemChangeValue.setTextColor(resProvider.getColor(getChangeColor(changeValue)))
-            binding.holdingsItemProfitLoss.text = getProfitLossText(changeValue, resProvider)
-
-            val portfolioStats = holdingsHandler.getStatsByHoldingData(holdingData)
-            binding.holdingsItemAverageBuy.text = formatMoney(portfolioStats.averageBuyPrice)
-            binding.holdingsItemAllocation.text = formatPercent(portfolioStats.allocationPercent)
-            binding.holdingsItemDayPnl.text = "${formatSignedMoney(portfolioStats.dayPnl)}  ${formatPercent(portfolioStats.dayPnlPercent)}"
-            binding.holdingsItemDayPnl.setTextColor(resProvider.getColor(getChangeColor(portfolioStats.dayPnl)))
+            val stats = holdingsHandler.getTransactionStats(holdingData)
+            binding.holdingsItemSpent.text = PortfolioValueFormatter.money(stats.totalSpent)
+            binding.holdingsItemCurrentPrice.text = PortfolioValueFormatter.price(stats.currentPrice)
+            binding.holdingsItemCurrentValue.text = PortfolioValueFormatter.money(stats.currentValue)
+            binding.holdingsItemProfit.text = resProvider.getString(
+                R.string.display_profit_percent,
+                PortfolioValueFormatter.signedMoney(stats.profit),
+                PortfolioValueFormatter.percent(stats.profitPercent)
+            )
+            binding.holdingsItemProfit.setTextColor(
+                resProvider.getColor(getChangeColor(stats.profit))
+            )
 
             val imageUrl = holdingsHandler.getImageUrlByHolding(holdingData)
             Picasso.get().cancelRequest(binding.holdingsItemIcon)
@@ -65,37 +100,30 @@ class HoldingsAdapter(private val holdings: ArrayList<HoldingData>,
                         .centerInside()
                         .into(binding.holdingsItemIcon)
             }
-
-            binding.holdingsItemMainPrice.text = holdingsHandler.getCurrentPriceByHolding(holdingData)
         }
 
-        private fun formatMoney(value: BigDecimal): String {
-            val formatted = getStringWithTwoDecimalsFromDouble(value)
-            return if (formatted.isNotEmpty()) "\$$formatted" else ""
-        }
-
-        private fun formatSignedMoney(value: BigDecimal): String {
-            val formatted = getStringWithTwoDecimalsFromDouble(value.abs())
-            if (formatted.isEmpty()) return ""
-            val sign = if (value.signum() > 0) "+" else if (value.signum() < 0) "-" else ""
-            return "$sign\$$formatted"
-        }
-
-        private fun formatPercent(value: BigDecimal): String {
-            val formatted = getStringWithTwoDecimalsFromDouble(value.abs())
-            if (formatted.isEmpty()) return ""
-            val sign = if (value.signum() > 0) "+" else if (value.signum() < 0) "-" else ""
-            return "$sign$formatted%"
+        private fun formatPurchaseDate(date: Long): String {
+            return purchaseDateFormatter.format(Instant.ofEpochMilli(date))
         }
 
         fun recycle() {
+            boundHolding = null
             Picasso.get().cancelRequest(binding.holdingsItemIcon)
             binding.holdingsItemIcon.setImageDrawable(null)
             binding.root.setOnClickListener(null)
+            binding.holdingsItemEdit.setOnClickListener(null)
+            binding.holdingsItemDelete.setOnClickListener(null)
         }
     }
 
     override fun getItemCount() = holdings.size
+
+    fun notifyItemsChanged() = dispatchTrackedListChanges(holdings.size)
+
+    fun restoreItem(holdingId: Long) {
+        val position = holdings.indexOfFirst { it.id == holdingId }
+        if (position >= 0) notifyItemChanged(position) else notifyItemsChanged()
+    }
 
     override fun onViewRecycled(holder: ViewHolder) {
         holder.recycle()
@@ -106,4 +134,9 @@ class HoldingsAdapter(private val holdings: ArrayList<HoldingData>,
         Picasso.get().cancelTag(this)
         super.onDetachedFromRecyclerView(recyclerView)
     }
+
+    private fun portfolioLocale(): Locale =
+        LocaleManager.getLocale(resProvider.context.resources)
+            .takeUnless { it.language.isBlank() }
+            ?: Locale.ENGLISH
 }

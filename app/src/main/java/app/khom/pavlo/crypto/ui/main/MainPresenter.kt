@@ -1,6 +1,7 @@
 package app.khom.pavlo.crypto.ui.main
 
 import app.khom.pavlo.crypto.model.COINS_FRAGMENT_PAGE_POSITION
+import app.khom.pavlo.crypto.model.PORTFOLIO_FRAGMENT_PAGE_POSITION
 import app.khom.pavlo.crypto.model.rxbus.CoinsLoadingEvent
 import app.khom.pavlo.crypto.model.rxbus.OnDeleteCoinsMenuItemClickedEvent
 import app.khom.pavlo.crypto.model.rxbus.RxBus
@@ -19,9 +20,12 @@ class MainPresenter @Inject constructor(private val view: IMain.View,
                                         private val preferences: Preferences) : IMain.Presenter {
 
     private val disposable = CompositeDisposable()
+    private var selectedPage = COINS_FRAGMENT_PAGE_POSITION
+    private var coinsSelected = false
 
     override fun onCreate() {
         setObservers()
+        renderMenu()
     }
 
     private fun setObservers() {
@@ -35,7 +39,8 @@ class MainPresenter @Inject constructor(private val view: IMain.View,
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
-                    view.setMenuIconsVisibility(it)
+                    coinsSelected = it
+                    renderMenu()
                 })
         disposable.add(pageController.getPageObservable()
                 .subscribeOn(Schedulers.io())
@@ -44,15 +49,20 @@ class MainPresenter @Inject constructor(private val view: IMain.View,
     }
 
     private fun onPageChanged(position: Int) {
-        view.setSortVisible(position == COINS_FRAGMENT_PAGE_POSITION)
+        selectedPage = position
+        renderMenu()
     }
 
     override fun onDestroy() {
         disposable.clear()
     }
 
-    override fun onAddCoinClicked() {
-        view.startAddCoinActivity()
+    override fun onAddClicked() {
+        when (mainMenuState(selectedPage, coinsSelected).addAction) {
+            MainAddAction.ADD_COIN -> view.startAddCoinActivity()
+            MainAddAction.ADD_TRANSACTION -> view.startAddTransactionActivity()
+            MainAddAction.NONE -> Unit
+        }
     }
 
     override fun onSortClicked() {
@@ -64,11 +74,36 @@ class MainPresenter @Inject constructor(private val view: IMain.View,
     }
 
     override fun onDeleteClicked() {
-        view.setMenuIconsVisibility(false)
+        coinsSelected = false
+        renderMenu()
         RxBus.publish(OnDeleteCoinsMenuItemClickedEvent())
     }
 
     override fun onPageSelected(position: Int) {
+        selectedPage = position
+        renderMenu()
         pageController.pageSelected(position)
     }
+
+    private fun renderMenu() {
+        view.renderMenu(mainMenuState(selectedPage, coinsSelected))
+    }
+}
+
+internal fun mainMenuState(page: Int, coinsSelected: Boolean): MainMenuState {
+    val favoriteSelected = page == COINS_FRAGMENT_PAGE_POSITION
+    val selectionMode = favoriteSelected && coinsSelected
+    val addAction = when {
+        selectionMode -> MainAddAction.NONE
+        favoriteSelected -> MainAddAction.ADD_COIN
+        page == PORTFOLIO_FRAGMENT_PAGE_POSITION -> MainAddAction.ADD_TRANSACTION
+        else -> MainAddAction.NONE
+    }
+    return MainMenuState(
+        showDelete = selectionMode,
+        showAdd = addAction != MainAddAction.NONE,
+        showSort = favoriteSelected && !selectionMode,
+        showOverflow = !selectionMode,
+        addAction = addAction
+    )
 }

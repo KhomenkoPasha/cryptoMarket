@@ -12,6 +12,8 @@
 *.iml
 *.apk
 *.aab
+*.jks
+*.keystore
 /app/release/
 /oldrepo/
 /.codex-build/

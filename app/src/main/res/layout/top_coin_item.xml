@@ -36,6 +36,7 @@
             android:id="@+id/top_coin_logo"
             android:layout_width="25dp"
             android:layout_height="25dp"
+            android:contentDescription="@null"
             android:layout_marginStart="5dp"
             app:layout_constraintStart_toEndOf="@+id/top_coin_rank"
             app:layout_constraintTop_toTopOf="parent"
@@ -118,7 +119,7 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:gravity="right"
+                android:gravity="end"
                 android:textColor="@color/on_surface"
                 tools:text="23112312" />
 
@@ -151,7 +152,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:gravity="right"
+                android:gravity="end"
                 android:textColor="@color/on_surface"
                 tools:text="23112312" />
 
@@ -186,7 +187,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:gravity="right"
+                android:gravity="end"
                 android:textColor="@color/on_surface"
                 tools:text="23112312" />
 
@@ -203,9 +204,7 @@
         </TableRow>
     </TableLayout>
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="end|center_vertical"
@@ -234,6 +233,7 @@
                 android:id="@+id/top_coin_add_icon"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
+                android:contentDescription="@string/add_to_favorites"
                 android:src="@drawable/ic_add_circle" />
 
             <com.github.ybq.android.spinkit.SpinKitView

@@ -44,6 +44,9 @@ object FavoritesWidgetScheduler {
         val largeIds = manager.getAppWidgetIds(
             ComponentName(context, FavoritesWidgetLargeProvider::class.java)
         )
-        return smallIds.isNotEmpty() || largeIds.isNotEmpty()
+        val investmentsIds = manager.getAppWidgetIds(
+            ComponentName(context, InvestmentsWidgetProvider::class.java)
+        )
+        return smallIds.isNotEmpty() || largeIds.isNotEmpty() || investmentsIds.isNotEmpty()
     }
 }

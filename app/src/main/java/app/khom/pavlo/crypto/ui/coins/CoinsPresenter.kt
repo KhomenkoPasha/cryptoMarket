@@ -5,7 +5,7 @@ import app.khom.pavlo.crypto.model.*
 import app.khom.pavlo.crypto.model.db.CMDatabase
 import app.khom.pavlo.crypto.model.network.NetworkRequests
 import app.khom.pavlo.crypto.model.rxbus.*
-import app.khom.pavlo.crypto.ui.main.SortDialog
+import app.khom.pavlo.crypto.utils.PortfolioValueFormatter
 import app.khom.pavlo.crypto.utils.*
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.disposables.CompositeDisposable
@@ -22,6 +22,7 @@ class CoinsPresenter @Inject constructor(private val view: ICoins.View,
                                          private val pageController: PageController,
                                          private val multiSelector: MultiSelector,
                                          private val holdingsHandler: HoldingsHandler,
+                                         private val favoritesChangeNotifier: FavoritesChangeNotifier,
                                          private val logger: Logger,
                                          private val toaster: Toaster,
                                          private val preferences: Preferences) : ICoins.Presenter {
@@ -127,18 +128,20 @@ class CoinsPresenter @Inject constructor(private val view: ICoins.View,
     }
 
     private fun setTotalHoldingValue() {
-        view.setTotalHoldingsValue("$ ${getStringWithTwoDecimalsFromDouble(holdingsHandler.getTotalValueWithCurrentPrice())}")
+        view.setTotalHoldingsValue(
+            PortfolioValueFormatter.money(holdingsHandler.getTotalValueWithCurrentPrice())
+        )
     }
 
     private fun setTotalHoldingsChangePercent() {
         val totalChangePercent = holdingsHandler.getTotalChangePercent()
-        view.setTotalHoldingsChangePercent("${getStringWithTwoDecimalsFromDouble(totalChangePercent)}%")
+        view.setTotalHoldingsChangePercent(PortfolioValueFormatter.percent(totalChangePercent))
         view.setTotalHoldingsChangePercentColor(getChangeColor(totalChangePercent))
     }
 
     private fun setTotalHoldingsChangeValue() {
         val totalChangeValue = holdingsHandler.getTotalChangeValue()
-        view.setTotalHoldingsChangeValue("$${getStringWithTwoDecimalsFromDouble(totalChangeValue)}")
+        view.setTotalHoldingsChangeValue(PortfolioValueFormatter.signedMoney(totalChangeValue))
         view.setTotalHoldingsChangeValueColor(getChangeColor(totalChangeValue))
         setAllTimeProfitLossString(totalChangeValue)
     }
@@ -165,21 +168,34 @@ class CoinsPresenter @Inject constructor(private val view: ICoins.View,
         val coinsToDelete = coins.filter { it.selected }
         if (coinsToDelete.isNotEmpty()) {
             disableSelected()
-            disposable.add(
-                    holdingsHandler.removeHoldings(coinsToDelete)
-                            .subscribeOn(Schedulers.io())
-                            .observeOn(AndroidSchedulers.mainThread())
-                            .subscribe({
-                                coinsController.deleteCoins(coinsToDelete)
-                                RxBus.publish(MainCoinsListUpdatedEvent())
-                                toaster.toastShort(if (coinsToDelete.size > 1) resProvider.getString(R.string.coins_deleted)
-                                                   else resProvider.getString(R.string.coin_deleted))
-                            }, {
-                                logger.logError("Delete holdings for coins: $it")
-                                toaster.toastShort(resProvider.getString(R.string.error))
-                            })
-            )
+            removeFavorites(coinsToDelete)
         }
+    }
+
+    override fun onRemoveFavoriteClicked(coin: Coin) {
+        view.showRemoveFavoriteConfirmation(coin)
+    }
+
+    override fun onRemoveFavoriteConfirmed(coin: Coin) {
+        removeFavorites(listOf(coin))
+    }
+
+    private fun removeFavorites(favorites: List<Coin>) {
+        disposable.add(
+                coinsController.deleteCoinsAsync(favorites)
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe({
+                            favoritesChangeNotifier.onFavoritesChanged()
+                            RxBus.publish(MainCoinsListUpdatedEvent())
+                            toaster.toastShort(
+                                    if (favorites.size > 1) resProvider.getString(R.string.coins_deleted)
+                                    else resProvider.getString(R.string.coin_deleted)
+                            )
+                        }, {
+                            logger.logError("Remove favorites: $it")
+                            toaster.toastShort(resProvider.getString(R.string.error))
+                        })
+        )
     }
 
     private fun onSortMethodUpdated(sort: String?) {
@@ -191,11 +207,11 @@ class CoinsPresenter @Inject constructor(private val view: ICoins.View,
 
     private fun sortCoinsBySelectedSortMethod() {
         when (preferences.sortBy) {
-            SortDialog.SORT_BY_NAME -> coins.sortBy { it.from }
-            SortDialog.SORT_BY_PRICE_INCREASE -> coins.sortBy { it.priceRaw }
-            SortDialog.SORT_BY_PRICE_DECREASE -> coins.sortByDescending { it.priceRaw }
-            SortDialog.SORT_BY_24H_PRICE_INCREASE -> coins.sortBy { it.changePct24hRaw }
-            SortDialog.SORT_BY_24H_PRICE_DECREASE -> coins.sortByDescending { it.changePct24hRaw }
+            CoinSort.NAME -> coins.sortBy { it.from }
+            CoinSort.PRICE_ASCENDING -> coins.sortBy { it.priceRaw }
+            CoinSort.PRICE_DESCENDING -> coins.sortByDescending { it.priceRaw }
+            CoinSort.CHANGE_24H_ASCENDING -> coins.sortBy { it.changePct24hRaw }
+            CoinSort.CHANGE_24H_DESCENDING -> coins.sortByDescending { it.changePct24hRaw }
         }
         view.updateRecyclerView()
     }

@@ -6,7 +6,6 @@
     <color name="surface_container">#121B29</color>
     <color name="surface_container_high">#192538</color>
     <color name="surface_container_highest">#223047</color>
-    <color name="on_background">#E7EEF9</color>
     <color name="on_surface">#E7EEF9</color>
     <color name="on_surface_variant">#9EACC2</color>
     <color name="outline">#33445E</color>
@@ -15,7 +14,6 @@
     <color name="glass_surface_end">#B8121B29</color>
     <color name="glass_surface_high">#D923344A</color>
     <color name="glass_outline">#6672CAD6</color>
-    <color name="glass_highlight">#33FFFFFF</color>
 
     <color name="brand_primary">#72CAD6</color>
     <color name="on_brand_primary">#04343A</color>
@@ -40,16 +38,10 @@
     <color name="accent">@color/brand_primary</color>
     <color name="primary_text">@color/on_surface</color>
     <color name="secondary_text">@color/on_surface_variant</color>
-    <color name="icons">@color/on_surface</color>
-    <color name="white">#FFFFFF</color>
     <color name="divider">@color/outline_variant</color>
     <color name="green">@color/positive</color>
-    <color name="colorPrimaryDarkB">#40223A4A</color>
     <color name="red">@color/negative</color>
-    <color name="black">@color/app_background</color>
     <color name="grey_light">#C5D0E0</color>
     <color name="grey">@color/on_surface_variant</color>
     <color name="orange_dark">@color/warning</color>
-    <color name="yellow">@color/warning</color>
-    <color name="darker_gray">@color/surface_container</color>
 </resources>

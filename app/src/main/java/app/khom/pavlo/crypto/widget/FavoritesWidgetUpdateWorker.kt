@@ -11,6 +11,7 @@ class FavoritesWidgetUpdateWorker(
 
     override fun doWork(): Result {
         FavoritesWidgetUpdater.updateAllSync(applicationContext)
+        InvestmentsWidgetUpdater.updateAllSync(applicationContext)
         return Result.success()
     }
 }

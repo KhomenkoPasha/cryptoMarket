@@ -3,7 +3,6 @@ package app.khom.pavlo.crypto.ui.settings
 import android.app.Activity
 import android.content.Context
 import app.khom.pavlo.crypto.model.Preferences
-import app.khom.pavlo.crypto.utils.ResourceProvider
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -20,6 +19,5 @@ class SettingsModule {
     @Provides @ActivityScoped
     fun providePresenter(view: Settings.View,
                          context: Context,
-                         resourceProvider: ResourceProvider,
-                         preferences: Preferences): Settings.Presenter = SettingsPresenter(view, context, resourceProvider, preferences)
+                         preferences: Preferences): Settings.Presenter = SettingsPresenter(view, context, preferences)
 }

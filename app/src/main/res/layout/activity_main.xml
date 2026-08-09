@@ -35,6 +35,8 @@
                 app:tabIndicator="@drawable/tab_indicator"
                 app:tabIndicatorFullWidth="false"
                 app:tabIndicatorHeight="3dp"
+                app:tabIconTint="@color/tab_item_tint"
+                app:tabInlineLabel="true"
                 app:tabRippleColor="@color/ripple"
                 app:tabSelectedTextColor="@color/brand_primary"
                 app:tabTextColor="@color/on_surface_variant" />

@@ -23,6 +23,7 @@ interface ICoins {
         fun startAllocationsActivity()
         fun enableEmptyText()
         fun disableEmptyText()
+        fun showRemoveFavoriteConfirmation(coin: Coin)
     }
 
     interface Presenter {
@@ -34,5 +35,7 @@ interface ICoins {
         fun onCoinClicked(coin: Coin)
         fun onHoldingsClicked()
         fun onAllocationsClicked()
+        fun onRemoveFavoriteClicked(coin: Coin)
+        fun onRemoveFavoriteConfirmed(coin: Coin)
     }
 }

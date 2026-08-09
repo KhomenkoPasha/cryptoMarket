@@ -13,6 +13,7 @@ import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava3.RxJava3CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
+import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
 @InstallIn(SingletonComponent::class)
@@ -21,22 +22,30 @@ class NetworkModule {
 
     @Provides @Singleton
     fun provideOkHttpClient(): OkHttpClient =
-            OkHttpClient.Builder()
-                    .addInterceptor(CryptoCompareAuthInterceptor(BuildConfig.CRYPTOCOMPARE_API_KEY))
-                    .build()
+        OkHttpClient.Builder()
+            .connectTimeout(NETWORK_TIMEOUT_SECONDS, TimeUnit.SECONDS)
+            .readTimeout(NETWORK_TIMEOUT_SECONDS, TimeUnit.SECONDS)
+            .writeTimeout(NETWORK_TIMEOUT_SECONDS, TimeUnit.SECONDS)
+            .callTimeout(NETWORK_TIMEOUT_SECONDS, TimeUnit.SECONDS)
+            .addInterceptor(CryptoCompareAuthInterceptor(BuildConfig.CRYPTOCOMPARE_API_KEY))
+            .build()
 
     @Provides @Singleton
     fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit =
-            Retrofit.Builder()
-                    .baseUrl(BASE_CRYPTOCOMPARE_URL)
-                    .client(okHttpClient)
-                    .addCallAdapterFactory(RxJava3CallAdapterFactory.create())
-                    .addConverterFactory(GsonConverterFactory.create())
-                    .build()
+        Retrofit.Builder()
+            .baseUrl(BASE_CRYPTOCOMPARE_URL)
+            .client(okHttpClient)
+            .addCallAdapterFactory(RxJava3CallAdapterFactory.create())
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
 
     @Provides @Singleton
     fun provideCrComApi(retrofit: Retrofit): CryptoCompareAPI = retrofit.create(CryptoCompareAPI::class.java)
 
     @Provides @Singleton
     fun provideNetworkRequests(cryptoCompareAPI: CryptoCompareAPI) = NetworkRequests(cryptoCompareAPI)
+
+    private companion object {
+        const val NETWORK_TIMEOUT_SECONDS = 30L
+    }
 }

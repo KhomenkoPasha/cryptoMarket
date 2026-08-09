@@ -126,7 +126,22 @@ val MIGRATION_4_5 = object : Migration(4, 5) {
     }
 }
 
-val ALL_MIGRATIONS = arrayOf(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4, MIGRATION_4_5)
+val MIGRATION_5_6 = object : Migration(5, 6) {
+    override fun migrate(db: SupportSQLiteDatabase) {
+        db.execSQL("ALTER TABLE `holdings` ADD COLUMN `coin_id` TEXT NOT NULL DEFAULT ''")
+        db.execSQL("ALTER TABLE `holdings` ADD COLUMN `coin_name` TEXT NOT NULL DEFAULT ''")
+        db.execSQL("ALTER TABLE `holdings` ADD COLUMN `exchange` TEXT NOT NULL DEFAULT ''")
+        db.execSQL("UPDATE `holdings` SET `coin_id` = `from_coin` WHERE `coin_id` = ''")
+    }
+}
+
+val ALL_MIGRATIONS = arrayOf(
+    MIGRATION_1_2,
+    MIGRATION_2_3,
+    MIGRATION_3_4,
+    MIGRATION_4_5,
+    MIGRATION_5_6
+)
 
 private fun recreateAllCoins(db: SupportSQLiteDatabase, nullableColumns: Set<String>) {
     fun type(column: String) = if (column in nullableColumns) "TEXT" else "TEXT NOT NULL"
