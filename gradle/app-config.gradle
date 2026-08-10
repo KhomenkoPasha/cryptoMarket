@@ -4,8 +4,8 @@ ext.cryptoMarketAppConfig = [
         compileSdk    : 36,
         minSdk        : 26,
         targetSdk     : 36,
-        versionCode   : 24,
-        versionName   : '2.0.1',
+        versionCode   : 25,
+        versionName   : '2.0.2',
         testRunner    : 'androidx.test.runner.AndroidJUnitRunner'
 ]
 

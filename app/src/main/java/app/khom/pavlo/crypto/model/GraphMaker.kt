@@ -22,7 +22,7 @@ class GraphMaker(val resProvider: ResourceProvider) {
 
     private fun setupDataSetParams(dataSet: CandleDataSet) {
         dataSet.shadowColor = resProvider.getColor(R.color.grey)
-        dataSet.shadowWidth = 0.7f
+        dataSet.shadowWidth = 0.45f
         dataSet.decreasingColor = resProvider.getColor(R.color.red)
         dataSet.decreasingPaintStyle = Paint.Style.FILL
         dataSet.increasingColor = resProvider.getColor(R.color.green)

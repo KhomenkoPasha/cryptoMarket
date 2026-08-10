@@ -116,11 +116,18 @@ class CoinInfoActivity : BaseActivity(), ICoinInfo.View {
             xAxis.textColor = secondaryText
             xAxis.axisLineColor = outline
             xAxis.gridColor = outline
+            xAxis.axisLineWidth = 0.5f
+            xAxis.gridLineWidth = 0.35f
+            xAxis.textSize = 9f
             axisLeft.textColor = secondaryText
             axisLeft.axisLineColor = outline
             axisLeft.gridColor = outline
+            axisLeft.axisLineWidth = 0.5f
+            axisLeft.gridLineWidth = 0.35f
+            axisLeft.textSize = 9f
             axisRight.isEnabled = false
             legend.textColor = primaryText
+            legend.textSize = 10f
             description.isEnabled = false
             setNoDataTextColor(secondaryText)
             setDrawBorders(false)

@@ -25,7 +25,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
 import android.widget.FrameLayout
-import android.widget.TextView
 import app.khom.pavlo.crypto.R
 import app.khom.pavlo.crypto.activities.BaseActivity
 import app.khom.pavlo.crypto.model.COINS_FRAGMENT_PAGE_POSITION
@@ -204,7 +203,7 @@ class MainActivity : BaseActivity(), IMain.View {
             true,
             false
         ) { tab, position ->
-            tab.text = pageTitle(position)
+            tab.contentDescription = pageTitle(position)
             tab.setIcon(pageIcon(position))
         }.also { it.attach() }
         binding.viewpager.registerOnPageChangeCallback(pageChangeCallback)
@@ -214,10 +213,11 @@ class MainActivity : BaseActivity(), IMain.View {
     private fun setCustomTab() {
         val customTab = LayoutInflater.from(this)
             .inflate(R.layout.tab_with_loading, binding.tabs, false)
-        val title: TextView = customTab.findViewById(R.id.tab_title)
         coinsLoading = customTab.findViewById(R.id.tab_loading)
-        title.text = resProvider.getString(R.string.coins)
-        binding.tabs.getTabAt(0)?.customView = customTab
+        binding.tabs.getTabAt(0)?.apply {
+            contentDescription = pageTitle(0)
+            customView = customTab
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

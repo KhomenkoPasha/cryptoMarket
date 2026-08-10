@@ -7,18 +7,18 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginStart="10dp"
-    android:layout_marginTop="8dp"
+    android:layout_marginTop="3dp"
     android:layout_marginEnd="10dp"
-    android:layout_marginBottom="8dp"
+    android:layout_marginBottom="3dp"
     android:background="@drawable/bg_card_surface"
     android:elevation="2dp"
-    android:minHeight="88dp"
-    android:padding="16dp">
+    android:minHeight="62dp"
+    android:padding="8dp">
 
     <ImageView
         android:id="@+id/main_item_market_logo"
-        android:layout_width="25dp"
-        android:layout_height="25dp"
+        android:layout_width="22dp"
+        android:layout_height="22dp"
         android:contentDescription="@null"
         app:layout_constraintBottom_toBottomOf="@+id/main_item_full_name"
         app:layout_constraintStart_toStartOf="parent"
@@ -30,8 +30,8 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="5dp"
         android:textColor="@color/on_surface"
-        android:textStyle="bold"
-        android:textSize="18sp"
+        android:textSize="@dimen/text_size_body"
+        android:textStyle="normal"
         app:layout_constraintLeft_toRightOf="@+id/main_item_market_logo"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="BTC" />
@@ -42,7 +42,7 @@
         android:layout_height="wrap_content"
         android:maxLines="1"
         android:textColor="@color/on_surface_variant"
-        android:textSize="18sp"
+        android:textSize="@dimen/text_size_body"
         app:layout_constraintLeft_toRightOf="@+id/main_item_from"
         app:layout_constraintTop_toTopOf="@+id/main_item_from"
         tools:text="USD" />
@@ -53,6 +53,7 @@
         android:layout_height="wrap_content"
         android:maxLines="1"
         android:textColor="@color/on_surface_variant"
+        android:textSize="@dimen/text_size_label"
         app:layout_constraintLeft_toLeftOf="@+id/main_item_from"
         app:layout_constraintTop_toBottomOf="@+id/main_item_from"
         tools:text="Bitcoin" />
@@ -63,6 +64,7 @@
         android:layout_height="wrap_content"
         android:maxLines="1"
         android:textColor="@color/on_surface_variant"
+        android:textSize="@dimen/text_size_label"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="@id/main_item_from"
@@ -73,6 +75,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@color/on_surface_variant"
+        android:textSize="@dimen/text_size_label"
         app:layout_constraintLeft_toLeftOf="@+id/main_item_holding_qty"
         app:layout_constraintTop_toBottomOf="@+id/main_item_holding_qty"
         tools:text="$45697" />
@@ -83,16 +86,16 @@
         android:layout_height="wrap_content"
         android:maxLines="1"
         android:textColor="@color/brand_primary"
-        android:textStyle="bold"
-        android:textSize="20sp"
+        android:textSize="@dimen/text_size_body_large"
+        android:textStyle="normal"
         app:layout_constraintEnd_toStartOf="@+id/main_item_price_arrow"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="2542" />
 
     <ImageView
         android:id="@+id/main_item_price_arrow"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="14dp"
+        android:layout_height="14dp"
         android:contentDescription="@null"
         app:layout_constraintEnd_toStartOf="@+id/main_item_remove_favorite"
         app:layout_constraintTop_toTopOf="parent"
@@ -103,17 +106,18 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@color/on_surface_variant"
+        android:textSize="@dimen/text_size_label"
         app:layout_constraintEnd_toStartOf="@+id/main_item_remove_favorite"
         app:layout_constraintTop_toBottomOf="@+id/main_item_last_price"
         tools:text="+101%" />
 
     <ImageButton
         android:id="@+id/main_item_remove_favorite"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
         android:background="?attr/selectableItemBackgroundBorderless"
         android:contentDescription="@string/remove_coin"
-        android:padding="10dp"
+        android:padding="9dp"
         android:src="@drawable/ic_remove_favorite"
         android:tooltipText="@string/remove_coin"
         app:layout_constraintBottom_toBottomOf="parent"

@@ -24,7 +24,7 @@
 
     <string name="exit_text"> Вийти з програми?</string>
 
-    <string name="yes"> Да</string>
+    <string name="yes"> Так</string>
 
     <string name="cancel"> Відміна</string>
 
@@ -34,7 +34,7 @@
 
     <string name="top100"> Рейтинг</string>
 
-    <string name="sort_by"> Сортувати по</string>
+    <string name="sort_by"> Сортувати за</string>
 
     <string name="coin_name"> Назва</string>
 
@@ -46,16 +46,16 @@
 
     <string name="add_coin_from_hint"> Введіть назву криптовалюты</string>
 
-    <string name="matches_found"> ​​збігаються знайдено</string>
+    <string name="matches_found">Збігів знайдено</string>
 
-    <string name="sort_menu_title"> Сортировка</string>
+    <string name="sort_menu_title">Сортування</string>
 
 
     <string name="coin_not_found"> ​​Криптовалюта не знайдена</string>
 
-    <string name="coin_added"> Криптовалюта добавлена ​​</string>
+    <string name="coin_added">Криптовалюту додано</string>
     <string name="searching_info">Searching for cryptocurrency info, please wait</string>
-    <string name="settings"> Настройки</string>
+    <string name="settings">Налаштування</string>
     <string name="remove_coin">Видалити з обраного</string>
 
     <string name="coins_deleted">Видалено з обраного</string>
@@ -84,7 +84,7 @@
 
     <string name="error"> Помилка</string>
 
-    <string name="current_price"> Текуча цена</string>
+    <string name="current_price"> Поточна ціна</string>
 
 
     <string name="quantity"> Кількість</string>
@@ -99,29 +99,29 @@
 
     <string name="add_trans_fill_price"> Заповніть поля ціни</string>
 
-    <string name="add_trans_fill_quantity"> Заповніть поле количества</string>
+    <string name="add_trans_fill_quantity">Заповніть поле кількості</string>
 
-    <string name="total_holdings"> Сумма вкладів</string>
-
-
-    <string name="all_time"> За весь час</string>
-
-    <string name="profit"> прибуль</string>
-
-    <string name="loss"> убыток</string>
+    <string name="total_holdings">Вартість активів</string>
 
 
-    <string name="holdings"> Вклады</string>
+    <string name="all_time">За весь час</string>
 
-    <string name="transaction_added"> Транзакция добавлена ​​</string>
+    <string name="profit">прибуток</string>
 
-    <string name="holdings_deleted"> Вклад удален</string>
-    <string name="allocations"> Распределение</string>
-    <string name="empty_text"> Новости не найдены</string>
+    <string name="loss">збиток</string>
+
+
+    <string name="holdings">Активи</string>
+
+    <string name="transaction_added">Транзакцію додано</string>
+
+    <string name="holdings_deleted">Актив видалено</string>
+    <string name="allocations">Розподіл</string>
+    <string name="empty_text">Новин не знайдено</string>
     <string name="empty_coins"> У вас немає криптовалют. Ви можете додати їх через знак "плюс" або через топ 100 криптовалют</string>
-    <string name="language"> Язык</string>
-    <string name="empty_graph_text"> Що то пошло не так, графік не був завантажений</string>
-    <string name="add_to_favorites"> В вибране</string>
+    <string name="language">Мова</string>
+    <string name="empty_graph_text">Щось пішло не так, графік не завантажено</string>
+    <string name="add_to_favorites">До обраного</string>
     <string name="widget_favorites_title_small"> Вибране</string>
     <string name="widget_favorites_title_large"> Вибране</string>
     <string name="widget_empty_favorites"> Немає вибраних монет</string>

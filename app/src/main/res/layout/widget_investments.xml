@@ -28,7 +28,7 @@
             android:singleLine="true"
             android:text="@string/widget_investments_title"
             android:textColor="@color/primary_text"
-            android:textSize="14sp"
+            android:textSize="@dimen/text_size_body"
             android:textStyle="bold" />
 
         <TextView
@@ -36,7 +36,7 @@
             android:layout_height="wrap_content"
             android:text="@string/widget_investments_open"
             android:textColor="@color/brand_primary"
-            android:textSize="22sp" />
+            android:textSize="@dimen/text_size_headline" />
     </LinearLayout>
 
     <LinearLayout
@@ -55,7 +55,7 @@
             android:gravity="center"
             android:text="@string/widget_investments_empty"
             android:textColor="@color/primary_text"
-            android:textSize="14sp"
+            android:textSize="@dimen/text_size_body"
             android:textStyle="bold" />
 
         <TextView
@@ -65,7 +65,7 @@
             android:gravity="center"
             android:text="@string/widget_investments_empty_hint"
             android:textColor="@color/secondary_text"
-            android:textSize="12sp" />
+            android:textSize="@dimen/text_size_label" />
     </LinearLayout>
 
     <LinearLayout
@@ -80,7 +80,7 @@
             android:layout_marginTop="8dp"
             android:text="@string/widget_investments_current_value"
             android:textColor="@color/secondary_text"
-            android:textSize="11sp" />
+            android:textSize="@dimen/text_size_micro" />
 
         <TextView
             android:id="@+id/widget_investments_current_value"
@@ -90,7 +90,7 @@
             android:singleLine="true"
             android:text="@string/widget_investments_zero_value"
             android:textColor="@color/primary_text"
-            android:textSize="24sp"
+            android:textSize="@dimen/text_size_display"
             android:textStyle="bold" />
 
         <LinearLayout
@@ -111,7 +111,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/widget_investments_invested"
                     android:textColor="@color/secondary_text"
-                    android:textSize="11sp" />
+                    android:textSize="@dimen/text_size_micro" />
 
                 <TextView
                     android:id="@+id/widget_investments_invested_value"
@@ -121,7 +121,7 @@
                     android:singleLine="true"
                     android:text="@string/widget_investments_zero_value"
                     android:textColor="@color/primary_text"
-                    android:textSize="13sp"
+                    android:textSize="@dimen/text_size_label"
                     android:textStyle="bold" />
             </LinearLayout>
 
@@ -137,7 +137,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/widget_investments_total_return"
                     android:textColor="@color/secondary_text"
-                    android:textSize="11sp" />
+                    android:textSize="@dimen/text_size_micro" />
 
                 <TextView
                     android:id="@+id/widget_investments_pnl_value"
@@ -148,7 +148,7 @@
                     android:singleLine="true"
                     android:text="@string/widget_investments_zero_return"
                     android:textColor="@color/positive"
-                    android:textSize="13sp"
+                    android:textSize="@dimen/text_size_label"
                     android:textStyle="bold" />
             </LinearLayout>
         </LinearLayout>
@@ -165,7 +165,7 @@
             android:layout_marginTop="6dp"
             android:text="@string/widget_investments_positions"
             android:textColor="@color/secondary_text"
-            android:textSize="11sp"
+            android:textSize="@dimen/text_size_micro"
             android:textStyle="bold" />
 
         <LinearLayout

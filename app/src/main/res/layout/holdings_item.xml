@@ -5,20 +5,20 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginStart="12dp"
-    android:layout_marginTop="6dp"
+    android:layout_marginTop="4dp"
     android:layout_marginEnd="12dp"
-    android:layout_marginBottom="6dp"
+    android:layout_marginBottom="4dp"
     app:cardBackgroundColor="@color/glass_surface_start"
-    app:cardCornerRadius="20dp"
-    app:cardElevation="3dp"
+    app:cardCornerRadius="16dp"
+    app:cardElevation="2dp"
     app:strokeColor="@color/glass_outline"
-    app:strokeWidth="1dp">
+    app:strokeWidth="@dimen/stroke_hairline">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="16dp">
+        android:padding="12dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -28,14 +28,14 @@
 
             <ImageView
                 android:id="@+id/holdings_item_icon"
-                android:layout_width="44dp"
-                android:layout_height="44dp"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
                 android:contentDescription="@null" />
 
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="12dp"
+                android:layout_marginStart="8dp"
                 android:layout_weight="1"
                 android:orientation="vertical">
 
@@ -44,7 +44,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textColor="@color/on_surface"
-                    android:textSize="18sp"
+                    android:textSize="@dimen/text_size_title"
                     android:textStyle="bold"
                     tools:text="Bitcoin (BTC)" />
 
@@ -54,7 +54,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="2dp"
                     android:textColor="@color/on_surface_variant"
-                    android:textSize="13sp"
+                    android:textSize="@dimen/text_size_label"
                     tools:text="Purchase date: 09 Aug 2026" />
 
                 <TextView
@@ -63,7 +63,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="2dp"
                     android:textColor="@color/on_surface_variant"
-                    android:textSize="13sp"
+                    android:textSize="@dimen/text_size_label"
                     tools:text="Exchange: Binance" />
 
             </LinearLayout>
@@ -110,9 +110,9 @@
 
         <View
             android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginTop="14dp"
-            android:layout_marginBottom="12dp"
+            android:layout_height="@dimen/stroke_hairline"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
             android:background="@color/outline_variant" />
 
         <LinearLayout
@@ -132,7 +132,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/quantity"
                     android:textColor="@color/on_surface_variant"
-                    android:textSize="12sp" />
+                    android:textSize="@dimen/text_size_label" />
 
                 <TextView
                     android:id="@+id/holdings_item_quantity"
@@ -157,7 +157,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/portfolio_purchase_price"
                     android:textColor="@color/on_surface_variant"
-                    android:textSize="12sp" />
+                    android:textSize="@dimen/text_size_label" />
 
                 <TextView
                     android:id="@+id/holdings_item_purchase_price"
@@ -175,7 +175,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
+            android:layout_marginTop="8dp"
             android:baselineAligned="false"
             android:orientation="horizontal">
 
@@ -190,7 +190,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/portfolio_total_spent"
                     android:textColor="@color/on_surface_variant"
-                    android:textSize="12sp" />
+                    android:textSize="@dimen/text_size_label" />
 
                 <TextView
                     android:id="@+id/holdings_item_spent"
@@ -214,7 +214,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/current_price"
                     android:textColor="@color/on_surface_variant"
-                    android:textSize="12sp" />
+                    android:textSize="@dimen/text_size_label" />
 
                 <TextView
                     android:id="@+id/holdings_item_current_price"
@@ -231,7 +231,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
+            android:layout_marginTop="8dp"
             android:baselineAligned="false"
             android:orientation="horizontal">
 
@@ -246,7 +246,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/portfolio_current_value"
                     android:textColor="@color/on_surface_variant"
-                    android:textSize="12sp" />
+                    android:textSize="@dimen/text_size_label" />
 
                 <TextView
                     android:id="@+id/holdings_item_current_value"
@@ -270,7 +270,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/portfolio_profit"
                     android:textColor="@color/on_surface_variant"
-                    android:textSize="12sp" />
+                    android:textSize="@dimen/text_size_label" />
 
                 <TextView
                     android:id="@+id/holdings_item_profit"

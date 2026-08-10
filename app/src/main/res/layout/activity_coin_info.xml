@@ -16,9 +16,11 @@
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="48dp"
             android:background="@drawable/bg_appbar_glass"
+            android:minHeight="48dp"
             android:theme="@style/ToolbarColoredBackArrow"
+            app:titleTextAppearance="@style/TextAppearance.Crypto.Toolbar"
             app:titleTextColor="@color/on_surface" />
 
     </com.google.android.material.appbar.AppBarLayout>
@@ -45,8 +47,8 @@
 
                 <ImageView
                     android:id="@+id/coin_info_logo"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
                     android:contentDescription="@string/cryptocurrency" />
 
                 <TextView
@@ -55,7 +57,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
                     android:textColor="@color/brand_primary"
-                    android:textSize="24sp"
+                    android:textSize="@dimen/text_size_display"
                     tools:text="$ 4345" />
 
             </LinearLayout>
@@ -70,11 +72,11 @@
                 android:layout_marginTop="4dp"
                 android:entries="@array/histo_periods"
                 android:textColor="@color/brand_primary"
-                android:textSize="22sp" />
+                android:textSize="@dimen/text_size_headline" />
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="250dp"
+                android:layout_height="200dp"
                 android:layout_marginStart="4dp"
                 android:layout_marginEnd="4dp"
                 android:background="@drawable/bg_card_surface"
@@ -83,7 +85,7 @@
                 <com.github.mikephil.charting.charts.CandleStickChart
                     android:id="@+id/coin_info_graph"
                     android:layout_width="match_parent"
-                    android:layout_height="250dp"
+                    android:layout_height="200dp"
                     android:background="@android:color/transparent"
                     android:visibility="gone" />
 

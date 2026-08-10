@@ -15,18 +15,18 @@
         android:id="@+id/holdings_summary_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="12dp"
+        android:layout_margin="8dp"
         android:background="@drawable/bg_hero_card"
-        android:elevation="6dp"
+        android:elevation="3dp"
         android:orientation="vertical"
-        android:padding="18dp">
+        android:padding="12dp">
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/portfolio_tracker"
             android:textColor="@color/brand_primary"
-            android:textSize="18sp"
+            android:textSize="@dimen/text_size_title"
             android:textStyle="bold" />
 
         <LinearLayout
@@ -47,14 +47,14 @@
                     android:layout_height="wrap_content"
                     android:text="@string/portfolio_current_value"
                     android:textColor="@color/colorAccent"
-                    android:textSize="12sp" />
+                    android:textSize="@dimen/text_size_label" />
 
                 <TextView
                     android:id="@+id/holdings_summary_current_value"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textColor="@color/grey_light"
-                    android:textSize="18sp"
+                    android:textSize="@dimen/text_size_title"
                     android:textStyle="bold" />
             </LinearLayout>
 
@@ -70,14 +70,14 @@
                     android:layout_height="wrap_content"
                     android:text="@string/portfolio_invested"
                     android:textColor="@color/colorAccent"
-                    android:textSize="12sp" />
+                    android:textSize="@dimen/text_size_label" />
 
                 <TextView
                     android:id="@+id/holdings_summary_invested"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textColor="@color/grey_light"
-                    android:textSize="18sp"
+                    android:textSize="@dimen/text_size_title"
                     android:textStyle="bold" />
             </LinearLayout>
         </LinearLayout>
@@ -100,14 +100,14 @@
                     android:layout_height="wrap_content"
                     android:text="@string/portfolio_total_pnl"
                     android:textColor="@color/colorAccent"
-                    android:textSize="12sp" />
+                    android:textSize="@dimen/text_size_label" />
 
                 <TextView
                     android:id="@+id/holdings_summary_total_pnl"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textColor="@color/grey_light"
-                    android:textSize="16sp" />
+                    android:textSize="@dimen/text_size_body_large" />
             </LinearLayout>
 
             <LinearLayout
@@ -122,14 +122,14 @@
                     android:layout_height="wrap_content"
                     android:text="@string/portfolio_day_pnl"
                     android:textColor="@color/colorAccent"
-                    android:textSize="12sp" />
+                    android:textSize="@dimen/text_size_label" />
 
                 <TextView
                     android:id="@+id/holdings_summary_day_pnl"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textColor="@color/grey_light"
-                    android:textSize="16sp" />
+                    android:textSize="@dimen/text_size_body_large" />
             </LinearLayout>
         </LinearLayout>
 
@@ -139,21 +139,21 @@
         android:id="@+id/holdings_empty_card"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="16dp"
-        android:layout_marginVertical="12dp"
+        android:layout_marginHorizontal="12dp"
+        android:layout_marginVertical="8dp"
         android:visibility="gone"
         app:cardBackgroundColor="@color/glass_surface_start"
         app:cardCornerRadius="20dp"
         app:cardElevation="3dp"
         app:strokeColor="@color/glass_outline"
-        app:strokeWidth="1dp">
+        app:strokeWidth="@dimen/stroke_hairline">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:orientation="vertical"
-            android:padding="24dp">
+            android:padding="16dp">
 
             <TextView
                 android:layout_width="match_parent"
@@ -161,7 +161,7 @@
                 android:gravity="center"
                 android:text="@string/portfolio_empty_title"
                 android:textColor="@color/on_surface"
-                android:textSize="20sp"
+                android:textSize="@dimen/text_size_title_large"
                 android:textStyle="bold" />
 
             <TextView
@@ -172,7 +172,7 @@
                 android:gravity="center"
                 android:text="@string/portfolio_empty_body"
                 android:textColor="@color/on_surface_variant"
-                android:textSize="15sp" />
+                android:textSize="@dimen/text_size_body" />
 
         </LinearLayout>
 
@@ -181,10 +181,10 @@
     <com.google.android.material.button.MaterialButton
         android:id="@+id/portfolio_add_transaction"
         android:layout_width="match_parent"
-        android:layout_height="52dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="10dp"
+        android:layout_height="48dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="12dp"
+        android:layout_marginBottom="8dp"
         android:text="@string/portfolio_add_transaction"
         android:textAllCaps="false"
         android:textColor="@color/on_brand_primary"

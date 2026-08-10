@@ -11,7 +11,7 @@ class PieMaker(val resProvider: ResourceProvider,
                val holdingsHandler: HoldingsHandler) {
 
     companion object {
-        private val TEXT_SIZE_DP: Float = 17f
+        private const val TEXT_SIZE_SP = 12f
     }
 
     fun makeChart(coinList: ArrayList<Coin>): PieData {
@@ -37,7 +37,7 @@ class PieMaker(val resProvider: ResourceProvider,
 
     private fun setupPieData(pieData: PieData) {
         with (pieData) {
-            setValueTextSize(TEXT_SIZE_DP)
+            setValueTextSize(TEXT_SIZE_SP)
             setValueTextColor(resProvider.getColor(R.color.on_surface))
             setValueFormatter(PercentFormatter())
         }

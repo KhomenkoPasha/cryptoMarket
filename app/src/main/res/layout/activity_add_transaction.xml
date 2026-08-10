@@ -15,9 +15,11 @@
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="48dp"
             android:background="@drawable/bg_appbar_glass"
+            android:minHeight="48dp"
             android:theme="@style/ToolbarColoredBackArrow"
+            app:titleTextAppearance="@style/TextAppearance.Crypto.Toolbar"
             app:titleTextColor="@color/on_surface" />
 
     </com.google.android.material.appbar.AppBarLayout>
@@ -32,7 +34,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="16dp">
+            android:padding="10dp">
 
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
@@ -41,20 +43,20 @@
                 app:cardCornerRadius="20dp"
                 app:cardElevation="4dp"
                 app:strokeColor="@color/glass_outline"
-                app:strokeWidth="1dp">
+                app:strokeWidth="@dimen/stroke_hairline">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="16dp">
+                    android:padding="12dp">
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/portfolio_transaction_details"
                         android:textColor="@color/brand_primary"
-                        android:textSize="20sp"
+                        android:textSize="@dimen/text_size_title_large"
                         android:textStyle="bold" />
 
                     <com.google.android.material.textfield.TextInputLayout
@@ -62,7 +64,7 @@
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
+                        android:layout_marginTop="10dp"
                         android:hint="@string/cryptocurrency">
 
                         <com.google.android.material.textfield.MaterialAutoCompleteTextView
@@ -87,7 +89,7 @@
                             android:layout_height="wrap_content"
                             android:text="@string/current_price"
                             android:textColor="@color/on_surface_variant"
-                            android:textSize="14sp" />
+                            android:textSize="@dimen/text_size_body" />
 
                         <TextView
                             android:id="@+id/add_trans_current_price"
@@ -95,7 +97,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginStart="8dp"
                             android:textColor="@color/on_surface"
-                            android:textSize="16sp"
+                            android:textSize="@dimen/text_size_body_large"
                             android:textStyle="bold"
                             tools:text="$64,000" />
 
@@ -190,7 +192,7 @@
                         android:background="@drawable/bg_input_surface"
                         android:gravity="center_vertical"
                         android:orientation="horizontal"
-                        android:padding="16dp">
+                        android:padding="12dp">
 
                         <TextView
                             android:layout_width="0dp"
@@ -198,14 +200,14 @@
                             android:layout_weight="1"
                             android:text="@string/portfolio_total_spent"
                             android:textColor="@color/on_surface_variant"
-                            android:textSize="15sp" />
+                            android:textSize="@dimen/text_size_body" />
 
                         <TextView
                             android:id="@+id/add_trans_total_value"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textColor="@color/on_surface"
-                            android:textSize="18sp"
+                            android:textSize="@dimen/text_size_title"
                             android:textStyle="bold"
                             tools:text="$2,375.00" />
 
@@ -214,8 +216,8 @@
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/add_trans_confirm_btn"
                         android:layout_width="match_parent"
-                        android:layout_height="52dp"
-                        android:layout_marginTop="16dp"
+                        android:layout_height="48dp"
+                        android:layout_marginTop="12dp"
                         android:text="@string/portfolio_save_transaction"
                         android:textAllCaps="false"
                         android:textColor="@color/on_brand_primary"

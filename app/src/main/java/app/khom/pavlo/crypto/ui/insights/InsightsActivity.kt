@@ -237,7 +237,7 @@ class InsightsActivity : BaseActivity() {
         }
 
         resetSection(binding.marketMoodContainer, getString(R.string.insights_market_mood))
-        addLine(binding.marketMoodContainer, mood, R.color.colorPrimaryDark, 18f, Typeface.BOLD)
+        addLine(binding.marketMoodContainer, mood, R.color.colorPrimaryDark, 14f, Typeface.BOLD)
         addLine(binding.marketMoodContainer, "$positive coins up, $negative down in cached top list.")
         addLine(binding.marketMoodContainer, "Average 24h move: ${formatPercent(average)}.")
         estimateBtcDominance(snapshot.topCoins)?.let {
@@ -270,7 +270,7 @@ class InsightsActivity : BaseActivity() {
                 ((coin.priceRaw - trackedPrice) / trackedPrice) * 100f
             } else null
 
-            addLine(binding.watchlistContainer, coinTitle(coin), R.color.colorPrimaryDark, 16f, Typeface.BOLD)
+            addLine(binding.watchlistContainer, coinTitle(coin), R.color.colorPrimaryDark, 13f, Typeface.BOLD)
             if (trackedDate > 0L) {
                 addLine(binding.watchlistContainer,
                         "Tracked since ${dateFormat.format(Date(trackedDate))}" +
@@ -309,7 +309,7 @@ class InsightsActivity : BaseActivity() {
         }
 
         rows.forEach {
-            addLine(binding.compareContainer, it.name, R.color.colorPrimaryDark, 16f, Typeface.BOLD)
+            addLine(binding.compareContainer, it.name, R.color.colorPrimaryDark, 13f, Typeface.BOLD)
             addLine(binding.compareContainer, "Price: ${it.price}   24h: ${it.move24h}")
             addLine(binding.compareContainer, "Volume: ${it.volume}")
             addLine(binding.compareContainer, "Market cap: ${it.marketCap}")
@@ -335,7 +335,7 @@ class InsightsActivity : BaseActivity() {
     private fun renderNewsImpact(favorites: List<Coin>) {
         resetSection(binding.newsImpactContainer, getString(R.string.insights_news_impact))
         addLine(binding.newsImpactContainer, "Suggested news filters: ${buildNewsFocus(favorites)}")
-        addLine(binding.newsImpactContainer, "Saved news note", R.color.colorPrimaryDark, 16f, Typeface.BOLD)
+        addLine(binding.newsImpactContainer, "Saved news note", R.color.colorPrimaryDark, 13f, Typeface.BOLD)
         addNewsNoteEditor()
     }
 
@@ -392,16 +392,16 @@ class InsightsActivity : BaseActivity() {
                 setTextColor(resProvider.getColor(R.color.on_surface))
                 setHintTextColor(resProvider.getColor(R.color.on_surface_variant))
                 setBackgroundResource(R.drawable.bg_input_surface)
-                setPadding(dp(16), dp(12), dp(16), dp(12))
+                setPadding(dp(12), dp(10), dp(12), dp(10))
             }
 
     private fun resetSection(container: LinearLayout, title: String) {
         container.removeAllViews()
-        addLine(container, title, R.color.brand_primary, 20f, Typeface.BOLD)
+        addLine(container, title, R.color.brand_primary, 14f, Typeface.BOLD)
     }
 
     private fun addTerm(term: String, definition: String) {
-        addLine(binding.glossaryContainer, term, R.color.on_surface, 16f, Typeface.BOLD)
+        addLine(binding.glossaryContainer, term, R.color.on_surface, 13f, Typeface.BOLD)
         addLine(binding.glossaryContainer, definition)
     }
 
@@ -413,7 +413,7 @@ class InsightsActivity : BaseActivity() {
             container: LinearLayout,
             text: String,
             color: Int = R.color.secondary_text,
-            size: Float = 14f,
+            size: Float = 12f,
             style: Int = Typeface.NORMAL
     ) {
         container.addView(TextView(this).apply {
@@ -422,7 +422,7 @@ class InsightsActivity : BaseActivity() {
             setTypeface(typeface, style)
             setTextColor(resProvider.getColor(color))
             setLineSpacing(dp(2).toFloat(), 1f)
-        }, wrapParams(if (size >= 18f) 10 else 5))
+        }, wrapParams(if (size >= 14f) 7 else 4))
     }
 
     private fun setContentEnabled(isEnabled: Boolean) {

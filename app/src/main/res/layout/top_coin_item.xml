@@ -5,13 +5,13 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginStart="10dp"
-    android:layout_marginTop="5dp"
+    android:layout_marginTop="4dp"
     android:layout_marginEnd="10dp"
-    android:layout_marginBottom="5dp"
+    android:layout_marginBottom="4dp"
     android:background="@drawable/bg_card_surface"
     android:elevation="2dp"
     android:orientation="vertical"
-    android:padding="14dp">
+    android:padding="10dp">
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -25,7 +25,7 @@
             android:background="@drawable/back_for_rate"
             android:gravity="center_horizontal|center_vertical"
             android:textColor="@color/accent"
-            android:textSize="14sp"
+            android:textSize="@dimen/text_size_body"
             android:textStyle="bold"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -34,8 +34,8 @@
 
         <ImageView
             android:id="@+id/top_coin_logo"
-            android:layout_width="25dp"
-            android:layout_height="25dp"
+            android:layout_width="22dp"
+            android:layout_height="22dp"
             android:contentDescription="@null"
             android:layout_marginStart="5dp"
             app:layout_constraintStart_toEndOf="@+id/top_coin_rank"
@@ -52,7 +52,7 @@
             android:maxLines="1"
             android:textColor="@color/on_surface"
             android:textStyle="bold"
-            android:textSize="18sp"
+            android:textSize="@dimen/text_size_title"
             app:layout_constraintStart_toEndOf="@+id/top_coin_logo"
             app:layout_constraintEnd_toStartOf="@+id/top_coin_currency_sign"
             app:layout_constraintTop_toTopOf="parent"
@@ -76,7 +76,7 @@
             android:layout_marginEnd="8dp"
             android:textColor="@color/brand_primary"
             android:textStyle="bold"
-            android:textSize="18sp"
+            android:textSize="@dimen/text_size_title"
             app:layout_constraintEnd_toStartOf="@+id/top_coin_24h_pct"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -88,7 +88,7 @@
             android:layout_height="wrap_content"
             android:text="@string/dollar_sign"
             android:textColor="@color/on_surface_variant"
-            android:textSize="18sp"
+            android:textSize="@dimen/text_size_title"
             app:layout_constraintEnd_toStartOf="@+id/top_coin_price"
             app:layout_constraintTop_toTopOf="@+id/top_coin_price"
             app:layout_constraintBottom_toBottomOf="@+id/top_coin_price" />
@@ -209,7 +209,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="end|center_vertical"
         android:gravity="end|center_vertical"
-        android:padding="8dp">
+        android:padding="4dp">
 
         <TextView
             android:layout_width="wrap_content"

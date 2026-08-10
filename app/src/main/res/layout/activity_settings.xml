@@ -18,9 +18,11 @@
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="48dp"
             android:background="@drawable/bg_appbar_glass"
+            android:minHeight="48dp"
             android:theme="@style/ToolbarColoredBackArrow"
+            app:titleTextAppearance="@style/TextAppearance.Crypto.Toolbar"
             app:titleTextColor="@color/on_surface" />
 
     </com.google.android.material.appbar.AppBarLayout>
@@ -67,7 +69,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
             android:textColor="@color/on_surface_variant"
-            android:textSize="14sp"
+            android:textSize="@dimen/text_size_body"
             app:layout_constraintBottom_toTopOf="@+id/line_bottom_of_lang"
             app:layout_constraintStart_toEndOf="@id/language_icon"
             app:layout_constraintTop_toBottomOf="@+id/language_title"

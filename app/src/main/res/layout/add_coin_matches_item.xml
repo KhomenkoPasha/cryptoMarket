@@ -35,7 +35,7 @@
             android:layout_marginEnd="5dp"
             android:textColor="@color/brand_primary"
             android:textStyle="bold"
-            android:textSize="18sp"
+            android:textSize="@dimen/text_size_title"
             tools:text="BTC" />
 
         <TextView
@@ -43,7 +43,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/on_surface"
-            android:textSize="18sp"
+            android:textSize="@dimen/text_size_title"
             tools:text="Bitcoin" />
 
     </LinearLayout>

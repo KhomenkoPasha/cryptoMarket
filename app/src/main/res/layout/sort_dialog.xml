@@ -14,7 +14,7 @@
         android:padding="14dp"
         android:text="@string/sort_by"
         android:textColor="@color/on_primary_container"
-        android:textSize="18sp" />
+        android:textSize="@dimen/text_size_title" />
 
     <RadioGroup
         android:id="@+id/radio_group"

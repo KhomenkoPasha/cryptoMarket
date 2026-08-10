@@ -32,6 +32,21 @@
         <item name="shapeAppearanceSmallComponent">@style/ShapeAppearance.Crypto.Small</item>
         <item name="shapeAppearanceMediumComponent">@style/ShapeAppearance.Crypto.Medium</item>
         <item name="shapeAppearanceLargeComponent">@style/ShapeAppearance.Crypto.Large</item>
+        <item name="textAppearanceDisplayLarge">@style/TextAppearance.Crypto.Display</item>
+        <item name="textAppearanceDisplayMedium">@style/TextAppearance.Crypto.Display</item>
+        <item name="textAppearanceDisplaySmall">@style/TextAppearance.Crypto.Headline</item>
+        <item name="textAppearanceHeadlineLarge">@style/TextAppearance.Crypto.Headline</item>
+        <item name="textAppearanceHeadlineMedium">@style/TextAppearance.Crypto.TitleLarge</item>
+        <item name="textAppearanceHeadlineSmall">@style/TextAppearance.Crypto.Title</item>
+        <item name="textAppearanceTitleLarge">@style/TextAppearance.Crypto.TitleLarge</item>
+        <item name="textAppearanceTitleMedium">@style/TextAppearance.Crypto.Title</item>
+        <item name="textAppearanceTitleSmall">@style/TextAppearance.Crypto.BodyLarge</item>
+        <item name="textAppearanceBodyLarge">@style/TextAppearance.Crypto.BodyLarge</item>
+        <item name="textAppearanceBodyMedium">@style/TextAppearance.Crypto.Body</item>
+        <item name="textAppearanceBodySmall">@style/TextAppearance.Crypto.Label</item>
+        <item name="textAppearanceLabelLarge">@style/TextAppearance.Crypto.Body</item>
+        <item name="textAppearanceLabelMedium">@style/TextAppearance.Crypto.Label</item>
+        <item name="textAppearanceLabelSmall">@style/TextAppearance.Crypto.Micro</item>
     </style>
 
     <style name="ToolbarColoredBackArrow" parent="ThemeOverlay.Material3.Dark.ActionBar">
@@ -50,13 +65,13 @@
         <item name="android:textColor">@color/on_surface</item>
         <item name="android:textColorHint">@color/on_surface_variant</item>
         <item name="android:background">@drawable/bg_input_surface</item>
-        <item name="android:padding">16dp</item>
+        <item name="android:padding">12dp</item>
         <item name="android:textStyle">normal</item>
-        <item name="android:textSize">16sp</item>
+        <item name="android:textSize">@dimen/text_size_body_large</item>
     </style>
 
     <style name="MyRadioButton" >
-        <item name="android:textSize">18sp</item>
+        <item name="android:textSize">@dimen/text_size_body</item>
         <item name="colorAccent">@color/brand_primary</item>
         <item name="android:textColor">@color/on_surface</item>
     </style>
@@ -66,9 +81,45 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:orientation">vertical</item>
         <item name="android:background">@drawable/bg_card_surface</item>
-        <item name="android:elevation">3dp</item>
-        <item name="android:padding">16dp</item>
-        <item name="android:layout_marginTop">10dp</item>
+        <item name="android:elevation">2dp</item>
+        <item name="android:padding">12dp</item>
+        <item name="android:layout_marginTop">8dp</item>
+    </style>
+
+    <style name="TextAppearance.Crypto.Display" parent="TextAppearance.Material3.DisplaySmall">
+        <item name="android:textSize">@dimen/text_size_display</item>
+    </style>
+
+    <style name="TextAppearance.Crypto.Headline" parent="TextAppearance.Material3.HeadlineSmall">
+        <item name="android:textSize">@dimen/text_size_headline</item>
+    </style>
+
+    <style name="TextAppearance.Crypto.TitleLarge" parent="TextAppearance.Material3.TitleLarge">
+        <item name="android:textSize">@dimen/text_size_title_large</item>
+    </style>
+
+    <style name="TextAppearance.Crypto.Title" parent="TextAppearance.Material3.TitleMedium">
+        <item name="android:textSize">@dimen/text_size_title</item>
+    </style>
+
+    <style name="TextAppearance.Crypto.BodyLarge" parent="TextAppearance.Material3.BodyLarge">
+        <item name="android:textSize">@dimen/text_size_body_large</item>
+    </style>
+
+    <style name="TextAppearance.Crypto.Body" parent="TextAppearance.Material3.BodyMedium">
+        <item name="android:textSize">@dimen/text_size_body</item>
+    </style>
+
+    <style name="TextAppearance.Crypto.Label" parent="TextAppearance.Material3.LabelMedium">
+        <item name="android:textSize">@dimen/text_size_label</item>
+    </style>
+
+    <style name="TextAppearance.Crypto.Micro" parent="TextAppearance.Material3.LabelSmall">
+        <item name="android:textSize">@dimen/text_size_micro</item>
+    </style>
+
+    <style name="TextAppearance.Crypto.Toolbar" parent="TextAppearance.Material3.TitleLarge">
+        <item name="android:textSize">@dimen/text_size_title</item>
     </style>
 
     <style name="ShapeAppearance.Crypto.Small" parent="ShapeAppearance.Material3.Corner.Medium">

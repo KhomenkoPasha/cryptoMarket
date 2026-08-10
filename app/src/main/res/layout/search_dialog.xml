@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:text="@string/news_search_title"
         android:textColor="@color/brand_primary"
-        android:textSize="20sp"
+        android:textSize="@dimen/text_size_title"
         android:textStyle="bold" />
 
     <com.google.android.material.textfield.TextInputLayout
