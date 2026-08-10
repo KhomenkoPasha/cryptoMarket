@@ -188,6 +188,41 @@ class ParserTest {
     }
 
     @Test
+    fun `CoinPaprika fallback response deserializes every required field`() {
+        val ticker = Gson().fromJson(
+            """
+            [
+              {
+                "id": "btc-bitcoin",
+                "name": "Bitcoin",
+                "symbol": "BTC",
+                "rank": 1,
+                "total_supply": 21000000,
+                "last_updated": "2026-08-09T00:00:00Z",
+                "quotes": {
+                  "USD": {
+                    "price": 100000,
+                    "volume_24h": 50000000000,
+                    "market_cap": 2000000000000,
+                    "percent_change_1h": 0.5,
+                    "percent_change_24h": 2.5,
+                    "percent_change_7d": 4.5
+                  }
+                }
+              }
+            ]
+            """.trimIndent(),
+            Array<CoinPaprikaTicker>::class.java
+        ).single()
+
+        assertEquals("btc-bitcoin", ticker.id)
+        assertEquals("BTC", ticker.symbol)
+        assertEquals(1, ticker.rank)
+        assertEquals(100_000.0, ticker.quotes?.usd?.price ?: 0.0, 0.0)
+        assertEquals(2.5, ticker.quotes?.usd?.percent_change_24h ?: 0.0, 0.0)
+    }
+
+    @Test
     fun `CoinPaprika tickers map and sort by rank`() {
         val tickers = listOf(
             CoinPaprikaTicker(

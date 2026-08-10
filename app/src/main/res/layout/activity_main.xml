@@ -14,29 +14,35 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/bg_appbar_glass"
-            app:elevation="6dp"
+            app:elevation="3dp"
             android:fitsSystemWindows="true">
 
             <androidx.appcompat.widget.Toolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="48dp"
                 android:background="@android:color/transparent"
+                android:minHeight="48dp"
                 android:theme="@style/ToolbarColoredBackArrow"
+                app:titleTextAppearance="@style/TextAppearance.Crypto.Toolbar"
                 app:titleTextColor="@color/on_surface" />
 
             <com.google.android.material.tabs.TabLayout
                 android:id="@+id/tabs"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="42dp"
                 android:background="@android:color/transparent"
-                app:tabGravity="start"
-                app:tabMode="scrollable"
+                android:minHeight="42dp"
+                app:tabGravity="fill"
+                app:tabIconTint="@color/tab_item_tint"
                 app:tabIndicator="@drawable/tab_indicator"
                 app:tabIndicatorFullWidth="false"
-                app:tabIndicatorHeight="3dp"
-                app:tabIconTint="@color/tab_item_tint"
-                app:tabInlineLabel="true"
+                app:tabIndicatorHeight="@dimen/stroke_hairline"
+                app:tabInlineLabel="false"
+                app:tabMinWidth="0dp"
+                app:tabMode="fixed"
+                app:tabPaddingEnd="0dp"
+                app:tabPaddingStart="0dp"
                 app:tabRippleColor="@color/ripple"
                 app:tabSelectedTextColor="@color/brand_primary"
                 app:tabTextColor="@color/on_surface_variant" />

@@ -44,6 +44,18 @@ class SupportedLanguagesResourcesTest {
         )
     }
 
+    @Test
+    fun ukrainianSettingsResourcesAreLocalized() {
+        val ukrainianContext = localizedContext(SupportedLanguages.UKRAINIAN)
+
+        assertEquals("Налаштування", ukrainianContext.getString(R.string.settings))
+        assertEquals("Мова", ukrainianContext.getString(R.string.language))
+        assertEquals("Вартість активів", ukrainianContext.getString(R.string.total_holdings))
+        assertEquals("Розподіл", ukrainianContext.getString(R.string.allocations))
+        assertEquals("прибуток", ukrainianContext.getString(R.string.profit))
+        assertEquals("збиток", ukrainianContext.getString(R.string.loss))
+    }
+
     private fun localizedContext(tag: String): Context {
         val configuration = Configuration(context.resources.configuration)
         configuration.setLocale(Locale.forLanguageTag(tag))

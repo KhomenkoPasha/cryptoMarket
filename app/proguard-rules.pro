@@ -30,4 +30,15 @@
 -keep class app.khom.pavlo.crypto.model.HistoData { *; }
 -keep class app.khom.pavlo.crypto.model.PairData { *; }
 -keep class app.khom.pavlo.crypto.model.TopCoinData { *; }
--keep class app.khom.pavlo.crypto.ui.news.NewsItem { *; }
+
+# CoinPaprika is the no-key fallback used when CryptoCompare rejects or limits a
+# request. Its response models use Gson reflection, so their fields must survive R8.
+-keep class app.khom.pavlo.crypto.model.CoinPaprikaTicker { *; }
+-keep class app.khom.pavlo.crypto.model.CoinPaprikaQuotes { *; }
+-keep class app.khom.pavlo.crypto.model.CoinPaprikaQuote { *; }
+
+# Backup documents are also serialized and restored through Gson reflection.
+-keep class app.khom.pavlo.crypto.model.backup.AppBackupDocument { *; }
+-keep class app.khom.pavlo.crypto.model.backup.FavoriteBackup { *; }
+-keep class app.khom.pavlo.crypto.model.backup.TransactionBackup { *; }
+-keep class app.khom.pavlo.crypto.model.backup.PreferenceBackup { *; }

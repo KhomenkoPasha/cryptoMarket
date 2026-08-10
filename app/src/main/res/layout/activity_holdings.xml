@@ -14,8 +14,10 @@
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="48dp"
+            android:minHeight="48dp"
             android:theme="@style/ToolbarColoredBackArrow"
+            app:titleTextAppearance="@style/TextAppearance.Crypto.Toolbar"
             app:titleTextColor="@color/on_surface"
             android:background="@drawable/bg_appbar_glass"/>
 
@@ -25,11 +27,11 @@
         android:id="@+id/holdings_summary_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="12dp"
+        android:layout_margin="8dp"
         android:background="@drawable/bg_hero_card"
-        android:elevation="6dp"
+        android:elevation="3dp"
         android:orientation="vertical"
-        android:padding="18dp"
+        android:padding="12dp"
         android:visibility="gone">
 
         <TextView
@@ -37,7 +39,7 @@
             android:layout_height="wrap_content"
             android:text="@string/portfolio_tracker"
             android:textColor="@color/brand_primary"
-            android:textSize="18sp"
+            android:textSize="@dimen/text_size_title"
             android:textStyle="bold" />
 
         <LinearLayout
@@ -58,14 +60,14 @@
                     android:layout_height="wrap_content"
                     android:text="@string/portfolio_current_value"
                     android:textColor="@color/colorAccent"
-                    android:textSize="12sp" />
+                    android:textSize="@dimen/text_size_label" />
 
                 <TextView
                     android:id="@+id/holdings_summary_current_value"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textColor="@color/grey_light"
-                    android:textSize="18sp"
+                    android:textSize="@dimen/text_size_title"
                     android:textStyle="bold" />
             </LinearLayout>
 
@@ -81,14 +83,14 @@
                     android:layout_height="wrap_content"
                     android:text="@string/portfolio_invested"
                     android:textColor="@color/colorAccent"
-                    android:textSize="12sp" />
+                    android:textSize="@dimen/text_size_label" />
 
                 <TextView
                     android:id="@+id/holdings_summary_invested"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textColor="@color/grey_light"
-                    android:textSize="18sp"
+                    android:textSize="@dimen/text_size_title"
                     android:textStyle="bold" />
             </LinearLayout>
         </LinearLayout>
@@ -111,14 +113,14 @@
                     android:layout_height="wrap_content"
                     android:text="@string/portfolio_total_pnl"
                     android:textColor="@color/colorAccent"
-                    android:textSize="12sp" />
+                    android:textSize="@dimen/text_size_label" />
 
                 <TextView
                     android:id="@+id/holdings_summary_total_pnl"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textColor="@color/grey_light"
-                    android:textSize="16sp" />
+                    android:textSize="@dimen/text_size_body_large" />
             </LinearLayout>
 
             <LinearLayout
@@ -133,14 +135,14 @@
                     android:layout_height="wrap_content"
                     android:text="@string/portfolio_day_pnl"
                     android:textColor="@color/colorAccent"
-                    android:textSize="12sp" />
+                    android:textSize="@dimen/text_size_label" />
 
                 <TextView
                     android:id="@+id/holdings_summary_day_pnl"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textColor="@color/grey_light"
-                    android:textSize="16sp" />
+                    android:textSize="@dimen/text_size_body_large" />
             </LinearLayout>
         </LinearLayout>
 
@@ -164,10 +166,10 @@
         android:layout_marginVertical="12dp"
         android:background="@drawable/bg_card_surface"
         android:gravity="center"
-        android:padding="24dp"
+        android:padding="16dp"
         android:text="@string/portfolio_empty"
         android:textColor="@color/grey_light"
-        android:textSize="18sp"
+        android:textSize="@dimen/text_size_body"
         android:visibility="gone" />
 
     <androidx.recyclerview.widget.RecyclerView

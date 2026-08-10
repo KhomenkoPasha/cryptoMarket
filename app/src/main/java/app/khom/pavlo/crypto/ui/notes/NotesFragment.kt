@@ -132,7 +132,7 @@ class NotesFragment : Fragment() {
                     container,
                     getString(R.string.notes_empty_favorites),
                     R.color.on_surface_variant,
-                    18f,
+                    14f,
                     topMarginDp = 10
             )
             return
@@ -147,7 +147,7 @@ class NotesFragment : Fragment() {
                 cardContent,
                 coinTitle(coin),
                 R.color.on_surface,
-                17f,
+                14f,
                 Typeface.BOLD,
                 topMarginDp = 0
         )
@@ -155,7 +155,7 @@ class NotesFragment : Fragment() {
                 cardContent,
                 coinMeta(coin),
                 R.color.on_surface_variant,
-                13f,
+                12f,
                 topMarginDp = 6
         )
 
@@ -165,7 +165,7 @@ class NotesFragment : Fragment() {
                     cardContent,
                     getString(R.string.notes_tracked_since, dateFormat.format(Date(trackedDate))),
                     R.color.on_surface_variant,
-                    13f,
+                    12f,
                     topMarginDp = 3
             )
         }
@@ -275,13 +275,13 @@ class NotesFragment : Fragment() {
         gravity = Gravity.TOP or Gravity.START
         minLines = 2
         maxLines = 5
-        minHeight = dp(92)
+        minHeight = dp(76)
         setSingleLine(false)
-        textSize = 16f
+        textSize = 12f
         setTextColor(resProvider.getColor(R.color.on_surface))
         setHintTextColor(resProvider.getColor(R.color.on_surface_variant))
         setBackgroundResource(R.drawable.bg_input_surface)
-        setPadding(dp(16), dp(14), dp(16), dp(14))
+        setPadding(dp(12), dp(10), dp(12), dp(10))
         setText(note)
         setSelection(text.length)
     }
@@ -294,10 +294,10 @@ class NotesFragment : Fragment() {
     ) {
         val noteText = TextView(requireContext()).apply {
             text = note
-            textSize = 15f
+            textSize = 12f
             setTextColor(resProvider.getColor(R.color.on_surface))
             setLineSpacing(dp(2).toFloat(), 1f)
-            setPadding(dp(14), dp(12), dp(6), dp(12))
+            setPadding(dp(12), dp(8), dp(4), dp(8))
         }
         val actions = LinearLayout(requireContext()).apply {
             orientation = LinearLayout.HORIZONTAL
@@ -339,7 +339,7 @@ class NotesFragment : Fragment() {
         val noteCard = MaterialCardView(requireContext()).apply {
             radius = dp(14).toFloat()
             cardElevation = 0f
-            strokeWidth = dp(1)
+            strokeWidth = resources.getDimensionPixelSize(R.dimen.stroke_hairline)
             strokeColor = resProvider.getColor(R.color.glass_outline)
             setCardBackgroundColor(resProvider.getColor(R.color.glass_surface_high))
             addView(
@@ -438,12 +438,12 @@ class NotesFragment : Fragment() {
     private fun addCard(parent: LinearLayout, topMarginDp: Int): LinearLayout {
         val content = LinearLayout(requireContext()).apply {
             orientation = LinearLayout.VERTICAL
-            setPadding(dp(16), dp(16), dp(16), dp(16))
+            setPadding(dp(12), dp(12), dp(12), dp(12))
         }
         val card = MaterialCardView(requireContext()).apply {
-            radius = dp(20).toFloat()
-            cardElevation = dp(3).toFloat()
-            strokeWidth = dp(1)
+            radius = dp(16).toFloat()
+            cardElevation = dp(2).toFloat()
+            strokeWidth = resources.getDimensionPixelSize(R.dimen.stroke_hairline)
             strokeColor = resProvider.getColor(R.color.glass_outline)
             setCardBackgroundColor(resProvider.getColor(R.color.glass_surface_start))
             addView(
@@ -459,13 +459,13 @@ class NotesFragment : Fragment() {
     }
 
     private fun addTitle(text: String, topMarginDp: Int = 0) {
-        addText(text, R.color.brand_primary, 20f, Typeface.BOLD, topMarginDp)
+        addText(text, R.color.brand_primary, 14f, Typeface.BOLD, topMarginDp)
     }
 
     private fun addText(
             text: String,
             color: Int = R.color.secondary_text,
-            size: Float = 14f,
+            size: Float = 12f,
             style: Int = Typeface.NORMAL,
             topMarginDp: Int = 5
     ) {
@@ -476,7 +476,7 @@ class NotesFragment : Fragment() {
             parent: LinearLayout,
             text: String,
             color: Int = R.color.secondary_text,
-            size: Float = 14f,
+            size: Float = 12f,
             style: Int = Typeface.NORMAL,
             topMarginDp: Int = 5
     ) {
@@ -515,7 +515,7 @@ class NotesFragment : Fragment() {
         binding.notesSwipeRefresh.isRefreshing = false
         val container = coinNotesContainer ?: return
         container.removeAllViews()
-        addText(container, getString(R.string.error), R.color.negative, 20f, Typeface.BOLD, 12)
+        addText(container, getString(R.string.error), R.color.negative, 14f, Typeface.BOLD, 12)
     }
 
     private fun coinTitle(coin: Coin): String =

@@ -1,5 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="backup_progress_height">96dp</dimen>
-    <dimen name="spacing_small">8dp</dimen>
+    <dimen name="backup_progress_height">80dp</dimen>
+    <dimen name="spacing_small">6dp</dimen>
+    <dimen name="stroke_hairline">0.5dp</dimen>
+
+    <dimen name="text_size_display">18sp</dimen>
+    <dimen name="text_size_headline">16sp</dimen>
+    <dimen name="text_size_title_large">15sp</dimen>
+    <dimen name="text_size_title">14sp</dimen>
+    <dimen name="text_size_body_large">13sp</dimen>
+    <dimen name="text_size_body">12sp</dimen>
+    <dimen name="text_size_label">11sp</dimen>
+    <dimen name="text_size_micro">10sp</dimen>
 </resources>
