@@ -3,6 +3,6 @@
     style="@style/MyRadioButton"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:minHeight="48dp"
-    android:paddingStart="8dp"
-    android:paddingEnd="8dp" />
+    android:minHeight="44dp"
+    android:paddingStart="6dp"
+    android:paddingEnd="6dp" />

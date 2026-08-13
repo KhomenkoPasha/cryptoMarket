@@ -10,6 +10,7 @@ import app.khom.pavlo.crypto.databinding.SortDialogBinding
 import app.khom.pavlo.crypto.model.CoinSort
 import app.khom.pavlo.crypto.model.rxbus.CoinsSortMethodUpdated
 import app.khom.pavlo.crypto.model.rxbus.RxBus
+import app.khom.pavlo.crypto.ui.common.applyAppDialogWindow
 
 
 class SortDialog : DialogFragment() {
@@ -47,6 +48,11 @@ class SortDialog : DialogFragment() {
                 R.id.sort_dialog_by_24h_price_decrease -> selectedSort = CoinSort.CHANGE_24H_DESCENDING
             }
         }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        applyAppDialogWindow()
     }
 
     private fun onOkClicked() {

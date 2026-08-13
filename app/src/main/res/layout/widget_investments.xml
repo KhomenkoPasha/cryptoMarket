@@ -14,12 +14,14 @@
         android:orientation="horizontal">
 
         <ImageView
+            android:id="@+id/widget_investments_icon"
             android:layout_width="18dp"
             android:layout_height="18dp"
             android:contentDescription="@string/widget_investments_title"
             android:src="@drawable/ic_widget_investments" />
 
         <TextView
+            android:id="@+id/widget_investments_title"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -32,6 +34,7 @@
             android:textStyle="bold" />
 
         <TextView
+            android:id="@+id/widget_investments_empty_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/widget_investments_open"
@@ -50,6 +53,7 @@
         android:visibility="gone">
 
         <TextView
+            android:id="@+id/widget_investments_empty_hint"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
@@ -75,6 +79,7 @@
         android:orientation="vertical">
 
         <TextView
+            android:id="@+id/widget_investments_current_value_label"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
@@ -107,6 +112,7 @@
                 android:orientation="vertical">
 
                 <TextView
+                    android:id="@+id/widget_investments_invested_label"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/widget_investments_invested"
@@ -133,6 +139,7 @@
                 android:orientation="vertical">
 
                 <TextView
+                    android:id="@+id/widget_investments_total_return_label"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/widget_investments_total_return"
@@ -154,6 +161,7 @@
         </LinearLayout>
 
         <TextView
+            android:id="@+id/widget_investments_positions_label"
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_marginTop="9dp"

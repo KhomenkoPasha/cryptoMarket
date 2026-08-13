@@ -10,6 +10,7 @@ import android.widget.RemoteViews
 import androidx.core.content.ContextCompat
 import app.khom.pavlo.crypto.R
 import app.khom.pavlo.crypto.model.Coin
+import app.khom.pavlo.crypto.model.LocaleManager
 import app.khom.pavlo.crypto.model.NAME
 import app.khom.pavlo.crypto.model.TO
 import app.khom.pavlo.crypto.ui.coinInfo.CoinInfoActivity
@@ -63,6 +64,7 @@ object FavoritesWidgetUpdater {
         coinsCached: List<Coin>?
     ) {
         if (appWidgetIds.isEmpty()) return
+        val localizedContext = LocaleManager.setLocale(context)
         val coins = coinsCached ?: loadCoins(context.applicationContext)
         val maxVisible = maxItems.coerceAtMost(coins.size)
         val rowIds = getRowIds(maxItems)
@@ -80,6 +82,20 @@ object FavoritesWidgetUpdater {
 
         appWidgetIds.forEach { appWidgetId ->
             val views = RemoteViews(context.packageName, layoutResId)
+            views.setTextViewText(
+                R.id.widget_title,
+                localizedContext.getString(
+                    if (layoutResId == R.layout.widget_favorites_small) {
+                        R.string.widget_favorites_title_small
+                    } else {
+                        R.string.widget_favorites_title_large
+                    }
+                )
+            )
+            views.setTextViewText(
+                R.id.widget_empty,
+                localizedContext.getString(R.string.widget_empty_favorites)
+            )
             views.setOnClickPendingIntent(R.id.widget_root, launchPendingIntent)
 
             if (coins.isEmpty()) {

@@ -29,6 +29,8 @@
         <item name="android:textColorSecondary">@color/on_surface_variant</item>
         <item name="colorControlNormal">@color/on_surface_variant</item>
         <item name="colorAccent">@color/brand_primary</item>
+        <item name="materialAlertDialogTheme">@style/ThemeOverlay.Crypto.MaterialAlertDialog</item>
+        <item name="android:datePickerDialogTheme">@style/Theme.Crypto.DatePickerDialog</item>
         <item name="shapeAppearanceSmallComponent">@style/ShapeAppearance.Crypto.Small</item>
         <item name="shapeAppearanceMediumComponent">@style/ShapeAppearance.Crypto.Medium</item>
         <item name="shapeAppearanceLargeComponent">@style/ShapeAppearance.Crypto.Large</item>
@@ -54,6 +56,30 @@
         <item name="colorControlNormal">@color/on_surface</item>
     </style>
 
+    <style name="ThemeOverlay.Crypto.PopupMenu" parent="ThemeOverlay.Material3.Dark">
+        <item name="colorSurface">@color/surface_container_high</item>
+        <item name="colorOnSurface">@color/on_surface</item>
+        <item name="android:colorBackground">@color/surface_container_high</item>
+        <item name="android:textColorPrimary">@color/on_surface</item>
+        <item name="android:listPreferredItemHeightSmall">38dp</item>
+        <item name="popupMenuBackground">@drawable/bg_popup_surface</item>
+        <item name="popupMenuStyle">@style/Widget.Crypto.PopupMenu</item>
+        <item name="textAppearanceLargePopupMenu">@style/TextAppearance.Crypto.PopupMenu</item>
+        <item name="textAppearanceSmallPopupMenu">@style/TextAppearance.Crypto.PopupMenu</item>
+    </style>
+
+    <style name="Widget.Crypto.PopupMenu" parent="Widget.Material3.PopupMenu">
+        <item name="android:popupBackground">@drawable/bg_popup_surface</item>
+        <item name="popupMenuBackground">@drawable/bg_popup_surface</item>
+        <item name="android:popupElevation">10dp</item>
+    </style>
+
+    <style name="TextAppearance.Crypto.PopupMenu" parent="TextAppearance.Material3.BodyMedium">
+        <item name="android:textColor">@color/on_surface</item>
+        <item name="android:textSize">@dimen/text_size_label</item>
+        <item name="android:textStyle">normal</item>
+    </style>
+
     <style name="SplashTheme" parent="Theme.SplashScreen">
         <item name="windowSplashScreenBackground">@color/app_background</item>
         <item name="windowSplashScreenAnimatedIcon">@drawable/splash_logo</item>
@@ -70,10 +96,13 @@
         <item name="android:textSize">@dimen/text_size_body_large</item>
     </style>
 
-    <style name="MyRadioButton" >
+    <style name="MyRadioButton" parent="Widget.Material3.CompoundButton.RadioButton">
         <item name="android:textSize">@dimen/text_size_body</item>
-        <item name="colorAccent">@color/brand_primary</item>
+        <item name="android:buttonTint">@color/dialog_radio_tint</item>
+        <item name="android:background">?attr/selectableItemBackground</item>
+        <item name="android:minHeight">44dp</item>
         <item name="android:textColor">@color/on_surface</item>
+        <item name="android:textStyle">normal</item>
     </style>
 
     <style name="InsightsSection">
@@ -137,5 +166,82 @@
     <style name="ShapeAppearanceOverlay.Crypto.NewsImage" parent="">
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">16dp</item>
+    </style>
+
+    <style name="ThemeOverlay.Crypto.MaterialAlertDialog" parent="ThemeOverlay.Material3.MaterialAlertDialog">
+        <item name="colorPrimary">@color/brand_primary</item>
+        <item name="colorSurface">@color/dialog_surface</item>
+        <item name="colorOnSurface">@color/on_surface</item>
+        <item name="colorOnSurfaceVariant">@color/on_surface_variant</item>
+        <item name="android:colorBackground">@color/dialog_surface</item>
+        <item name="alertDialogStyle">@style/MaterialAlertDialog.Crypto</item>
+        <item name="shapeAppearanceOverlay">@style/ShapeAppearanceOverlay.Crypto.Dialog</item>
+        <item name="materialAlertDialogTitleTextStyle">@style/TextAppearance.Crypto.Dialog.Title</item>
+        <item name="materialAlertDialogBodyTextStyle">@style/TextAppearance.Crypto.Dialog.Body</item>
+        <item name="buttonBarPositiveButtonStyle">@style/Widget.Crypto.DialogButton.Positive</item>
+        <item name="buttonBarNegativeButtonStyle">@style/Widget.Crypto.DialogButton.Negative</item>
+        <item name="buttonBarNeutralButtonStyle">@style/Widget.Crypto.DialogButton.Negative</item>
+    </style>
+
+    <style name="MaterialAlertDialog.Crypto" parent="MaterialAlertDialog.Material3">
+        <item name="backgroundTint">@color/dialog_surface</item>
+        <item name="shapeAppearance">@style/ShapeAppearanceOverlay.Crypto.Dialog</item>
+    </style>
+
+    <style name="ShapeAppearanceOverlay.Crypto.Dialog" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">22dp</item>
+    </style>
+
+    <style name="TextAppearance.Crypto.Dialog.Title" parent="MaterialAlertDialog.Material3.Title.Text">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/brand_primary</item>
+        <item name="android:textSize">@dimen/text_size_title</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:singleLine">false</item>
+        <item name="android:maxLines">3</item>
+    </style>
+
+    <style name="TextAppearance.Crypto.Dialog.Body" parent="MaterialAlertDialog.Material3.Body.Text">
+        <item name="android:textColor">@color/on_surface_variant</item>
+        <item name="android:textSize">@dimen/text_size_body</item>
+        <item name="android:textStyle">normal</item>
+    </style>
+
+    <style name="Widget.Crypto.DialogButton.Positive" parent="Widget.Material3.Button.TextButton.Dialog">
+        <item name="android:minHeight">40dp</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textColor">@color/brand_primary</item>
+        <item name="android:textSize">@dimen/text_size_body</item>
+    </style>
+
+    <style name="Widget.Crypto.DialogButton.Negative" parent="Widget.Material3.Button.TextButton.Dialog">
+        <item name="android:minHeight">40dp</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textColor">@color/on_surface_variant</item>
+        <item name="android:textSize">@dimen/text_size_body</item>
+    </style>
+
+    <style name="TextAppearance.Crypto.TextInput.Hint" parent="TextAppearance.Material3.LabelMedium">
+        <item name="android:textColor">@color/on_surface_variant</item>
+        <item name="android:textSize">@dimen/text_size_label</item>
+        <item name="android:textStyle">normal</item>
+    </style>
+
+    <style name="TextAppearance.Crypto.TextInput.Error" parent="TextAppearance.Material3.LabelSmall">
+        <item name="android:textColor">@color/negative</item>
+        <item name="android:textSize">@dimen/text_size_micro</item>
+        <item name="android:textStyle">normal</item>
+    </style>
+
+    <style name="Theme.Crypto.DatePickerDialog" parent="Theme.Material3.Dark.Dialog.Alert">
+        <item name="colorPrimary">@color/brand_primary</item>
+        <item name="colorOnPrimary">@color/on_brand_primary</item>
+        <item name="colorSurface">@color/surface_container_high</item>
+        <item name="colorOnSurface">@color/on_surface</item>
+        <item name="android:colorAccent">@color/brand_primary</item>
+        <item name="android:windowBackground">@drawable/bg_dialog_surface</item>
+        <item name="android:backgroundDimAmount">0.72</item>
     </style>
 </resources>

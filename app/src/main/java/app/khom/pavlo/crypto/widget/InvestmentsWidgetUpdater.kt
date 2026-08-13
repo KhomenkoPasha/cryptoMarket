@@ -12,6 +12,7 @@ import app.khom.pavlo.crypto.R
 import app.khom.pavlo.crypto.model.Coin
 import app.khom.pavlo.crypto.model.FSYMS
 import app.khom.pavlo.crypto.model.HoldingData
+import app.khom.pavlo.crypto.model.LocaleManager
 import app.khom.pavlo.crypto.model.TSYMS
 import app.khom.pavlo.crypto.ui.main.EXTRA_OPEN_PAGE
 import app.khom.pavlo.crypto.ui.main.MainActivity
@@ -51,6 +52,7 @@ object InvestmentsWidgetUpdater {
 
     private fun updateWidgetsSync(context: Context, appWidgetIds: IntArray) {
         if (appWidgetIds.isEmpty()) return
+        val localizedContext = LocaleManager.setLocale(context)
         val content = loadContent(context)
         val openInvestments = investmentsPendingIntent(context)
         val manager = AppWidgetManager.getInstance(context)
@@ -58,9 +60,40 @@ object InvestmentsWidgetUpdater {
         appWidgetIds.forEach { appWidgetId ->
             val views = RemoteViews(context.packageName, R.layout.widget_investments)
             views.setOnClickPendingIntent(R.id.widget_investments_root, openInvestments)
-            renderContent(context, views, content)
+            renderStaticLabels(localizedContext, views)
+            renderContent(localizedContext, views, content)
             manager.updateAppWidget(appWidgetId, views)
         }
+    }
+
+    private fun renderStaticLabels(context: Context, views: RemoteViews) {
+        val title = context.getString(R.string.widget_investments_title)
+        views.setContentDescription(R.id.widget_investments_icon, title)
+        views.setTextViewText(R.id.widget_investments_title, title)
+        views.setTextViewText(
+            R.id.widget_investments_empty_title,
+            context.getString(R.string.widget_investments_empty)
+        )
+        views.setTextViewText(
+            R.id.widget_investments_empty_hint,
+            context.getString(R.string.widget_investments_empty_hint)
+        )
+        views.setTextViewText(
+            R.id.widget_investments_current_value_label,
+            context.getString(R.string.widget_investments_current_value)
+        )
+        views.setTextViewText(
+            R.id.widget_investments_invested_label,
+            context.getString(R.string.widget_investments_invested)
+        )
+        views.setTextViewText(
+            R.id.widget_investments_total_return_label,
+            context.getString(R.string.widget_investments_total_return)
+        )
+        views.setTextViewText(
+            R.id.widget_investments_positions_label,
+            context.getString(R.string.widget_investments_positions)
+        )
     }
 
     private fun loadContent(context: Context): InvestmentsWidgetContent {

@@ -12,6 +12,7 @@ import app.khom.pavlo.crypto.databinding.LanguageDialogBinding
 import app.khom.pavlo.crypto.model.SupportedLanguages
 import app.khom.pavlo.crypto.model.rxbus.LanguageChanged
 import app.khom.pavlo.crypto.model.rxbus.RxBus
+import app.khom.pavlo.crypto.ui.common.applyAppDialogWindow
 
 
 class LanguageDialog : DialogFragment() {
@@ -32,7 +33,7 @@ class LanguageDialog : DialogFragment() {
 
     override fun onStart() {
         super.onStart()
-        dialog?.window?.setLayout(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
+        applyAppDialogWindow()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
