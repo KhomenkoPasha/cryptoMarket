@@ -56,7 +56,7 @@
                         android:layout_height="wrap_content"
                         android:text="@string/portfolio_transaction_details"
                         android:textColor="@color/brand_primary"
-                        android:textSize="@dimen/text_size_title_large"
+                        android:textSize="@dimen/text_size_body_large"
                         android:textStyle="bold" />
 
                     <com.google.android.material.textfield.TextInputLayout
@@ -65,7 +65,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
-                        android:hint="@string/cryptocurrency">
+                        android:hint="@string/cryptocurrency"
+                        app:errorTextAppearance="@style/TextAppearance.Crypto.TextInput.Error"
+                        app:hintTextAppearance="@style/TextAppearance.Crypto.TextInput.Hint">
 
                         <com.google.android.material.textfield.MaterialAutoCompleteTextView
                             android:id="@+id/add_trans_coin"
@@ -73,7 +75,8 @@
                             android:layout_height="wrap_content"
                             android:inputType="text"
                             android:maxLines="1"
-                            android:textColor="@color/on_surface" />
+                            android:textColor="@color/on_surface"
+                            android:textSize="@dimen/text_size_body" />
 
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -89,7 +92,7 @@
                             android:layout_height="wrap_content"
                             android:text="@string/current_price"
                             android:textColor="@color/on_surface_variant"
-                            android:textSize="@dimen/text_size_body" />
+                            android:textSize="@dimen/text_size_label" />
 
                         <TextView
                             android:id="@+id/add_trans_current_price"
@@ -97,7 +100,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginStart="8dp"
                             android:textColor="@color/on_surface"
-                            android:textSize="@dimen/text_size_body_large"
+                            android:textSize="@dimen/text_size_body"
                             android:textStyle="bold"
                             tools:text="$64,000" />
 
@@ -119,7 +122,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="12dp"
-                        android:hint="@string/portfolio_purchase_price">
+                        android:hint="@string/portfolio_purchase_price"
+                        app:errorTextAppearance="@style/TextAppearance.Crypto.TextInput.Error"
+                        app:hintTextAppearance="@style/TextAppearance.Crypto.TextInput.Hint">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/add_trans_trading_price"
@@ -127,7 +132,8 @@
                             android:layout_height="wrap_content"
                             android:inputType="numberDecimal"
                             android:maxLines="1"
-                            android:textColor="@color/on_surface" />
+                            android:textColor="@color/on_surface"
+                            android:textSize="@dimen/text_size_body" />
 
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -136,7 +142,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
-                        android:hint="@string/quantity">
+                        android:hint="@string/quantity"
+                        app:errorTextAppearance="@style/TextAppearance.Crypto.TextInput.Error"
+                        app:hintTextAppearance="@style/TextAppearance.Crypto.TextInput.Hint">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/add_trans_quantity"
@@ -144,7 +152,8 @@
                             android:layout_height="wrap_content"
                             android:inputType="numberDecimal"
                             android:maxLines="1"
-                            android:textColor="@color/on_surface" />
+                            android:textColor="@color/on_surface"
+                            android:textSize="@dimen/text_size_body" />
 
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -153,7 +162,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
-                        android:hint="@string/portfolio_exchange_optional">
+                        android:hint="@string/portfolio_exchange_optional"
+                        app:errorTextAppearance="@style/TextAppearance.Crypto.TextInput.Error"
+                        app:hintTextAppearance="@style/TextAppearance.Crypto.TextInput.Hint">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/add_trans_exchange"
@@ -161,7 +172,8 @@
                             android:layout_height="wrap_content"
                             android:inputType="textCapWords"
                             android:maxLines="1"
-                            android:textColor="@color/on_surface" />
+                            android:textColor="@color/on_surface"
+                            android:textSize="@dimen/text_size_body" />
 
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -172,7 +184,9 @@
                         android:layout_marginTop="10dp"
                         android:hint="@string/trade_date"
                         app:endIconMode="custom"
-                        app:endIconDrawable="@drawable/ic_portfolio_calendar">
+                        app:endIconDrawable="@drawable/ic_portfolio_calendar"
+                        app:errorTextAppearance="@style/TextAppearance.Crypto.TextInput.Error"
+                        app:hintTextAppearance="@style/TextAppearance.Crypto.TextInput.Hint">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/add_trans_trade_date"
@@ -181,7 +195,8 @@
                             android:clickable="true"
                             android:focusable="false"
                             android:maxLines="1"
-                            android:textColor="@color/on_surface" />
+                            android:textColor="@color/on_surface"
+                            android:textSize="@dimen/text_size_body" />
 
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -200,14 +215,14 @@
                             android:layout_weight="1"
                             android:text="@string/portfolio_total_spent"
                             android:textColor="@color/on_surface_variant"
-                            android:textSize="@dimen/text_size_body" />
+                            android:textSize="@dimen/text_size_label" />
 
                         <TextView
                             android:id="@+id/add_trans_total_value"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textColor="@color/on_surface"
-                            android:textSize="@dimen/text_size_title"
+                            android:textSize="@dimen/text_size_body_large"
                             android:textStyle="bold"
                             tools:text="$2,375.00" />
 
@@ -221,6 +236,7 @@
                         android:text="@string/portfolio_save_transaction"
                         android:textAllCaps="false"
                         android:textColor="@color/on_brand_primary"
+                        android:textSize="@dimen/text_size_body"
                         app:backgroundTint="@color/brand_primary"
                         app:cornerRadius="16dp" />
 

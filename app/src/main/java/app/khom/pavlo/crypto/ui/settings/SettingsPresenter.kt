@@ -6,6 +6,8 @@ import app.khom.pavlo.crypto.model.Preferences
 import app.khom.pavlo.crypto.model.SupportedLanguages
 import app.khom.pavlo.crypto.model.rxbus.LanguageChanged
 import app.khom.pavlo.crypto.model.rxbus.RxBus
+import app.khom.pavlo.crypto.widget.FavoritesWidgetUpdater
+import app.khom.pavlo.crypto.widget.InvestmentsWidgetUpdater
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.schedulers.Schedulers
@@ -45,6 +47,8 @@ class SettingsPresenter @Inject constructor(
     private fun onLanguageChanged(language: String?) {
         preferences.language = SupportedLanguages.normalize(language) ?: SupportedLanguages.ENGLISH
         LocaleManager.setNewLocale(context, preferences.language)
+        FavoritesWidgetUpdater.updateAllAsync(context)
+        InvestmentsWidgetUpdater.updateAllAsync(context)
         view.restartApplication()
     }
 

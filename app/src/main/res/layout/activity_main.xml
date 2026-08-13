@@ -24,6 +24,7 @@
                 android:background="@android:color/transparent"
                 android:minHeight="48dp"
                 android:theme="@style/ToolbarColoredBackArrow"
+                app:popupTheme="@style/ThemeOverlay.Crypto.PopupMenu"
                 app:titleTextAppearance="@style/TextAppearance.Crypto.Toolbar"
                 app:titleTextColor="@color/on_surface" />
 

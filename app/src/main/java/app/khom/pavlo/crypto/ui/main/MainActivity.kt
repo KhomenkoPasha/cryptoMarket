@@ -326,7 +326,7 @@ class MainActivity : BaseActivity(), IMain.View {
 
     override fun setCoinsLoadingVisibility(isLoading: Boolean) {
         if (isLoading) coinsLoading.visibility = View.VISIBLE
-        else coinsLoading.visibility = View.INVISIBLE
+        else coinsLoading.visibility = View.GONE
     }
 
     override fun onDestroy() {

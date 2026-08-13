@@ -1,5 +1,6 @@
 package app.khom.pavlo.crypto.ui.coinInfo
 
+import app.khom.pavlo.crypto.R
 import app.khom.pavlo.crypto.model.*
 import app.khom.pavlo.crypto.model.network.NetworkRequests
 import app.khom.pavlo.crypto.model.rxbus.RxBus
@@ -9,6 +10,7 @@ import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.disposables.SerialDisposable
 import io.reactivex.rxjava3.schedulers.Schedulers
+import java.math.BigDecimal
 import javax.inject.Inject
 
 class CoinInfoPresenter @Inject constructor(private val view: ICoinInfo.View,
@@ -21,12 +23,14 @@ class CoinInfoPresenter @Inject constructor(private val view: ICoinInfo.View,
 
     private val disposable = CompositeDisposable()
     private val histoDisposable = SerialDisposable()
+    private val statsDisposable = SerialDisposable()
     private var coin: Coin = Coin(from = "", to = "")
     private lateinit var from: String
     private lateinit var to: String
 
     init {
         disposable.add(histoDisposable)
+        disposable.add(statsDisposable)
     }
 
     override fun onCreate(fromArg: String, toArg: String) {
@@ -50,18 +54,70 @@ class CoinInfoPresenter @Inject constructor(private val view: ICoinInfo.View,
         view.setLogo(coin.imgUrl)
         view.setMainPrice(coin.price)
         setCoinInfo()
+        requestMissing24hStats()
         view.setupSpinner()
     }
 
     private fun setCoinInfo() {
-        view.setOpen(coin.open24h)
-        view.setHigh(coin.high24h)
-        view.setLow(coin.low24h)
-        view.setChange(coin.change24h)
-        view.setChangePct(coin.changePct24h)
-        view.setSupply(coin.supply)
-        view.setMarketCap(coin.mktCap)
+        view.setOpen(coin.open24h.orUnavailable())
+        view.setHigh(coin.high24h.orUnavailable())
+        view.setLow(coin.low24h.orUnavailable())
+        view.setChange(coin.change24h.orUnavailable())
+        view.setChangePct(coin.changePct24h.orUnavailable())
+        view.setSupply(coin.supply.orUnavailable())
+        view.setMarketCap(coin.mktCap.orUnavailable())
     }
+
+    private fun requestMissing24hStats() {
+        if (coin.open24h.isNotBlank() &&
+            coin.high24h.isNotBlank() &&
+            coin.low24h.isNotBlank() &&
+            coin.change24h.isNotBlank()) {
+            return
+        }
+        statsDisposable.set(
+            networkRequests.getHistoPeriod(HOURS24, coin.from, coin.to)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(::apply24hStats) { logger.logError("request24hStats $it") }
+        )
+    }
+
+    private fun apply24hStats(candles: ArrayList<HistoData>) {
+        val stats = calculateCoin24hStats(candles) ?: return
+        if (coin.open24h.isBlank()) {
+            coin.open24hRaw = stats.open.toFloat()
+            coin.open24h = formatPrice(stats.open)
+            view.setOpen(coin.open24h)
+        }
+        if (coin.high24h.isBlank()) {
+            coin.high24hRaw = stats.high.toFloat()
+            coin.high24h = formatPrice(stats.high)
+            view.setHigh(coin.high24h)
+        }
+        if (coin.low24h.isBlank()) {
+            coin.low24hRaw = stats.low.toFloat()
+            coin.low24h = formatPrice(stats.low)
+            view.setLow(coin.low24h)
+        }
+        if (coin.change24h.isBlank()) {
+            coin.change24hRaw = stats.change.toFloat()
+            coin.change24h = formatPrice(stats.change)
+            view.setChange(coin.change24h)
+        }
+        if (coin.changePct24h.isBlank()) {
+            coin.changePct24hRaw = stats.changePercent.toFloat()
+            coin.changePct24h = PortfolioValueFormatter.percent(
+                BigDecimal.valueOf(stats.changePercent)
+            )
+            view.setChangePct(coin.changePct24h)
+        }
+    }
+
+    private fun formatPrice(value: Double): String =
+        PortfolioValueFormatter.price(BigDecimal.valueOf(value))
+
+    private fun String.orUnavailable(): String =
+        ifBlank { resProvider.getString(R.string.value_unavailable) }
 
 
     private fun onFindCoinError(throwable: Throwable) {

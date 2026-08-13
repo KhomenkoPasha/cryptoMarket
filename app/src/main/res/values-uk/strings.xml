@@ -122,9 +122,9 @@
     <string name="language">Мова</string>
     <string name="empty_graph_text">Щось пішло не так, графік не завантажено</string>
     <string name="add_to_favorites">До обраного</string>
-    <string name="widget_favorites_title_small"> Вибране</string>
-    <string name="widget_favorites_title_large"> Вибране</string>
-    <string name="widget_empty_favorites"> Немає вибраних монет</string>
+    <string name="widget_favorites_title_small">Вибране</string>
+    <string name="widget_favorites_title_large">Вибране</string>
+    <string name="widget_empty_favorites">Немає вибраних монет</string>
     <string name="widget_investments_title">Мої інвестиції</string>
     <string name="widget_investments_description">Відстеження інвестиційного портфеля</string>
     <string name="widget_investments_current_value">Поточна вартість</string>
