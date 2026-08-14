@@ -1,0 +1,4 @@
+root = true
+
+[*.{kt,java}]
+insert_final_newline = false

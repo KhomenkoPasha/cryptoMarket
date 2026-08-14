@@ -48,25 +48,19 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/search_cancel"
-            style="@style/Widget.MaterialComponents.Button.TextButton"
+            style="@style/Widget.Crypto.Button.Text"
             android:layout_width="wrap_content"
             android:layout_height="40dp"
-            android:textSize="@dimen/text_size_body"
             android:text="@string/cancel"
-            android:textAllCaps="false"
             android:textColor="@color/on_surface_variant" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/search_ok"
+            style="@style/Widget.Crypto.Button.Outlined"
             android:layout_width="wrap_content"
             android:layout_height="40dp"
             android:layout_marginStart="8dp"
-            android:text="@string/news_search_title"
-            android:textAllCaps="false"
-            android:textColor="@color/on_brand_primary"
-            android:textSize="@dimen/text_size_body"
-            app:backgroundTint="@color/brand_primary"
-            app:cornerRadius="14dp" />
+            android:text="@string/news_search_title" />
 
     </LinearLayout>
 

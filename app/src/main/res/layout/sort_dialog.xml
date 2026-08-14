@@ -76,29 +76,24 @@
         android:gravity="end"
         android:orientation="horizontal">
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/sort_cancel"
+            style="@style/Widget.Crypto.Button.Text"
             android:layout_width="wrap_content"
             android:layout_height="40dp"
             android:layout_marginTop="8dp"
-            android:background="?attr/selectableItemBackgroundBorderless"
             android:minWidth="72dp"
             android:text="@string/cancel"
-            android:textAllCaps="false"
-            android:textColor="@color/on_surface_variant"
-            android:textSize="@dimen/text_size_body" />
+            android:textColor="@color/on_surface_variant" />
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/sort_ok"
+            style="@style/Widget.Crypto.Button.Outlined"
             android:layout_width="wrap_content"
             android:layout_height="40dp"
             android:layout_marginStart="4dp"
             android:layout_marginTop="8dp"
-            android:background="?attr/selectableItemBackgroundBorderless"
             android:minWidth="56dp"
-            android:text="@string/ok"
-            android:textAllCaps="false"
-            android:textColor="@color/brand_primary"
-            android:textSize="@dimen/text_size_body" />
+            android:text="@string/ok" />
     </LinearLayout>
 </LinearLayout>

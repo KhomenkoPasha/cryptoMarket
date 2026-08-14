@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.text.InputType
 import android.view.Gravity
 import android.view.View
-import android.widget.Button
 import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.TextView
@@ -20,6 +19,7 @@ import app.khom.pavlo.crypto.model.TopCoinData
 import app.khom.pavlo.crypto.model.db.CMDatabase
 import app.khom.pavlo.crypto.utils.ResourceProvider
 import app.khom.pavlo.crypto.utils.toastShort
+import com.google.android.material.button.MaterialButton
 import dagger.hilt.android.AndroidEntryPoint
 import io.reactivex.rxjava3.core.Single
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
@@ -360,7 +360,7 @@ class InsightsActivity : BaseActivity() {
     private fun addNewsNoteEditor() {
         val editText = noteEditText(preferences.newsNotes)
         binding.newsImpactContainer.addView(editText)
-        binding.newsImpactContainer.addView(Button(this).apply {
+        binding.newsImpactContainer.addView(MaterialButton(this).apply {
             text = getString(R.string.insights_save_note)
             setOnClickListener {
                 preferences.newsNotes = editText.text.toString()
@@ -372,7 +372,7 @@ class InsightsActivity : BaseActivity() {
     private fun addNoteEditor(container: LinearLayout, symbol: String, note: String) {
         val editText = noteEditText(note)
         container.addView(editText)
-        container.addView(Button(this).apply {
+        container.addView(MaterialButton(this).apply {
             text = getString(R.string.insights_save_note)
             setOnClickListener {
                 preferences.setCoinNote(symbol, editText.text.toString())

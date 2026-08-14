@@ -45,6 +45,27 @@ object FavoritesWidgetUpdater {
         )
     }
 
+    fun refreshLabels(context: Context) {
+        val appContext = context.applicationContext
+        val manager = AppWidgetManager.getInstance(appContext)
+        refreshLabels(
+            context,
+            manager,
+            manager.getAppWidgetIds(
+                ComponentName(appContext, FavoritesWidgetSmallProvider::class.java)
+            ),
+            R.layout.widget_favorites_small
+        )
+        refreshLabels(
+            context,
+            manager,
+            manager.getAppWidgetIds(
+                ComponentName(appContext, FavoritesWidgetLargeProvider::class.java)
+            ),
+            R.layout.widget_favorites_large
+        )
+    }
+
     fun updateWidgetsAsync(
         context: Context,
         appWidgetIds: IntArray,
@@ -82,20 +103,7 @@ object FavoritesWidgetUpdater {
 
         appWidgetIds.forEach { appWidgetId ->
             val views = RemoteViews(context.packageName, layoutResId)
-            views.setTextViewText(
-                R.id.widget_title,
-                localizedContext.getString(
-                    if (layoutResId == R.layout.widget_favorites_small) {
-                        R.string.widget_favorites_title_small
-                    } else {
-                        R.string.widget_favorites_title_large
-                    }
-                )
-            )
-            views.setTextViewText(
-                R.id.widget_empty,
-                localizedContext.getString(R.string.widget_empty_favorites)
-            )
+            renderStaticLabels(localizedContext, views, layoutResId)
             views.setOnClickPendingIntent(R.id.widget_root, launchPendingIntent)
 
             if (coins.isEmpty()) {
@@ -137,6 +145,40 @@ object FavoritesWidgetUpdater {
 
             AppWidgetManager.getInstance(context).updateAppWidget(appWidgetId, views)
         }
+    }
+
+    private fun refreshLabels(
+        context: Context,
+        manager: AppWidgetManager,
+        appWidgetIds: IntArray,
+        layoutResId: Int
+    ) {
+        appWidgetIds.forEach { appWidgetId ->
+            val views = RemoteViews(context.packageName, layoutResId)
+            renderStaticLabels(context, views, layoutResId)
+            manager.partiallyUpdateAppWidget(appWidgetId, views)
+        }
+    }
+
+    private fun renderStaticLabels(
+        context: Context,
+        views: RemoteViews,
+        layoutResId: Int
+    ) {
+        views.setTextViewText(
+            R.id.widget_title,
+            context.getString(
+                if (layoutResId == R.layout.widget_favorites_small) {
+                    R.string.widget_favorites_title_small
+                } else {
+                    R.string.widget_favorites_title_large
+                }
+            )
+        )
+        views.setTextViewText(
+            R.id.widget_empty,
+            context.getString(R.string.widget_empty_favorites)
+        )
     }
 
     private fun loadCoins(context: Context): List<Coin> {

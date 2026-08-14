@@ -1,5 +1,6 @@
 package app.khom.pavlo.crypto.ui.coinAllocation
 
+import android.graphics.Color
 import android.os.Bundle
 import androidx.appcompat.widget.Toolbar
 import android.view.View
@@ -7,7 +8,8 @@ import app.khom.pavlo.crypto.R
 import app.khom.pavlo.crypto.activities.BaseActivity
 import app.khom.pavlo.crypto.utils.ResourceProvider
 import app.khom.pavlo.crypto.databinding.ActivityCoinAllocationBinding
-import com.github.mikephil.charting.components.Description
+import com.github.mikephil.charting.animation.Easing
+import com.github.mikephil.charting.components.Legend
 import com.github.mikephil.charting.data.PieData
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -44,18 +46,28 @@ class CoinAllocationActivity : BaseActivity(), ICoinAllocation.View {
     override fun drawPieChart(pieData: PieData) {
         with(binding.coinAllocationPie) {
             data = pieData
-            description = Description().apply {
-                text = "Coin % of Holdings"
-                textColor = resProvider.getColor(R.color.on_surface_variant)
+            description.isEnabled = false
+            legend.apply {
+                textColor = resProvider.getColor(R.color.chart_label)
+                textSize = 10f
+                form = Legend.LegendForm.CIRCLE
+                formSize = 7f
+                horizontalAlignment = Legend.LegendHorizontalAlignment.CENTER
+                verticalAlignment = Legend.LegendVerticalAlignment.BOTTOM
+                orientation = Legend.LegendOrientation.HORIZONTAL
+                isWordWrapEnabled = true
             }
-            legend.textColor = resProvider.getColor(R.color.on_surface)
-            setEntryLabelColor(resProvider.getColor(R.color.on_surface))
-            setEntryLabelTextSize(12f)
-            setHoleColor(resProvider.getColor(R.color.surface_container))
-            setTransparentCircleAlpha(0)
+            setEntryLabelColor(resProvider.getColor(R.color.app_background))
+            setEntryLabelTextSize(10f)
+            setHoleColor(Color.TRANSPARENT)
+            setTransparentCircleColor(resProvider.getColor(R.color.brand_primary))
+            setTransparentCircleAlpha(24)
+            transparentCircleRadius = 61f
             holeRadius = 58f
             setUsePercentValues(true)
-            animateY(500)
+            setNoDataTextColor(resProvider.getColor(R.color.chart_label))
+            setExtraOffsets(8f, 8f, 8f, 8f)
+            animateY(500, Easing.EaseOutCubic)
             invalidate()
         }
     }

@@ -108,28 +108,28 @@ class CoinInfoActivity : BaseActivity(), ICoinInfo.View {
         binding.coinInfoLoading.visibility = View.GONE
         binding.coinInfoEmptyGraph.visibility = View.GONE
         binding.coinInfoGraph.visibility = View.VISIBLE
-        val primaryText = resProvider.getColor(R.color.on_surface)
-        val secondaryText = resProvider.getColor(R.color.on_surface_variant)
-        val outline = resProvider.getColor(R.color.outline_variant)
+        val label = resProvider.getColor(R.color.chart_label)
+        val axis = resProvider.getColor(R.color.chart_axis)
+        val grid = resProvider.getColor(R.color.chart_grid)
         with(binding.coinInfoGraph) {
             xAxis.position = XAxis.XAxisPosition.BOTTOM
-            xAxis.textColor = secondaryText
-            xAxis.axisLineColor = outline
-            xAxis.gridColor = outline
+            xAxis.textColor = label
+            xAxis.axisLineColor = axis
+            xAxis.gridColor = grid
             xAxis.axisLineWidth = 0.5f
             xAxis.gridLineWidth = 0.35f
             xAxis.textSize = 9f
-            axisLeft.textColor = secondaryText
-            axisLeft.axisLineColor = outline
-            axisLeft.gridColor = outline
+            axisLeft.textColor = label
+            axisLeft.axisLineColor = axis
+            axisLeft.gridColor = grid
             axisLeft.axisLineWidth = 0.5f
             axisLeft.gridLineWidth = 0.35f
             axisLeft.textSize = 9f
             axisRight.isEnabled = false
-            legend.textColor = primaryText
+            legend.textColor = label
             legend.textSize = 10f
             description.isEnabled = false
-            setNoDataTextColor(secondaryText)
+            setNoDataTextColor(label)
             setDrawBorders(false)
             setExtraOffsets(6f, 8f, 8f, 6f)
             data = line

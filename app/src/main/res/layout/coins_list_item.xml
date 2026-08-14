@@ -119,6 +119,7 @@
         android:contentDescription="@string/remove_coin"
         android:padding="9dp"
         android:src="@drawable/ic_remove_favorite"
+        android:stateListAnimator="@animator/button_press_scale"
         android:tooltipText="@string/remove_coin"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
