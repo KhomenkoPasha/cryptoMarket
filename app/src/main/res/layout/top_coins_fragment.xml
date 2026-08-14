@@ -38,7 +38,7 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/top_coins_retry"
-            style="@style/Widget.Material3.Button.TonalButton"
+            style="@style/Widget.Crypto.Button.Outlined"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"

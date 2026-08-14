@@ -70,7 +70,7 @@
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/holdings_item_edit"
-                style="@style/Widget.MaterialComponents.Button.TextButton"
+                style="@style/Widget.Crypto.Button.Icon"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
                 android:contentDescription="@string/portfolio_edit_transaction"
@@ -81,7 +81,6 @@
                 android:minWidth="0dp"
                 android:padding="12dp"
                 android:text=""
-                app:backgroundTint="@android:color/transparent"
                 app:icon="@drawable/ic_note_edit"
                 app:iconGravity="textStart"
                 app:iconPadding="0dp"
@@ -89,7 +88,7 @@
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/holdings_item_delete"
-                style="@style/Widget.MaterialComponents.Button.TextButton"
+                style="@style/Widget.Crypto.Button.Icon"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
                 android:contentDescription="@string/portfolio_delete_transaction"
@@ -100,7 +99,6 @@
                 android:minWidth="0dp"
                 android:padding="12dp"
                 android:text=""
-                app:backgroundTint="@android:color/transparent"
                 app:icon="@drawable/ic_note_delete"
                 app:iconGravity="textStart"
                 app:iconPadding="0dp"

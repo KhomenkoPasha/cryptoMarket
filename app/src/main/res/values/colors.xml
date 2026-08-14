@@ -32,6 +32,27 @@
     <color name="warning">#FFCA72</color>
     <color name="ripple">#3372CAD6</color>
 
+    <!-- Charts: the same cyan/lavender accents used throughout Midnight Aurora. -->
+    <color name="chart_increase">@color/brand_primary</color>
+    <color name="chart_decrease">#FF5F73</color>
+    <color name="chart_neutral">@color/brand_secondary</color>
+    <color name="chart_highlight">#9972CAD6</color>
+    <color name="chart_axis">#8A435672</color>
+    <color name="chart_grid">#6633445E</color>
+    <color name="chart_label">@color/on_surface_variant</color>
+    <color name="chart_allocation_1">@color/brand_primary</color>
+    <color name="chart_allocation_2">@color/warning</color>
+    <color name="chart_allocation_3">@color/brand_secondary</color>
+    <color name="chart_allocation_4">#8ED1B2</color>
+    <color name="chart_allocation_5">@color/brand_tertiary</color>
+    <color name="chart_allocation_6">#70A8E8</color>
+    <color name="chart_allocation_7">#E6A17C</color>
+    <color name="chart_allocation_8">#D896CF</color>
+    <color name="chart_allocation_9">#61C3B8</color>
+    <color name="chart_allocation_10">#849AD6</color>
+    <color name="chart_allocation_11">#A8C98C</color>
+    <color name="chart_allocation_12">#D98FA6</color>
+
     <!-- Legacy names mapped to semantic roles while old Views are migrated. -->
     <color name="colorPrimary">@color/brand_primary</color>
     <color name="colorPrimaryDark">@color/on_surface</color>

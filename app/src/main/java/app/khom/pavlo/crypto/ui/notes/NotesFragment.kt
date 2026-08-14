@@ -243,14 +243,9 @@ class NotesFragment : Fragment() {
                 MaterialButton(requireContext()).apply {
                     text = getString(R.string.notes_save_note)
                     isAllCaps = false
-                    cornerRadius = dp(16)
                     insetTop = 0
                     insetBottom = 0
                     minHeight = dp(48)
-                    backgroundTintList = ColorStateList.valueOf(
-                            resProvider.getColor(R.color.brand_primary)
-                    )
-                    setTextColor(resProvider.getColor(R.color.on_brand_primary))
                     setOnClickListener {
                         val note = editText.text.toString().trim()
                         if (note.isEmpty()) {
@@ -373,6 +368,7 @@ class NotesFragment : Fragment() {
         minimumHeight = 0
         setPadding(dp(10), dp(10), dp(10), dp(10))
         backgroundTintList = ColorStateList.valueOf(Color.TRANSPARENT)
+        strokeWidth = 0
         rippleColor = ColorStateList.valueOf(resProvider.getColor(R.color.ripple))
         setOnClickListener { onClick() }
     }

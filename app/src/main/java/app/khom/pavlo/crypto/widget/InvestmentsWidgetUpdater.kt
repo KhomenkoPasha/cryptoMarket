@@ -50,12 +50,22 @@ object InvestmentsWidgetUpdater {
         }
     }
 
+    fun refreshLabels(context: Context) {
+        val appContext = context.applicationContext
+        val manager = AppWidgetManager.getInstance(appContext)
+        val ids = manager.getAppWidgetIds(
+            ComponentName(appContext, InvestmentsWidgetProvider::class.java)
+        )
+        refreshLabels(context, manager, ids)
+    }
+
     private fun updateWidgetsSync(context: Context, appWidgetIds: IntArray) {
         if (appWidgetIds.isEmpty()) return
         val localizedContext = LocaleManager.setLocale(context)
+        val manager = AppWidgetManager.getInstance(context)
+        refreshLabels(localizedContext, manager, appWidgetIds)
         val content = loadContent(context)
         val openInvestments = investmentsPendingIntent(context)
-        val manager = AppWidgetManager.getInstance(context)
 
         appWidgetIds.forEach { appWidgetId ->
             val views = RemoteViews(context.packageName, R.layout.widget_investments)
@@ -66,10 +76,27 @@ object InvestmentsWidgetUpdater {
         }
     }
 
-    private fun renderStaticLabels(context: Context, views: RemoteViews) {
+    private fun refreshLabels(
+        context: Context,
+        manager: AppWidgetManager,
+        appWidgetIds: IntArray
+    ) {
+        if (appWidgetIds.isEmpty()) return
+        appWidgetIds.forEach { appWidgetId ->
+            val views = RemoteViews(context.packageName, R.layout.widget_investments)
+            renderStaticLabels(context, views)
+            manager.partiallyUpdateAppWidget(appWidgetId, views)
+        }
+    }
+
+    internal fun renderStaticLabels(context: Context, views: RemoteViews) {
         val title = context.getString(R.string.widget_investments_title)
         views.setContentDescription(R.id.widget_investments_icon, title)
         views.setTextViewText(R.id.widget_investments_title, title)
+        views.setTextViewText(
+            R.id.widget_investments_open_label,
+            context.getString(R.string.widget_investments_open)
+        )
         views.setTextViewText(
             R.id.widget_investments_empty_title,
             context.getString(R.string.widget_investments_empty)

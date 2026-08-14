@@ -180,19 +180,15 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/portfolio_add_transaction"
+        style="@style/Widget.Crypto.Button.Outlined"
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:layout_marginStart="12dp"
         android:layout_marginEnd="12dp"
         android:layout_marginBottom="8dp"
         android:text="@string/portfolio_add_transaction"
-        android:textAllCaps="false"
-        android:textColor="@color/on_brand_primary"
-        app:backgroundTint="@color/brand_primary"
-        app:cornerRadius="16dp"
         app:icon="@drawable/ic_portfolio_add"
-        app:iconGravity="textStart"
-        app:iconTint="@color/on_brand_primary" />
+        app:iconGravity="textStart" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/holdings_rec_view"

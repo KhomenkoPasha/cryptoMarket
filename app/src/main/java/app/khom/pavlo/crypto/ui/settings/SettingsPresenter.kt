@@ -46,9 +46,9 @@ class SettingsPresenter @Inject constructor(
 
     private fun onLanguageChanged(language: String?) {
         preferences.language = SupportedLanguages.normalize(language) ?: SupportedLanguages.ENGLISH
-        LocaleManager.setNewLocale(context, preferences.language)
-        FavoritesWidgetUpdater.updateAllAsync(context)
-        InvestmentsWidgetUpdater.updateAllAsync(context)
+        val localizedContext = LocaleManager.setNewLocale(context, preferences.language)
+        FavoritesWidgetUpdater.refreshLabels(localizedContext)
+        InvestmentsWidgetUpdater.refreshLabels(localizedContext)
         view.restartApplication()
     }
 
