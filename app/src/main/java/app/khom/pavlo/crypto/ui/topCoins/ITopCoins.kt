@@ -1,5 +1,6 @@
 package app.khom.pavlo.crypto.ui.topCoins
 
+import app.khom.pavlo.crypto.model.MarketOverview
 import app.khom.pavlo.crypto.model.TopCoinData
 
 interface ITopCoins {
@@ -13,6 +14,7 @@ interface ITopCoins {
         fun setCoinAdding(symbol: String, isAdding: Boolean)
         fun setCoinAdded(symbol: String)
         fun startCoinInfoActivity(name: String?)
+        fun showMarketOverview(overview: MarketOverview)
     }
 
     interface Presenter {

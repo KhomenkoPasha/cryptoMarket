@@ -90,17 +90,7 @@
     <string name="insights_note_hint">Добавить заметку</string>
     <string name="insights_note_saved">Заметка сохранена</string>
 
-    <string-array name="histo_periods">
-        <item>1 час</item>
-        <item>12 часов</item>
-        <item>24 часа</item>
-        <item>3 дня</item>
-        <item>1 неделя</item>
-        <item>1 месяц</item>
-        <item>3 месяца</item>
-        <item>6 месяцев</item>
-        <item>1 год</item>
-    </string-array>
+
     <string name="notes">Заметки</string>
     <string name="notes_news_notes">Заметки по новостям</string>
     <string name="notes_news_notes_hint">Сохраняйте здесь ссылки, заголовки и важные события.</string>
@@ -156,4 +146,128 @@
     <string name="backup_restored">Данные восстановлены: избранное — %1$d, транзакции — %2$d</string>
     <string name="backup_save_error">Не удалось сохранить резервную копию</string>
     <string name="backup_restore_error">Не удалось восстановить данные. Выберите корректную копию Crypto InvestPulse.</string>
+    <string name="settings_theme">Тема</string>
+    <string name="theme_system">Как в системе</string>
+    <string name="theme_light">Светлая</string>
+    <string name="theme_dark">Тёмная</string>
+    <string name="settings_currency">Валюта</string>
+    <string name="currency_rate_error">Не удалось загрузить курс валют. Проверьте подключение и повторите попытку.</string>
+    <string name="market_fear_greed">Индекс страха и жадности</string>
+    <string name="market_btc_dominance">Доминация BTC</string>
+    <string name="fng_extreme_fear">Крайний страх</string>
+    <string name="fng_fear">Страх</string>
+    <string name="fng_neutral">Нейтрально</string>
+    <string name="fng_greed">Жадность</string>
+    <string name="fng_extreme_greed">Крайняя жадность</string>
+    <string name="fng_yesterday">Вчера: %1$d</string>
+    <string name="chart_period_all">Всё</string>
+    <string name="chart_type_line">Линейный график</string>
+    <string name="chart_type_candles">Свечной график</string>
+    <string name="price_alerts">Ценовые алерты</string>
+    <string name="alerts_settings_subtitle">Уведомления о движении цен</string>
+    <string name="alerts_empty_title">Пока нет ценовых алертов</string>
+    <string name="alerts_empty_body">Создайте алерт, чтобы получать уведомление, когда монета достигнет вашей цены или резко изменится.</string>
+    <string name="alert_add">Добавить алерт</string>
+    <string name="alert_create_title">Новый ценовой алерт</string>
+    <string name="alert_coin">Криптовалюта</string>
+    <string name="alert_condition">Условие</string>
+    <string name="alert_condition_above">Цена поднимется выше</string>
+    <string name="alert_condition_below">Цена опустится ниже</string>
+    <string name="alert_condition_change_up">Рост за 24ч не менее</string>
+    <string name="alert_condition_change_down">Падение за 24ч не менее</string>
+    <string name="alert_target_price_hint">Целевая цена (%1$s)</string>
+    <string name="alert_target_percent_hint">Изменение в процентах</string>
+    <string name="alert_current_price">Текущая цена: %1$s</string>
+    <string name="alert_create">Создать</string>
+    <string name="alert_invalid_value">Введите значение больше нуля</string>
+    <string name="alert_no_coins">Сначала добавьте монеты в избранное, чтобы создавать алерты.</string>
+    <string name="alert_saved">Алерт создан</string>
+    <string name="alert_deleted">Алерт удалён</string>
+    <string name="alert_delete_confirmation">Удалить этот алерт?</string>
+    <string name="alert_summary_above">%1$s поднимется выше %2$s</string>
+    <string name="alert_summary_below">%1$s опустится ниже %2$s</string>
+    <string name="alert_summary_change_up">%1$s вырастет на %2$s или больше за 24ч</string>
+    <string name="alert_summary_change_down">%1$s упадёт на %2$s или больше за 24ч</string>
+    <string name="alert_status_active">Активен</string>
+    <string name="alert_status_triggered">Сработал %1$s</string>
+    <string name="alert_notification_title">Ценовой алерт %1$s</string>
+    <string name="alert_notification_above">%1$s сейчас %2$s — выше вашей цели %3$s.</string>
+    <string name="alert_notification_below">%1$s сейчас %2$s — ниже вашей цели %3$s.</string>
+    <string name="alert_notification_change_up">%1$s вырос на %2$s за последние 24 часа.</string>
+    <string name="alert_notification_change_down">%1$s упал на %2$s за последние 24 часа.</string>
+    <string name="alert_channel_name">Ценовые алерты</string>
+    <string name="alert_channel_description">Уведомления, когда цена или движение за 24ч достигает вашего алерта.</string>
+    <string name="alert_permission_denied">Уведомления отключены. Разрешите их в настройках системы, чтобы получать ценовые алерты.</string>
+    <string name="alert_status_paused">Приостановлен</string>
+    <string name="trade_type">Тип</string>
+    <string name="trade_type_buy">Покупка</string>
+    <string name="trade_type_sell">Продажа</string>
+    <string name="trade_type_transfer_in">Перевод на кошелёк</string>
+    <string name="trade_type_transfer_out">Перевод с кошелька</string>
+    <string name="trade_fee">Комиссия (%1$s)</string>
+    <string name="portfolio_fee">Комиссия</string>
+    <string name="portfolio_sale_price">Цена продажи</string>
+    <string name="portfolio_cost_basis">Базовая стоимость за единицу</string>
+    <string name="portfolio_proceeds">Выручка</string>
+    <string name="portfolio_realized_pnl">Зафиксированный PnL</string>
+    <string name="portfolio_fees_paid">Уплачено комиссий</string>
+    <string name="portfolio_sell_exceeds">У вас только %1$s, поэтому продать или отправить больше нельзя.</string>
+    <string name="portfolio_all">Все</string>
+    <string name="portfolio_default_name">Основной портфель</string>
+    <string name="portfolio_new">Новый портфель</string>
+    <string name="portfolio_rename">Переименовать</string>
+    <string name="portfolio_delete">Удалить портфель</string>
+    <string name="portfolio_name_hint">Название портфеля</string>
+    <string name="portfolio_name_required">Введите название</string>
+    <string name="portfolio_delete_message">Удалить «%1$s» и все его транзакции? Это действие нельзя отменить.</string>
+    <string name="portfolio_field">Портфель</string>
+    <string name="portfolio_created">Портфель создан</string>
+    <string name="portfolio_deleted">Портфель удалён</string>
+    <string name="portfolio_last_cannot_delete">Должен остаться хотя бы один портфель</string>
+    <string name="portfolio_value_history">Стоимость портфеля</string>
+    <string name="portfolio_max_drawdown">Макс. просадка</string>
+    <string name="portfolio_best_day">Лучший день</string>
+    <string name="portfolio_worst_day">Худший день</string>
+    <string name="portfolio_history_building">Строим историю…</string>
+    <string name="portfolio_history_unavailable">Пока недостаточно истории</string>
+    <string name="menu_export_csv">Экспорт в CSV</string>
+    <string name="menu_import_csv">Импорт из CSV</string>
+    <string name="csv_export_format_title">Экспортировать транзакции как</string>
+    <string name="csv_exported">Экспортировано транзакций: %1$d</string>
+    <string name="csv_export_error">Не удалось сохранить CSV-файл</string>
+    <string name="csv_import_error">Не удалось прочитать файл. Поддерживаются экспорт Crypto InvestPulse, история сделок Binance и отчёт Coinbase.</string>
+    <string name="csv_import_title">Импорт транзакций</string>
+    <string name="csv_import_summary">Найдено транзакций: %1$d (%2$s).</string>
+    <string name="csv_import_summary_skipped">Найдено транзакций: %1$d (%2$s). Пропущено строк: %3$d — неизвестный тип, оценка не в USD или неверные данные.</string>
+    <string name="csv_import_target">Добавить в портфель</string>
+    <string name="csv_import_confirm">Импортировать</string>
+    <string name="csv_imported">Импортировано: %1$d, дубликатов пропущено: %2$d</string>
+    <string name="csv_import_nothing">В этом файле нет транзакций для импорта</string>
+    <string name="settings_app_lock">Блокировка приложения</string>
+    <string name="app_lock_on">Включена</string>
+    <string name="app_lock_off">Выключена</string>
+    <string name="app_lock_locked_title">Приложение заблокировано</string>
+    <string name="app_lock_locked_message">Подтвердите, что это вы, чтобы увидеть портфель</string>
+    <string name="app_lock_unlock">Разблокировать</string>
+    <string name="app_lock_prompt_title">Разблокировать Crypto InvestPulse</string>
+    <string name="app_lock_prompt_subtitle">Используйте отпечаток пальца, лицо или блокировку экрана</string>
+    <string name="app_lock_enable_title">Включить блокировку приложения</string>
+    <string name="app_lock_disable_title">Выключить блокировку приложения</string>
+    <string name="app_lock_unavailable_title">Нужна блокировка экрана</string>
+    <string name="app_lock_unavailable_message">Настройте PIN-код, графический ключ, пароль или отпечаток пальца в настройках устройства, чтобы защитить приложение.</string>
+    <string name="app_lock_open_settings">Открыть настройки</string>
+    <string name="app_lock_removed">Блокировка приложения отключена: на устройстве нет блокировки экрана</string>
+    <string name="app_lock_unavailable_now">Аутентификация сейчас недоступна. Повторите попытку позже.</string>
+    <string name="wallpaper_title">Обои</string>
+    <string name="wallpaper_description">Один фон для всех экранов приложения. Выбор сохраняется автоматически.</string>
+    <string name="wallpaper_gallery">Выберите фон</string>
+    <string name="wallpaper_none">Без обоев</string>
+    <string name="wallpaper_number">Обои %1$d</string>
+    <string name="wallpaper_selected">Выбрано</string>
+    <string name="wallpaper_appearance">Прозрачное оформление</string>
+    <string name="wallpaper_transparency_label">Прозрачность панелей</string>
+    <string name="wallpaper_dimming_label">Приглушение фона</string>
+    <string name="wallpaper_transparency_value">Прозрачность панелей: %1$d%%</string>
+    <string name="wallpaper_dimming_value">Приглушение фона: %1$d%%</string>
+    <string name="wallpaper_readability">Текст и изображения остаются чёткими. Выберите «Без обоев», чтобы вернуть обычную тему.</string>
 </resources>

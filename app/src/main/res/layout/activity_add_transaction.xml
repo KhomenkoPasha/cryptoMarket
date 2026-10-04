@@ -16,7 +16,7 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="48dp"
-            android:background="@drawable/bg_appbar_glass"
+            android:background="@android:color/transparent"
             android:minHeight="48dp"
             android:theme="@style/ToolbarColoredBackArrow"
             app:titleTextAppearance="@style/TextAppearance.Crypto.Toolbar"
@@ -58,6 +58,47 @@
                         android:textColor="@color/brand_primary"
                         android:textSize="@dimen/text_size_title"
                         android:textStyle="bold" />
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/add_trans_type_layout"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:hint="@string/trade_type"
+                        app:hintTextAppearance="@style/TextAppearance.Crypto.TextInput.Hint">
+
+                        <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                            android:id="@+id/add_trans_type"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="none"
+                            android:maxLines="1"
+                            android:textColor="@color/on_surface"
+                            android:textSize="@dimen/text_size_title" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/add_trans_portfolio_layout"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:hint="@string/portfolio_field"
+                        android:visibility="gone"
+                        app:hintTextAppearance="@style/TextAppearance.Crypto.TextInput.Hint">
+
+                        <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                            android:id="@+id/add_trans_portfolio"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="none"
+                            android:maxLines="1"
+                            android:textColor="@color/on_surface"
+                            android:textSize="@dimen/text_size_title" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/add_trans_coin_layout"
@@ -122,6 +163,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="12dp"
+                        android:id="@+id/add_trans_price_layout"
                         android:hint="@string/portfolio_purchase_price"
                         app:errorTextAppearance="@style/TextAppearance.Crypto.TextInput.Error"
                         app:hintTextAppearance="@style/TextAppearance.Crypto.TextInput.Hint">
@@ -148,6 +190,27 @@
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/add_trans_quantity"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="numberDecimal"
+                            android:maxLines="1"
+                            android:textColor="@color/on_surface"
+                            android:textSize="@dimen/text_size_title" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/add_trans_fee_layout"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:hint="@string/trade_fee"
+                        app:errorTextAppearance="@style/TextAppearance.Crypto.TextInput.Error"
+                        app:hintTextAppearance="@style/TextAppearance.Crypto.TextInput.Hint">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/add_trans_fee"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:inputType="numberDecimal"
@@ -213,6 +276,7 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
+                            android:id="@+id/add_trans_total_label"
                             android:text="@string/portfolio_total_spent"
                             android:textColor="@color/on_surface_variant"
                             android:textSize="@dimen/text_size_body" />

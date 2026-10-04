@@ -14,7 +14,7 @@ import app.khom.pavlo.crypto.model.HoldingsHandler
 import app.khom.pavlo.crypto.utils.ResourceProvider
 import app.khom.pavlo.crypto.databinding.ActivityHoldingsBinding
 import app.khom.pavlo.crypto.utils.getChangeColor
-import app.khom.pavlo.crypto.utils.getStringWithTwoDecimalsFromDouble
+import app.khom.pavlo.crypto.utils.PortfolioValueFormatter
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import java.math.BigDecimal
@@ -136,28 +136,14 @@ class HoldingsActivity : BaseActivity(), IHoldings.View {
             formatPercent(summary.dayPnlPercent)
         )
         binding.holdingsSummaryDayPnl.setTextColor(resProvider.getColor(getChangeColor(summary.dayPnl)))
+        binding.holdingsSummaryExtra.render(summary, resProvider)
     }
 
-    private fun formatMoney(value: BigDecimal): String {
-        val formatted = getStringWithTwoDecimalsFromDouble(value.abs())
-        if (formatted.isEmpty()) return ""
-        val sign = if (value.signum() < 0) "-" else ""
-        return "$sign\$$formatted"
-    }
+    private fun formatMoney(value: BigDecimal): String = PortfolioValueFormatter.money(value)
 
-    private fun formatSignedMoney(value: BigDecimal): String {
-        val formatted = getStringWithTwoDecimalsFromDouble(value.abs())
-        if (formatted.isEmpty()) return ""
-        val sign = if (value.signum() > 0) "+" else if (value.signum() < 0) "-" else ""
-        return "$sign\$$formatted"
-    }
+    private fun formatSignedMoney(value: BigDecimal): String = PortfolioValueFormatter.signedMoney(value)
 
-    private fun formatPercent(value: BigDecimal): String {
-        val formatted = getStringWithTwoDecimalsFromDouble(value.abs())
-        if (formatted.isEmpty()) return ""
-        val sign = if (value.signum() > 0) "+" else if (value.signum() < 0) "-" else ""
-        return "$sign$formatted%"
-    }
+    private fun formatPercent(value: BigDecimal): String = PortfolioValueFormatter.percent(value)
 
     override fun onStop() {
         super.onStop()

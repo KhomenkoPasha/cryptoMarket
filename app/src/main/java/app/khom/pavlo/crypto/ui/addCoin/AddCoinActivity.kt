@@ -5,6 +5,7 @@ import android.os.Bundle
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.appcompat.widget.Toolbar
+import androidx.core.view.WindowInsetsCompat
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import com.jakewharton.rxbinding4.widget.textChanges
@@ -18,6 +19,9 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class AddCoinActivity : BaseActivity(), IAddCoin.View {
+
+    override val contentInsetTypes: Int
+        get() = WindowInsetsCompat.Type.navigationBars() or WindowInsetsCompat.Type.ime()
 
     @Inject lateinit var presenter: IAddCoin.Presenter
     @Inject lateinit var resProvider: ResourceProvider

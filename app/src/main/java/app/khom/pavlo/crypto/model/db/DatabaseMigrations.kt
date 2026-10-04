@@ -135,12 +135,81 @@ val MIGRATION_5_6 = object : Migration(5, 6) {
     }
 }
 
+val MIGRATION_6_7 = object : Migration(6, 7) {
+    override fun migrate(db: SupportSQLiteDatabase) {
+        db.execSQL(
+            """
+            CREATE TABLE IF NOT EXISTS `price_alerts` (
+                `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                `symbol` TEXT NOT NULL,
+                `coin_name` TEXT NOT NULL,
+                `type` TEXT NOT NULL,
+                `threshold` TEXT NOT NULL,
+                `currency` TEXT NOT NULL,
+                `enabled` INTEGER NOT NULL,
+                `created_at` INTEGER NOT NULL,
+                `triggered_at` INTEGER NOT NULL,
+                `triggered_value` TEXT NOT NULL
+            )
+            """.trimIndent()
+        )
+    }
+}
+
+val MIGRATION_7_8 = object : Migration(7, 8) {
+    override fun migrate(db: SupportSQLiteDatabase) {
+        db.execSQL("ALTER TABLE `holdings` ADD COLUMN `type` TEXT NOT NULL DEFAULT 'BUY'")
+        db.execSQL("ALTER TABLE `holdings` ADD COLUMN `fee` TEXT NOT NULL DEFAULT '0'")
+    }
+}
+
+val MIGRATION_8_9 = object : Migration(8, 9) {
+    override fun migrate(db: SupportSQLiteDatabase) {
+        db.execSQL(
+            """
+            CREATE TABLE IF NOT EXISTS `portfolios` (
+                `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                `name` TEXT NOT NULL,
+                `created_at` INTEGER NOT NULL,
+                `sort_order` INTEGER NOT NULL
+            )
+            """.trimIndent()
+        )
+        db.execSQL(
+            "INSERT OR IGNORE INTO `portfolios` (`id`, `name`, `created_at`, `sort_order`) " +
+                "VALUES (1, '', ${System.currentTimeMillis()}, 0)"
+        )
+        db.execSQL("ALTER TABLE `holdings` ADD COLUMN `portfolio_id` INTEGER NOT NULL DEFAULT 1")
+    }
+}
+
+val MIGRATION_9_10 = object : Migration(9, 10) {
+    override fun migrate(db: SupportSQLiteDatabase) {
+        db.execSQL(
+            """
+            CREATE TABLE IF NOT EXISTS `portfolio_snapshots` (
+                `portfolio_id` INTEGER NOT NULL,
+                `day` INTEGER NOT NULL,
+                `value` TEXT NOT NULL,
+                `invested` TEXT NOT NULL,
+                `net_flow` TEXT NOT NULL,
+                PRIMARY KEY(`portfolio_id`, `day`)
+            )
+            """.trimIndent()
+        )
+    }
+}
+
 val ALL_MIGRATIONS = arrayOf(
     MIGRATION_1_2,
     MIGRATION_2_3,
     MIGRATION_3_4,
     MIGRATION_4_5,
-    MIGRATION_5_6
+    MIGRATION_5_6,
+    MIGRATION_6_7,
+    MIGRATION_7_8,
+    MIGRATION_8_9,
+    MIGRATION_9_10
 )
 
 private fun recreateAllCoins(db: SupportSQLiteDatabase, nullableColumns: Set<String>) {

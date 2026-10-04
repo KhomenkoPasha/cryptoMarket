@@ -87,7 +87,7 @@
             android:id="@+id/top_coin_currency_sign"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/dollar_sign"
+            tools:text="@string/dollar_sign"
             android:textColor="@color/on_surface_variant"
             android:textSize="@dimen/text_size_micro"
             app:layout_constraintEnd_toStartOf="@+id/top_coin_price"
@@ -135,7 +135,7 @@
                 android:layout_marginStart="5dp"
                 android:layout_weight="0.1"
                 android:gravity="center_horizontal"
-                android:text="@string/dollar_sign"
+                tools:text="@string/dollar_sign"
                 android:textColor="@color/on_surface_variant"
                 android:textSize="@dimen/text_size_micro" />
 
@@ -173,7 +173,7 @@
                 android:layout_marginStart="5dp"
                 android:layout_weight="0.1"
                 android:gravity="center_horizontal"
-                android:text="@string/dollar_sign"
+                tools:text="@string/dollar_sign"
                 android:textColor="@color/on_surface_variant"
                 android:textSize="@dimen/text_size_micro" />
 
@@ -213,7 +213,7 @@
                 android:layout_marginStart="5dp"
                 android:layout_weight="0.1"
                 android:gravity="center_horizontal"
-                android:text="@string/dollar_sign"
+                tools:text="@string/dollar_sign"
                 android:textColor="@color/on_surface_variant"
                 android:textSize="@dimen/text_size_micro" />
 

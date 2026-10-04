@@ -14,6 +14,7 @@ import app.khom.pavlo.crypto.activities.BaseActivity
 import app.khom.pavlo.crypto.databinding.ActivityAddTransactionBinding
 import app.khom.pavlo.crypto.model.HoldingData
 import app.khom.pavlo.crypto.model.Coin
+import app.khom.pavlo.crypto.model.CurrencyManager
 import app.khom.pavlo.crypto.model.CoinsController
 import app.khom.pavlo.crypto.model.InfoCoin
 import app.khom.pavlo.crypto.model.FSYMS
@@ -22,15 +23,21 @@ import app.khom.pavlo.crypto.model.NAME
 import app.khom.pavlo.crypto.model.preferredCoinInfoBySymbol
 import app.khom.pavlo.crypto.model.TSYMS
 import app.khom.pavlo.crypto.model.TO
+import app.khom.pavlo.crypto.model.DEFAULT_PORTFOLIO_ID
+import app.khom.pavlo.crypto.model.Portfolio
+import app.khom.pavlo.crypto.model.PositionCalculator
+import app.khom.pavlo.crypto.model.TradeType
 import app.khom.pavlo.crypto.model.USD
 import app.khom.pavlo.crypto.model.db.CoinsRepository
 import app.khom.pavlo.crypto.model.db.PortfolioRepository
 import app.khom.pavlo.crypto.model.network.NetworkRequests
+import app.khom.pavlo.crypto.ui.portfolio.displayName
 import app.khom.pavlo.crypto.utils.PortfolioValueFormatter
 import app.khom.pavlo.crypto.utils.Logger
 import app.khom.pavlo.crypto.utils.toastShort
 import dagger.hilt.android.AndroidEntryPoint
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.core.Completable
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.disposables.SerialDisposable
 import io.reactivex.rxjava3.schedulers.Schedulers
@@ -64,6 +71,9 @@ class AddTransactionActivity : BaseActivity() {
     private var editingHoldingId = 0L
     private var coins: List<Coin> = emptyList()
     private var coinIdsBySymbol: Map<String, String> = emptyMap()
+    private var selectedType = TradeType.BUY
+    private var portfolios: List<Portfolio> = emptyList()
+    private var selectedPortfolioId = DEFAULT_PORTFOLIO_ID
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -79,6 +89,7 @@ class AddTransactionActivity : BaseActivity() {
         disposable.add(priceDisposable)
         setupToolbar()
         setupForm()
+        setupPortfolioDropdown()
         if (editingHoldingId > 0L && preselectedFrom.isBlank()) {
             loadTransactionForEdit()
         } else {
@@ -112,6 +123,69 @@ class AddTransactionActivity : BaseActivity() {
         }
         binding.addTransTradingPrice.addTextChangedListener(watcher)
         binding.addTransQuantity.addTextChangedListener(watcher)
+        binding.addTransFee.addTextChangedListener(watcher)
+        setupTypeDropdown()
+    }
+
+    /** Offers a portfolio choice once there is more than one; new transactions start in the selected one. */
+    private fun setupPortfolioDropdown() {
+        disposable.add(
+            portfolioRepository.loadPortfolios()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({ list ->
+                    portfolios = list
+                    val active = portfolioRepository.selection.activeId
+                    val preferred = editingHolding?.portfolioId ?: active
+                    selectedPortfolioId = list.firstOrNull { it.id == preferred }?.id
+                        ?: list.firstOrNull()?.id
+                        ?: DEFAULT_PORTFOLIO_ID
+                    binding.addTransPortfolioLayout.visibility = if (list.size > 1) View.VISIBLE else View.GONE
+                    val labels = list.map { it.displayName(this) }.toTypedArray()
+                    binding.addTransPortfolio.setSimpleItems(labels)
+                    list.firstOrNull { it.id == selectedPortfolioId }?.let {
+                        binding.addTransPortfolio.setText(it.displayName(this), false)
+                    }
+                    binding.addTransPortfolio.setOnItemClickListener { _, _, position, _ ->
+                        selectedPortfolioId = list[position].id
+                    }
+                }, { logger.logError("Load portfolios: $it") })
+        )
+    }
+
+    private fun setupTypeDropdown() {
+        val types = TradeType.values()
+        val labels = types.map { getString(tradeTypeLabel(it)) }.toTypedArray()
+        binding.addTransType.setSimpleItems(labels)
+        binding.addTransType.setText(labels[selectedType.ordinal], false)
+        binding.addTransType.setOnItemClickListener { _, _, position, _ ->
+            selectedType = types[position]
+            applyType()
+        }
+        applyType()
+    }
+
+    /** Re-labels and shows or hides the fields that only make sense for some transaction types. */
+    private fun applyType() {
+        val type = selectedType
+        binding.addTransPriceLayout.visibility = if (type == TradeType.TRANSFER_OUT) View.GONE else View.VISIBLE
+        binding.addTransPriceLayout.hint = getString(
+            when (type) {
+                TradeType.SELL -> R.string.portfolio_sale_price
+                TradeType.TRANSFER_IN -> R.string.portfolio_cost_basis
+                else -> R.string.portfolio_purchase_price
+            }
+        )
+        val hasFee = type == TradeType.BUY || type == TradeType.SELL
+        binding.addTransFeeLayout.visibility = if (hasFee) View.VISIBLE else View.GONE
+        binding.addTransFeeLayout.hint = getString(R.string.trade_fee, CurrencyManager.selected.code)
+        val hasTotal = type != TradeType.TRANSFER_OUT
+        binding.addTransTotalLabel.visibility = if (hasTotal) View.VISIBLE else View.GONE
+        binding.addTransTotalValue.visibility = if (hasTotal) View.VISIBLE else View.GONE
+        binding.addTransTotalLabel.setText(
+            if (type == TradeType.SELL) R.string.portfolio_proceeds else R.string.portfolio_total_spent
+        )
+        updateTotal()
     }
 
     private fun loadTransactionForEdit() {
@@ -124,7 +198,17 @@ class AddTransactionActivity : BaseActivity() {
                 .subscribe({ holding ->
                     editingHolding = holding
                     selectedDate = holding.date
-                    binding.addTransTradingPrice.setText(holding.price.toPlainString())
+                    selectedType = holding.tradeType
+                    selectedPortfolioId = holding.portfolioId
+                    portfolios.firstOrNull { it.id == holding.portfolioId }?.let {
+                        binding.addTransPortfolio.setText(it.displayName(this), false)
+                    }
+                    binding.addTransType.setText(getString(tradeTypeLabel(selectedType)), false)
+                    if (holding.fee.signum() > 0) {
+                        binding.addTransFee.setText(PortfolioValueFormatter.inputAmount(holding.fee))
+                    }
+                    applyType()
+                    binding.addTransTradingPrice.setText(PortfolioValueFormatter.inputAmount(holding.price))
                     binding.addTransQuantity.setText(holding.quantity.toPlainString())
                     binding.addTransExchange.setText(holding.exchange)
                     binding.addTransTradeDate.setText(dateFormat.format(Date(selectedDate)))
@@ -295,19 +379,15 @@ class AddTransactionActivity : BaseActivity() {
                     currentCoin.selected = coin.selected
                     selectedCoin = currentCoin
                     binding.addTransPriceLoading.visibility = View.GONE
-                    binding.addTransCurrentPrice.text = currentCoin.price.ifBlank {
-                        currentCoin.priceRaw.takeIf { it > 0f }
-                            ?.toString()
-                            ?.toBigDecimalOrNull()
-                            ?.let(PortfolioValueFormatter::price)
-                            ?: getString(R.string.portfolio_price_unavailable)
-                    }
+                    binding.addTransCurrentPrice.text = currentCoin.priceRaw.takeIf { it > 0f }
+                        ?.toString()
+                        ?.toBigDecimalOrNull()
+                        ?.let(PortfolioValueFormatter::price)
+                        ?: getString(R.string.portfolio_price_unavailable)
                     if (currentCoin.priceRaw > 0f &&
                         (replacePurchasePrice || binding.addTransTradingPrice.text.isNullOrBlank())) {
                         binding.addTransTradingPrice.setText(
-                            BigDecimal.valueOf(currentCoin.priceRaw.toDouble())
-                                .stripTrailingZeros()
-                                .toPlainString()
+                            PortfolioValueFormatter.inputAmount(BigDecimal.valueOf(currentCoin.priceRaw.toDouble()))
                         )
                     }
                 }, { error ->
@@ -337,8 +417,12 @@ class AddTransactionActivity : BaseActivity() {
     private fun updateTotal() {
         val price = binding.addTransTradingPrice.text.toDecimalOrNull()
         val quantity = binding.addTransQuantity.text.toDecimalOrNull()
+        val fee = binding.addTransFee.text.toDecimalOrNull()?.takeIf { it.signum() > 0 } ?: BigDecimal.ZERO
         binding.addTransTotalValue.text = if (price != null && quantity != null) {
-            PortfolioValueFormatter.money(price.multiply(quantity))
+            val gross = CurrencyManager.toUsd(price).multiply(quantity)
+            val feeUsd = CurrencyManager.toUsd(fee)
+            // A fee makes a purchase cost more and a sale pay less.
+            PortfolioValueFormatter.money(if (selectedType == TradeType.SELL) gross - feeUsd else gross + feeUsd)
         } else {
             ""
         }
@@ -351,16 +435,31 @@ class AddTransactionActivity : BaseActivity() {
             binding.addTransCoinLayout.error = getString(R.string.portfolio_choose_coin)
             return
         }
-        val price = binding.addTransTradingPrice.text.toDecimalOrNull()
-        val quantity = binding.addTransQuantity.text.toDecimalOrNull()
-        if (price == null || price.signum() <= 0) {
+        val type = selectedType
+        val enteredPrice = binding.addTransTradingPrice.text.toDecimalOrNull()
+        val price = when (type) {
+            TradeType.TRANSFER_OUT -> BigDecimal.ZERO
+            // The cost basis of received coins is optional; no value means they came at no cost.
+            TradeType.TRANSFER_IN -> enteredPrice ?: BigDecimal.ZERO
+            else -> enteredPrice
+        }
+        val priceRequired = type == TradeType.BUY || type == TradeType.SELL
+        if (price == null || price.signum() < 0 || (priceRequired && price.signum() == 0)) {
             toastShort(getString(R.string.add_trans_fill_price))
             return
         }
+        val quantity = binding.addTransQuantity.text.toDecimalOrNull()
         if (quantity == null || quantity.signum() <= 0) {
             toastShort(getString(R.string.add_trans_fill_quantity))
             return
         }
+        val hasFee = type == TradeType.BUY || type == TradeType.SELL
+        val fee = if (hasFee) binding.addTransFee.text.toDecimalOrNull() ?: BigDecimal.ZERO else BigDecimal.ZERO
+        if (fee.signum() < 0) {
+            binding.addTransFeeLayout.error = getString(R.string.add_trans_fill_price)
+            return
+        }
+        binding.addTransFeeLayout.error = null
 
         binding.addTransConfirmBtn.isEnabled = false
         binding.addTransSaveLoading.visibility = View.VISIBLE
@@ -369,7 +468,10 @@ class AddTransactionActivity : BaseActivity() {
             from = coin.from,
             to = coin.to,
             quantity = quantity,
-            price = price,
+            price = CurrencyManager.toUsd(price),
+            fee = CurrencyManager.toUsd(fee),
+            type = type.name,
+            portfolioId = selectedPortfolioId,
             date = selectedDate,
             coinId = coinIdsBySymbol[coin.from.uppercase(Locale.US)]
                 ?: editingHolding
@@ -380,10 +482,25 @@ class AddTransactionActivity : BaseActivity() {
             coinName = coin.fullName.ifBlank { coin.from },
             exchange = binding.addTransExchange.text?.toString()?.trim().orEmpty()
         )
-        val saveOperation = if (editingHoldingId > 0L) {
-            portfolioRepository.updateHolding(holding)
-        } else {
-            portfolioRepository.addHolding(holding)
+        val saveOperation = portfolioRepository.loadHoldings().flatMapCompletable { existing ->
+            val others = existing.filter { it.id != editingHoldingId }
+            val before = PositionCalculator.replay(existing)
+            val after = PositionCalculator.replay(others + holding.copy(id = Long.MAX_VALUE))
+            when {
+                // Refuse a change that would leave a sale or transfer out without the coins to cover it.
+                after.hasOversell && !before.hasOversell -> Completable.error(
+                    OversellException(
+                        PositionCalculator.replay(others).positions
+                            .firstOrNull {
+                                it.portfolioId == selectedPortfolioId && it.from == coin.from && it.to == coin.to
+                            }
+                            ?.quantity
+                            ?: BigDecimal.ZERO
+                    )
+                )
+                editingHoldingId > 0L -> portfolioRepository.updateHolding(holding)
+                else -> portfolioRepository.addHolding(holding)
+            }
         }
         disposable.add(
             saveOperation
@@ -401,7 +518,13 @@ class AddTransactionActivity : BaseActivity() {
                     logger.logError("Save transaction: $error")
                     binding.addTransConfirmBtn.isEnabled = true
                     binding.addTransSaveLoading.visibility = View.GONE
-                    toastShort(getString(R.string.error))
+                    toastShort(
+                        if (error is OversellException) {
+                            getString(R.string.portfolio_sell_exceeds, error.held.stripTrailingZeros().toPlainString())
+                        } else {
+                            getString(R.string.error)
+                        }
+                    )
                 })
         )
     }
@@ -432,3 +555,6 @@ class AddTransactionActivity : BaseActivity() {
                 .putExtra(EXTRA_HOLDING_ID, holdingId)
     }
 }
+
+/** Thrown when a change would sell or send out more coins than are held. */
+private class OversellException(val held: BigDecimal) : IllegalStateException("Not enough coins")

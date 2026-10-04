@@ -45,5 +45,10 @@ val MONTH = "1 month"
 val MONTHS3 = "3 months"
 val MONTHS6 = "6 months"
 val YEAR = "1 year"
+val ALL_TIME = "all time"
 
 val DEFAULT_DATE_FORMAT = "dd/MM/yyyy"
+
+val COINBASE_RATES_URL = "https://api.coinbase.com/v2/exchange-rates"
+val FEAR_GREED_URL = "https://api.alternative.me/fng/"
+val COINPAPRIKA_GLOBAL_URL = "https://api.coinpaprika.com/v1/global"

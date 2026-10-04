@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Midnight Aurora: Material 3 Expressive dark tonal palette. -->
+    <color name="app_background">#080D17</color>
+    <color name="surface_container_low">#0D1420</color>
+    <color name="surface_container">#121B29</color>
+    <color name="surface_container_high">#192538</color>
+    <color name="surface_container_highest">#223047</color>
+    <color name="dialog_surface">#1F2E44</color>
+    <color name="on_surface">#E7EEF9</color>
+    <color name="on_surface_variant">#9EACC2</color>
+    <color name="outline">#33445E</color>
+    <color name="outline_variant">#243249</color>
+    <color name="glass_surface_start">#E61B2A3D</color>
+    <color name="glass_surface_end">#B8121B29</color>
+    <color name="glass_surface_high">#D923344A</color>
+    <color name="glass_outline">#6672CAD6</color>
+
+    <color name="brand_primary">#72CAD6</color>
+    <color name="on_brand_primary">#04343A</color>
+    <color name="primary_container">#173A42</color>
+    <color name="on_primary_container">#C1EDF2</color>
+    <color name="brand_secondary">#AEBBFF</color>
+    <color name="secondary_container">#29325D</color>
+    <color name="on_secondary_container">#E1E5FF</color>
+    <color name="brand_tertiary">#CBB8FF</color>
+    <color name="tertiary_container">#403365</color>
+    <color name="on_tertiary_container">#EBDDFF</color>
+
+    <color name="positive">#45DDA1</color>
+    <color name="negative">#FF7088</color>
+    <color name="warning">#FFCA72</color>
+    <color name="ripple">#3372CAD6</color>
+
+    <color name="bg_depth_start">#0D1928</color>
+    <color name="bg_depth_center">#080D17</color>
+    <color name="bg_depth_end">#050912</color>
+    <color name="card_selected_start">#F0245360</color>
+    <color name="card_selected_end">#C6173A42</color>
+    <color name="dialog_gradient_start">#FF263750</color>
+    <color name="dialog_gradient_center">#FF1F2E44</color>
+    <color name="dialog_gradient_end">#FF182437</color>
+    <color name="hero_start">#E01B4650</color>
+    <color name="hero_center">#D4213D4E</color>
+    <color name="hero_end">#D926294D</color>
+    <color name="input_surface_end">#BF192538</color>
+    <color name="popup_stroke">#B372CAD6</color>
+    <color name="loading_scrim">#D9080D17</color>
+
+    <color name="chart_decrease">#FF5F73</color>
+    <color name="chart_highlight">#9972CAD6</color>
+    <color name="chart_axis">#8A435672</color>
+    <color name="chart_grid">#6633445E</color>
+    <color name="chart_allocation_4">#8ED1B2</color>
+    <color name="chart_allocation_6">#70A8E8</color>
+    <color name="chart_allocation_7">#E6A17C</color>
+    <color name="chart_allocation_8">#D896CF</color>
+    <color name="chart_allocation_9">#61C3B8</color>
+    <color name="chart_allocation_10">#849AD6</color>
+    <color name="chart_allocation_11">#A8C98C</color>
+    <color name="chart_allocation_12">#D98FA6</color>
+
+    <color name="grey_light">#C5D0E0</color>
+</resources>

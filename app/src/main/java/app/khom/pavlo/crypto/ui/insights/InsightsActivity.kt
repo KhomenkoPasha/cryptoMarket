@@ -13,11 +13,16 @@ import app.khom.pavlo.crypto.R
 import app.khom.pavlo.crypto.activities.BaseActivity
 import app.khom.pavlo.crypto.databinding.ActivityInsightsBinding
 import app.khom.pavlo.crypto.model.Coin
+import app.khom.pavlo.crypto.model.CurrencyManager
 import app.khom.pavlo.crypto.model.HoldingData
+import app.khom.pavlo.crypto.model.MarketOverview
 import app.khom.pavlo.crypto.model.Preferences
 import app.khom.pavlo.crypto.model.TopCoinData
 import app.khom.pavlo.crypto.model.db.CMDatabase
+import app.khom.pavlo.crypto.model.network.NetworkRequests
+import app.khom.pavlo.crypto.utils.PortfolioValueFormatter
 import app.khom.pavlo.crypto.utils.ResourceProvider
+import app.khom.pavlo.crypto.utils.fearGreedLabel
 import app.khom.pavlo.crypto.utils.toastShort
 import com.google.android.material.button.MaterialButton
 import dagger.hilt.android.AndroidEntryPoint
@@ -25,6 +30,7 @@ import io.reactivex.rxjava3.core.Single
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.schedulers.Schedulers
+import java.math.BigDecimal
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -38,11 +44,11 @@ class InsightsActivity : BaseActivity() {
     @Inject lateinit var db: CMDatabase
     @Inject lateinit var resProvider: ResourceProvider
     @Inject lateinit var preferences: Preferences
+    @Inject lateinit var networkRequests: NetworkRequests
 
     private lateinit var binding: ActivityInsightsBinding
     private val disposable = CompositeDisposable()
     private val percentFormat = DecimalFormat("#.##")
-    private val moneyFormat = DecimalFormat("#,###.####")
     private val dateFormat = SimpleDateFormat("MMM d, yyyy", Locale.US)
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -86,6 +92,10 @@ class InsightsActivity : BaseActivity() {
         val favorites = db.coinsDao().getAllCoinsSync()
         val topCoins = db.topCoinsDao().getAllTopCoins().blockingFirst()
         val holdings = db.holdingsDao().getAllHoldings().blockingFirst()
+        // Runs on an io thread; a missing market overview just falls back to the cached top-list estimates.
+        val overview = networkRequests.getMarketOverview()
+                .onErrorReturnItem(MarketOverview())
+                .blockingGet()
 
         favorites.forEach {
             preferences.ensureCoinTracking(it.from, it.priceRaw)
@@ -98,7 +108,8 @@ class InsightsActivity : BaseActivity() {
                 alerts = buildAlerts(favorites, topCoins),
                 anomalies = buildAnomalies(favorites, topCoins),
                 categories = buildCategories(favorites),
-                digest = buildDigest(favorites, topCoins, holdings)
+                digest = buildDigest(favorites, topCoins, holdings, overview),
+                overview = overview
         )
     }
 
@@ -185,20 +196,21 @@ class InsightsActivity : BaseActivity() {
     private fun buildDigest(
             favorites: List<Coin>,
             topCoins: List<TopCoinData>,
-            holdings: List<HoldingData>
+            holdings: List<HoldingData>,
+            overview: MarketOverview
     ): List<String> {
         val digest = ArrayList<String>()
         val moves = topCoins.mapNotNull { coin -> coin.change24hOrNull()?.let { coin to it } }
         val topGainer = moves.maxByOrNull { it.second }
         val topLoser = moves.minByOrNull { it.second }
         val favoriteAverage = favorites.takeIf { it.isNotEmpty() }?.map { it.changePct24hRaw }?.average()
-        val btcDominance = estimateBtcDominance(topCoins)
+        val btcDominance = overview.global?.btcDominance ?: estimateBtcDominance(topCoins)
 
         digest.add("Watchlist: ${favorites.size} favorites, ${holdings.size} saved holdings.")
         if (favoriteAverage != null) digest.add("Average favorite 24h move: ${formatPercent(favoriteAverage)}.")
         if (topGainer != null) digest.add("Top gainer: ${topGainer.first.displayName()} ${formatPercent(topGainer.second)}.")
         if (topLoser != null) digest.add("Top loser: ${topLoser.first.displayName()} ${formatPercent(topLoser.second)}.")
-        if (btcDominance != null) digest.add("Estimated BTC dominance in cached top list: ${formatPercent(btcDominance)}.")
+        if (btcDominance != null) digest.add("BTC dominance: ${formatPercent(btcDominance)}.")
         digest.add("News focus: ${buildNewsFocus(favorites)}.")
 
         return digest
@@ -240,8 +252,14 @@ class InsightsActivity : BaseActivity() {
         addLine(binding.marketMoodContainer, mood, R.color.colorPrimaryDark, 14f, Typeface.BOLD)
         addLine(binding.marketMoodContainer, "$positive coins up, $negative down in cached top list.")
         addLine(binding.marketMoodContainer, "Average 24h move: ${formatPercent(average)}.")
-        estimateBtcDominance(snapshot.topCoins)?.let {
-            addLine(binding.marketMoodContainer, "BTC dominance estimate: ${formatPercent(it)}.")
+        snapshot.overview.fearGreed?.let {
+            addLine(
+                    binding.marketMoodContainer,
+                    "${getString(R.string.market_fear_greed)}: ${it.value} - ${getString(fearGreedLabel(it.value))}."
+            )
+        }
+        (snapshot.overview.global?.btcDominance ?: estimateBtcDominance(snapshot.topCoins))?.let {
+            addLine(binding.marketMoodContainer, "${getString(R.string.market_btc_dominance)}: ${formatPercent(it)}.")
         }
     }
 
@@ -285,20 +303,20 @@ class InsightsActivity : BaseActivity() {
         val favoriteRows = snapshot.favorites.take(3).map {
             CompareRow(
                     name = coinTitle(it),
-                    price = it.price.ifEmpty { formatMoney(it.priceRaw.toDouble()) },
+                    price = formatPrice(it.priceRaw.toDouble()),
                     move24h = formatPercent(it.changePct24hRaw),
-                    volume = it.volume24h.ifEmpty { formatMoney(it.volume24hRaw.toDouble()) },
-                    marketCap = it.mktCap.ifEmpty { formatMoney(it.mktCapRaw.toDouble()) }
+                    volume = formatCompactMoney(it.volume24hRaw.toDouble()),
+                    marketCap = formatCompactMoney(it.mktCapRaw.toDouble())
             )
         }
         val rows = favoriteRows.ifEmpty {
             snapshot.topCoins.take(3).map {
                 CompareRow(
                         name = it.displayName(),
-                        price = "\$${formatMoney(it.priceOrNull() ?: 0.0)}",
+                        price = formatPrice(it.priceOrNull() ?: 0.0),
                         move24h = formatPercent(it.change24hOrNull() ?: 0.0),
-                        volume = "\$${formatMoney(it.volumeOrNull() ?: 0.0)}",
-                        marketCap = "\$${formatMoney(it.marketCapOrNull() ?: 0.0)}"
+                        volume = formatCompactMoney(it.volumeOrNull() ?: 0.0),
+                        marketCap = formatCompactMoney(it.marketCapOrNull() ?: 0.0)
                 )
             }
         }
@@ -458,7 +476,7 @@ class InsightsActivity : BaseActivity() {
     private fun dp(value: Int): Int = (value * resources.displayMetrics.density).toInt()
 
     private fun coinTitle(coin: Coin): String =
-            if (coin.fullName.isNotEmpty()) "${coin.from} - ${coin.fullName}" else "${coin.from} / ${coin.to}"
+            if (coin.fullName.isNotEmpty()) "${coin.from} - ${coin.fullName}" else "${coin.from} / ${CurrencyManager.selected.code}"
 
     private fun buildNewsFocus(favorites: List<Coin>): String {
         val favoriteTags = favorites.take(4).joinToString(" ") { "#${it.from}" }
@@ -495,8 +513,11 @@ class InsightsActivity : BaseActivity() {
 
     private fun formatPercent(value: Double): String = "${percentFormat.format(value)}%"
 
-    private fun formatMoney(value: Double): String =
-            if (value == 0.0) "-" else moneyFormat.format(value)
+    private fun formatPrice(usd: Double): String =
+            if (usd == 0.0) "-" else PortfolioValueFormatter.price(BigDecimal.valueOf(usd))
+
+    private fun formatCompactMoney(usd: Double): String =
+            if (usd == 0.0) "-" else PortfolioValueFormatter.compact(BigDecimal.valueOf(usd))
 
     private fun String?.numberOrNull(): Double? =
             this?.replace(",", "")
@@ -533,7 +554,8 @@ class InsightsActivity : BaseActivity() {
             val alerts: List<String>,
             val anomalies: List<String>,
             val categories: List<Pair<String, Int>>,
-            val digest: List<String>
+            val digest: List<String>,
+            val overview: MarketOverview
     )
 
     private data class CompareRow(

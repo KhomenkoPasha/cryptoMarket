@@ -1,58 +1,68 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginStart="10dp"
     android:layout_marginTop="4dp"
-    android:layout_marginEnd="10dp"
     android:layout_marginBottom="4dp"
-    android:background="@drawable/bg_card_surface"
-    android:elevation="2dp"
-    android:gravity="center_vertical"
-    android:orientation="vertical"
-    android:padding="8dp">
+    android:clickable="true"
+    android:focusable="true"
+    app:cardBackgroundColor="@color/surface_container"
+    app:cardCornerRadius="12dp"
+    app:cardElevation="0dp"
+    app:cardPreventCornerOverlap="false"
+    app:strokeColor="@color/outline_variant"
+    app:strokeWidth="1dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
+        android:minHeight="56dp"
         android:orientation="horizontal"
-        android:padding="12dp">
+        android:paddingStart="12dp"
+        android:paddingTop="8dp"
+        android:paddingEnd="12dp"
+        android:paddingBottom="8dp">
 
         <ImageView
             android:id="@+id/add_coin_icon"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_marginEnd="5dp"
-            android:contentDescription="@null" />
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:layout_marginEnd="10dp"
+            android:contentDescription="@null"
+            android:src="@drawable/ic_coin_placeholder" />
 
-        <TextView
-            android:id="@+id/add_coin_short_name"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="5dp"
-            android:textColor="@color/brand_primary"
-            android:textStyle="bold"
-            android:textSize="@dimen/text_size_title"
-            tools:text="BTC" />
+            android:layout_weight="1"
+            android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/add_coin_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/on_surface"
-            android:textSize="@dimen/text_size_title"
-            tools:text="Bitcoin" />
+            <TextView
+                android:id="@+id/add_coin_short_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:textColor="@color/brand_primary"
+                android:textSize="@dimen/text_size_body_large"
+                android:textStyle="normal"
+                tools:text="BTC" />
+
+            <TextView
+                android:id="@+id/add_coin_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="2"
+                android:textColor="@color/on_surface_variant"
+                android:textSize="@dimen/text_size_body"
+                tools:text="Bitcoin" />
+
+        </LinearLayout>
 
     </LinearLayout>
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0.7dp"
-        android:layout_marginBottom="3dp"
-        android:layout_marginTop="3dp"
-        android:background="@drawable/divider" />
-
-</LinearLayout>
+</com.google.android.material.card.MaterialCardView>

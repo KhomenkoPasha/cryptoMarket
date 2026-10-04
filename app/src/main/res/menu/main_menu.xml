@@ -28,6 +28,18 @@
         android:title="@string/backup_restore_data"
         app:showAsAction="ifRoom" />
     <item
+        android:id="@+id/main_menu_export_csv"
+        android:title="@string/menu_export_csv"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/main_menu_import_csv"
+        android:title="@string/menu_import_csv"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/main_menu_alerts"
+        android:title="@string/price_alerts"
+        app:showAsAction="never" />
+    <item
         android:id="@+id/main_menu_insights"
         android:title="@string/insights"
         app:showAsAction="never" />

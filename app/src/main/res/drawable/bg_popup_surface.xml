@@ -3,14 +3,14 @@
     android:shape="rectangle">
     <gradient
         android:angle="315"
-        android:centerColor="#FF1F2E44"
-        android:endColor="#FF182437"
-        android:startColor="#FF263750"
+        android:centerColor="@color/dialog_gradient_center"
+        android:endColor="@color/dialog_gradient_end"
+        android:startColor="@color/dialog_gradient_start"
         android:type="linear" />
     <corners android:radius="16dp" />
     <stroke
         android:width="@dimen/stroke_hairline"
-        android:color="#B372CAD6" />
+        android:color="@color/popup_stroke" />
     <padding
         android:bottom="2dp"
         android:left="4dp"

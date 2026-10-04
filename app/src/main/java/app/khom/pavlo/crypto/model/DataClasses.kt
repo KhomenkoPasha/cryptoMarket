@@ -189,4 +189,26 @@ data class HoldingData(@PrimaryKey(autoGenerate = true) var id: Long = 0,
                        @ColumnInfo(name = "transaction_date") var date: Long,
                        @ColumnInfo(name = "coin_id") var coinId: String = "",
                        @ColumnInfo(name = "coin_name") var coinName: String = "",
-                       var exchange: String = "")
+                       var exchange: String = "",
+                       var type: String = TradeType.BUY.name,
+                       var fee: BigDecimal = BigDecimal.ZERO,
+                       @ColumnInfo(name = "portfolio_id") var portfolioId: Long = DEFAULT_PORTFOLIO_ID) {
+
+    val tradeType: TradeType get() = TradeType.fromName(type)
+}
+
+data class FearGreedIndex(
+        val value: Int,
+        val classification: String,
+        val previousValue: Int? = null,
+        val timestamp: Long = 0L)
+
+data class GlobalMarketStats(
+        val btcDominance: Double? = null,
+        val marketCapUsd: Double? = null,
+        val volume24hUsd: Double? = null,
+        val marketCapChange24h: Double? = null)
+
+data class MarketOverview(
+        val fearGreed: FearGreedIndex? = null,
+        val global: GlobalMarketStats? = null)

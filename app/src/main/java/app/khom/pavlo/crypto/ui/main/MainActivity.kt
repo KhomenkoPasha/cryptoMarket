@@ -28,12 +28,15 @@ import android.widget.FrameLayout
 import app.khom.pavlo.crypto.R
 import app.khom.pavlo.crypto.activities.BaseActivity
 import app.khom.pavlo.crypto.model.COINS_FRAGMENT_PAGE_POSITION
+import app.khom.pavlo.crypto.model.CoinsController
+import app.khom.pavlo.crypto.model.db.PortfolioRepository
 import app.khom.pavlo.crypto.model.backup.AppBackupRepository
 import app.khom.pavlo.crypto.model.backup.BACKUP_FILE_MIME_TYPE
 import app.khom.pavlo.crypto.model.backup.BACKUP_OPEN_MIME_TYPES
 import app.khom.pavlo.crypto.model.backup.BackupResult
 import app.khom.pavlo.crypto.model.backup.createBackupFileName
 import app.khom.pavlo.crypto.ui.addCoin.AddCoinActivity
+import app.khom.pavlo.crypto.ui.alerts.AlertsActivity
 import app.khom.pavlo.crypto.ui.coins.CoinsFragment
 import app.khom.pavlo.crypto.ui.insights.InsightsActivity
 import app.khom.pavlo.crypto.ui.holdings.AddTransactionActivity
@@ -68,6 +71,9 @@ class MainActivity : BaseActivity(), IMain.View {
     @Inject lateinit var presenter: IMain.Presenter
     @Inject lateinit var resProvider: ResourceProvider
     @Inject lateinit var backupRepository: AppBackupRepository
+    @Inject lateinit var portfolioRepository: PortfolioRepository
+    @Inject lateinit var coinsController: CoinsController
+    private lateinit var csvTransfer: CsvTransferController
     private lateinit var binding: ActivityMainBinding
     private lateinit var coinsLoading: ProgressBar
     private var deleteMenuItem: MenuItem? = null
@@ -75,8 +81,11 @@ class MainActivity : BaseActivity(), IMain.View {
     private var sortMenuItem: MenuItem? = null
     private var settingsMenuItem: MenuItem? = null
     private var insightsMenuItem: MenuItem? = null
+    private var alertsMenuItem: MenuItem? = null
     private var backupSaveMenuItem: MenuItem? = null
     private var backupRestoreMenuItem: MenuItem? = null
+    private var csvExportMenuItem: MenuItem? = null
+    private var csvImportMenuItem: MenuItem? = null
     private var adView: AdView? = null
     private var exitDialog: AlertDialog? = null
     private var restoreConfirmationDialog: AlertDialog? = null
@@ -111,6 +120,7 @@ class MainActivity : BaseActivity(), IMain.View {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        csvTransfer = CsvTransferController(this, portfolioRepository, coinsController, backupDisposable)
         onBackPressedDispatcher.addCallback(this, exitBackCallback)
         setupToolbar()
         setupViewPager()
@@ -227,8 +237,11 @@ class MainActivity : BaseActivity(), IMain.View {
         sortMenuItem = menu?.findItem(R.id.main_menu_sort)
         settingsMenuItem = menu?.findItem(R.id.main_menu_settings)
         insightsMenuItem = menu?.findItem(R.id.main_menu_insights)
+        alertsMenuItem = menu?.findItem(R.id.main_menu_alerts)
         backupSaveMenuItem = menu?.findItem(R.id.main_menu_backup_save)
         backupRestoreMenuItem = menu?.findItem(R.id.main_menu_backup_restore)
+        csvExportMenuItem = menu?.findItem(R.id.main_menu_export_csv)
+        csvImportMenuItem = menu?.findItem(R.id.main_menu_import_csv)
         applyMenuState()
         return super.onCreateOptionsMenu(menu)
     }
@@ -251,6 +264,10 @@ class MainActivity : BaseActivity(), IMain.View {
                 openInsights()
                 true
             }
+            R.id.main_menu_alerts -> {
+                startActivity(Intent(this, AlertsActivity::class.java))
+                true
+            }
             R.id.main_menu_delete -> {
                 presenter.onDeleteClicked()
                 true
@@ -261,6 +278,14 @@ class MainActivity : BaseActivity(), IMain.View {
             }
             R.id.main_menu_backup_restore -> {
                 showRestoreConfirmation()
+                true
+            }
+            R.id.main_menu_export_csv -> {
+                csvTransfer.startExport()
+                true
+            }
+            R.id.main_menu_import_csv -> {
+                csvTransfer.startImport()
                 true
             }
             else -> super.onOptionsItemSelected(item)
@@ -278,10 +303,13 @@ class MainActivity : BaseActivity(), IMain.View {
         sortMenuItem?.isVisible = currentMenuState.showSort
         settingsMenuItem?.isVisible = currentMenuState.showOverflow
         insightsMenuItem?.isVisible = currentMenuState.showOverflow
+        alertsMenuItem?.isVisible = currentMenuState.showOverflow
         backupSaveMenuItem?.isVisible = currentMenuState.showOverflow
         backupRestoreMenuItem?.isVisible = currentMenuState.showOverflow
         backupSaveMenuItem?.isEnabled = !backupBusy
         backupRestoreMenuItem?.isEnabled = !backupBusy
+        csvExportMenuItem?.isVisible = currentMenuState.showOverflow
+        csvImportMenuItem?.isVisible = currentMenuState.showOverflow
         addMenuItem?.setTitle(
             when (currentMenuState.addAction) {
                 MainAddAction.ADD_TRANSACTION -> R.string.portfolio_add_transaction
@@ -338,6 +366,7 @@ class MainActivity : BaseActivity(), IMain.View {
         restoreConfirmationDialog = null
         dataTransferDialog?.dismiss()
         dataTransferDialog = null
+        csvTransfer.dismiss()
         backupDisposable.clear()
         detachBanner()
         binding.viewpager.unregisterOnPageChangeCallback(pageChangeCallback)

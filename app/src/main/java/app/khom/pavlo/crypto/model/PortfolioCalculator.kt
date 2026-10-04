@@ -10,18 +10,28 @@ object PortfolioCalculator {
     private val mathContext = MathContext.DECIMAL128
 
     fun summary(holdings: List<HoldingData>, coins: List<Coin>): PortfolioSummary {
-        val investedValue = investedValue(holdings)
-        val currentValue = currentValue(holdings, coins)
-        val dayPnl = totalDayPnl(holdings, coins)
+        val positions = PositionCalculator.replay(holdings).positions
+        val investedValue = positions.sumOf { it.costBasis }
+        val currentValue = positions.sumOf { it.quantity.multiply(currentPrice(it.from, it.to, coins)) }
+        val unrealizedPnl = currentValue - investedValue
+        val realizedPnl = positions.sumOf { it.realizedPnl }
+        val totalPnl = unrealizedPnl + realizedPnl
+        val dayPnl = positions.sumOf { dayPnl(it, coins) }
         val previousValue = currentValue - dayPnl
+        // Sold coins count towards the base so the percentage still relates profit to money put in.
+        val costBase = investedValue + positions.sumOf { it.soldCostBasis }
 
         return PortfolioSummary(
             investedValue = investedValue,
             currentValue = currentValue,
-            totalPnl = currentValue - investedValue,
-            totalPnlPercent = changePercent(investedValue, currentValue),
+            totalPnl = totalPnl,
+            totalPnlPercent = changePercent(costBase, costBase + totalPnl),
             dayPnl = dayPnl,
-            dayPnlPercent = changePercent(previousValue, currentValue)
+            dayPnlPercent = changePercent(previousValue, currentValue),
+            realizedPnl = realizedPnl,
+            unrealizedPnl = unrealizedPnl,
+            feesPaid = positions.sumOf { it.fees },
+            hasSales = positions.any { it.soldCostBasis.signum() > 0 || it.realizedPnl.signum() != 0 }
         )
     }
 
@@ -30,88 +40,119 @@ object PortfolioCalculator {
         holdings: List<HoldingData>,
         coins: List<Coin>
     ): PortfolioHoldingStats {
-        val matching = holdings.filter { it.from == holding.from && it.to == holding.to }
-        val quantity = matching.sumOf { it.quantity }
-        val invested = investedValue(matching)
-        val averageBuyPrice = if (quantity.signum() > 0) {
-            invested.divide(quantity, mathContext)
-        } else {
-            zero
-        }
-        val pairCurrentValue = currentValue(matching, coins)
-        val totalCurrentValue = currentValue(holdings, coins)
-        val coin = coinFor(holding, coins)
+        val report = PositionCalculator.replay(holdings)
+        val position = report.positionFor(holding.from, holding.to)
+        val totalCurrentValue = report.positions.sumOf { it.quantity.multiply(currentPrice(it.from, it.to, coins)) }
+        val pairCurrentValue = position?.quantity?.multiply(currentPrice(holding.from, holding.to, coins)) ?: zero
+        val coin = coinFor(holding.from, holding.to, coins)
 
         return PortfolioHoldingStats(
-            averageBuyPrice = averageBuyPrice,
+            averageBuyPrice = position?.averageCost ?: zero,
             allocationPercent = if (totalCurrentValue.signum() > 0) {
                 pairCurrentValue.multiply(oneHundred).divide(totalCurrentValue, mathContext)
             } else {
                 zero
             },
-            dayPnl = dayPnl(matching, coins),
+            dayPnl = position?.let { dayPnl(it, coins) } ?: zero,
             dayPnlPercent = coin?.changePct24hRaw?.toDecimal() ?: zero
         )
     }
 
+    /** Stats for a single transaction on its own, as if it were a plain purchase. */
     fun transactionStats(
         holding: HoldingData,
         coins: List<Coin>
+    ): PortfolioTransactionStats = transactionStats(holding, listOf(holding), coins)
+
+    /**
+     * Stats for one transaction card. [holdings] must hold every transaction of the portfolio so a
+     * sale can be matched with the average cost of the coins that were held when it happened.
+     */
+    fun transactionStats(
+        holding: HoldingData,
+        holdings: List<HoldingData>,
+        coins: List<Coin>
     ): PortfolioTransactionStats {
-        val currentPrice = currentPrice(holding, coins)
-        val totalSpent = holding.quantity.multiply(holding.price)
+        val currentPrice = currentPrice(holding.from, holding.to, coins)
+        val gross = holding.quantity.multiply(holding.price)
         val currentValue = holding.quantity.multiply(currentPrice)
-        val profit = currentValue - totalSpent
-        return PortfolioTransactionStats(
-            currentPrice = currentPrice,
-            totalSpent = totalSpent,
-            currentValue = currentValue,
-            profit = profit,
-            profitPercent = changePercent(totalSpent, currentValue)
-        )
+        return when (holding.tradeType) {
+            TradeType.SELL -> {
+                val sale = PositionCalculator.replay(holdings).sales[holding.id]
+                    ?: SaleResult(gross - holding.fee, zero, gross - holding.fee)
+                PortfolioTransactionStats(
+                    currentPrice = currentPrice,
+                    totalSpent = sale.proceeds,
+                    currentValue = currentValue,
+                    profit = sale.realizedPnl,
+                    profitPercent = changePercent(sale.costBasis, sale.costBasis + sale.realizedPnl),
+                    type = TradeType.SELL,
+                    fee = holding.fee
+                )
+            }
+            TradeType.TRANSFER_OUT -> PortfolioTransactionStats(
+                currentPrice = currentPrice,
+                totalSpent = zero,
+                currentValue = currentValue,
+                profit = zero,
+                profitPercent = zero,
+                type = TradeType.TRANSFER_OUT,
+                fee = zero
+            )
+            else -> {
+                val spent = gross + holding.fee
+                val profit = currentValue - spent
+                PortfolioTransactionStats(
+                    currentPrice = currentPrice,
+                    totalSpent = spent,
+                    currentValue = currentValue,
+                    profit = profit,
+                    profitPercent = changePercent(spent, currentValue),
+                    type = holding.tradeType,
+                    fee = holding.fee
+                )
+            }
+        }
     }
 
     fun investedValue(holdings: List<HoldingData>): BigDecimal =
-        holdings.sumOf { it.quantity.multiply(it.price) }
+        PositionCalculator.replay(holdings).positions.sumOf { it.costBasis }
 
     fun currentValue(holdings: List<HoldingData>, coins: List<Coin>): BigDecimal =
-        holdings.sumOf { holding ->
-            holding.quantity.multiply(currentPrice(holding, coins))
+        PositionCalculator.replay(holdings).positions.sumOf {
+            it.quantity.multiply(currentPrice(it.from, it.to, coins))
         }
 
     fun currentValue(holding: HoldingData, coins: List<Coin>): BigDecimal =
         currentValue(listOf(holding), coins)
 
     fun changePercent(holding: HoldingData, coins: List<Coin>): BigDecimal {
-        val oldValue = holding.quantity.multiply(holding.price)
+        val oldValue = holding.quantity.multiply(holding.price) + holding.fee
         return changePercent(oldValue, currentValue(holding, coins))
     }
 
     fun changeValue(holding: HoldingData, coins: List<Coin>): BigDecimal =
-        currentValue(holding, coins) - holding.quantity.multiply(holding.price)
+        currentValue(holding, coins) - (holding.quantity.multiply(holding.price) + holding.fee)
 
+    /**
+     * Merges every transaction of the holding's coin into one: the net quantity held and its
+     * average cost. A coin that was sold completely ends up with a zero quantity.
+     */
     fun aggregatePair(holding: HoldingData, holdings: List<HoldingData>): HoldingData {
         val matching = holdings.filter { it.from == holding.from && it.to == holding.to }
-        val quantity = matching.sumOf { it.quantity }
-        val invested = investedValue(matching)
-        val averagePrice = if (quantity.signum() > 0) invested.divide(quantity, mathContext) else zero
+        val position = PositionCalculator.replay(matching).positionFor(holding.from, holding.to)
         return holding.copy(
-            quantity = quantity,
-            price = averagePrice,
-            date = matching.minOfOrNull { it.date } ?: holding.date
+            quantity = position?.quantity ?: zero,
+            price = position?.averageCost ?: zero,
+            date = matching.minOfOrNull { it.date } ?: holding.date,
+            type = TradeType.BUY.name,
+            fee = zero
         )
     }
 
-    private fun totalDayPnl(holdings: List<HoldingData>, coins: List<Coin>): BigDecimal =
-        holdings
-            .groupBy { it.from to it.to }
-            .values
-            .sumOf { dayPnl(it, coins) }
-
-    private fun dayPnl(holdings: List<HoldingData>, coins: List<Coin>): BigDecimal {
-        val first = holdings.firstOrNull() ?: return zero
-        val coin = coinFor(first, coins) ?: return zero
-        val current = currentValue(holdings, coins)
+    private fun dayPnl(position: Position, coins: List<Coin>): BigDecimal {
+        val coin = coinFor(position.from, position.to, coins) ?: return zero
+        val current = position.quantity.multiply(currentPrice(position.from, position.to, coins))
         val denominator = BigDecimal.ONE + coin.changePct24hRaw.toDecimal().divide(oneHundred, mathContext)
         if (denominator.signum() <= 0) return zero
         val previous = current.divide(denominator, mathContext)
@@ -123,12 +164,12 @@ object PortfolioCalculator {
         return (newValue - oldValue).multiply(oneHundred).divide(oldValue, mathContext)
     }
 
-    private fun coinFor(holding: HoldingData, coins: List<Coin>): Coin? =
-        coins.find { it.from == holding.from && it.to == holding.to }
-            ?: coins.find { it.from == holding.from }
+    private fun coinFor(from: String, to: String, coins: List<Coin>): Coin? =
+        coins.find { it.from == from && it.to == to }
+            ?: coins.find { it.from == from }
 
-    private fun currentPrice(holding: HoldingData, coins: List<Coin>): BigDecimal =
-        coinFor(holding, coins)?.priceRaw?.toDecimal() ?: zero
+    private fun currentPrice(from: String, to: String, coins: List<Coin>): BigDecimal =
+        coinFor(from, to, coins)?.priceRaw?.toDecimal() ?: zero
 
     private fun Float.toDecimal(): BigDecimal = BigDecimal.valueOf(toDouble())
 }

@@ -18,6 +18,7 @@ class CoinInfoPresenter @Inject constructor(private val view: ICoinInfo.View,
                                             private val networkRequests: NetworkRequests,
                                             private val graphMaker: GraphMaker,
                                             private val holdingsHandler: HoldingsHandler,
+                                            private val preferences: Preferences,
                                             private val resProvider: ResourceProvider,
                                             private val logger: Logger) : ICoinInfo.Presenter {
 
@@ -27,6 +28,7 @@ class CoinInfoPresenter @Inject constructor(private val view: ICoinInfo.View,
     private var coin: Coin = Coin(from = "", to = "")
     private lateinit var from: String
     private lateinit var to: String
+    private var period = MONTH
 
     init {
         disposable.add(histoDisposable)
@@ -52,20 +54,21 @@ class CoinInfoPresenter @Inject constructor(private val view: ICoinInfo.View,
         this.coin = coin
         view.setTitle(coin.fullName)
         view.setLogo(coin.imgUrl)
-        view.setMainPrice(coin.price)
+        view.setMainPrice(priceText(coin.priceRaw, coin.price))
         setCoinInfo()
         requestMissing24hStats()
-        view.setupSpinner()
+        view.setupChartControls(period, preferences.chartStyle)
+        requestHisto(period)
     }
 
     private fun setCoinInfo() {
-        view.setOpen(coin.open24h.orUnavailable())
-        view.setHigh(coin.high24h.orUnavailable())
-        view.setLow(coin.low24h.orUnavailable())
-        view.setChange(coin.change24h.orUnavailable())
+        view.setOpen(priceText(coin.open24hRaw, coin.open24h))
+        view.setHigh(priceText(coin.high24hRaw, coin.high24h))
+        view.setLow(priceText(coin.low24hRaw, coin.low24h))
+        view.setChange(priceText(coin.change24hRaw, coin.change24h))
         view.setChangePct(coin.changePct24h.orUnavailable())
         view.setSupply(coin.supply.orUnavailable())
-        view.setMarketCap(coin.mktCap.orUnavailable())
+        view.setMarketCap(compactText(coin.mktCapRaw, coin.mktCap))
     }
 
     private fun requestMissing24hStats() {
@@ -119,6 +122,21 @@ class CoinInfoPresenter @Inject constructor(private val view: ICoinInfo.View,
     private fun String.orUnavailable(): String =
         ifBlank { resProvider.getString(R.string.value_unavailable) }
 
+    // Stored display strings are always USD, so amounts are rebuilt from the raw USD value in the selected currency.
+    private fun priceText(raw: Float, display: String): String =
+        if (raw.isFinite() && (raw != 0f || display.isNotBlank())) {
+            formatPrice(raw.toDouble())
+        } else {
+            resProvider.getString(R.string.value_unavailable)
+        }
+
+    private fun compactText(raw: Float, display: String): String =
+        if (raw.isFinite() && raw > 0f) {
+            PortfolioValueFormatter.compact(BigDecimal.valueOf(raw.toDouble()))
+        } else {
+            display.orUnavailable()
+        }
+
 
     private fun onFindCoinError(throwable: Throwable) {
         logger.logDebug("getCoinByName error " + throwable.toString())
@@ -139,23 +157,18 @@ class CoinInfoPresenter @Inject constructor(private val view: ICoinInfo.View,
         }
     }
 
-    override fun onSpinnerItemClicked(position: Int) {
-        view.enableGraphLoading()
-        requestHisto(when (position) {
-            0 -> HOUR
-            1 -> HOURS12
-            2 -> HOURS24
-            3 -> DAYS3
-            4 -> WEEK
-            5 -> MONTH
-            6 -> MONTHS3
-            7 -> MONTHS6
-            8 -> YEAR
-            else -> MONTH
-        })
+    override fun onPeriodSelected(period: String) {
+        this.period = period
+        requestHisto(period)
+    }
+
+    override fun onChartStyleSelected(style: String) {
+        preferences.chartStyle = style
+        view.setChartStyle(style)
     }
 
     private fun requestHisto(period: String) {
+        view.enableGraphLoading()
         histoDisposable.set(networkRequests.getHistoPeriod(period, coin.from, coin.to)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ onHistoReceived(it, period) }, { onHistoError(it) }))

@@ -5,6 +5,10 @@ import android.content.SharedPreferences
 import android.net.Uri
 import app.khom.pavlo.crypto.BuildConfig
 import app.khom.pavlo.crypto.model.Coin
+import app.khom.pavlo.crypto.model.CurrencyManager
+import app.khom.pavlo.crypto.model.DEFAULT_PORTFOLIO_ID
+import app.khom.pavlo.crypto.model.Portfolio
+import app.khom.pavlo.crypto.model.PriceAlert
 import app.khom.pavlo.crypto.model.HoldingData
 import app.khom.pavlo.crypto.model.Preferences
 import app.khom.pavlo.crypto.model.db.CMDatabase
@@ -47,9 +51,13 @@ class AppBackupRepository(
     private fun createDocument(): AppBackupDocument {
         var favorites: List<Coin> = emptyList()
         var transactions: List<HoldingData> = emptyList()
+        var alerts: List<PriceAlert> = emptyList()
+        var portfolios: List<Portfolio> = emptyList()
         database.runInTransaction {
             favorites = database.coinsDao().getAllCoinsSync()
             transactions = database.holdingsDao().getAllHoldingsSync()
+            alerts = database.priceAlertsDao().getAllSync()
+            portfolios = database.portfoliosDao().getAllSync()
         }
         val preferenceValues = preferences().all
         return AppBackupDocument(
@@ -57,6 +65,8 @@ class AppBackupRepository(
             appVersion = BuildConfig.VERSION_NAME,
             favorites = favorites.map { it.toBackup() },
             transactions = transactions.map { it.toBackup() },
+            alerts = alerts.map { it.toBackup() },
+            portfolios = portfolios.map { it.toBackup() },
             preferences = PreferenceBackupCodec.fromValues(preferenceValues)
         )
     }
@@ -72,7 +82,17 @@ class AppBackupRepository(
         try {
             database.runInTransaction {
                 database.coinsDao().replaceAll(document.favorites.map { it.toCoin() })
+                if (document.schemaVersion >= BACKUP_PORTFOLIOS_SINCE_VERSION) {
+                    database.portfoliosDao().replaceAll(document.portfolios.map { it.toPortfolio() })
+                }
                 database.holdingsDao().replaceAll(document.transactions.map { it.toHolding() })
+                // Every transaction needs its portfolio; the built-in one always exists.
+                database.portfoliosDao().insertIfMissingSync(
+                    Portfolio(id = DEFAULT_PORTFOLIO_ID, createdAt = System.currentTimeMillis(), sortOrder = 0)
+                )
+                if (document.schemaVersion >= BACKUP_ALERTS_SINCE_VERSION) {
+                    database.priceAlertsDao().replaceAll(document.alerts.map { it.toAlert() })
+                }
             }
         } catch (error: Throwable) {
             if (!replacePreferences(originalPreferences)) {
@@ -80,6 +100,8 @@ class AppBackupRepository(
             }
             throw error
         }
+        // Restored settings may change the display currency, so refresh the in-memory copy right away.
+        runCatching { CurrencyManager.load(Preferences(context)) }
         runCatching { changeNotifier.onBackupRestored() }
     }
 
@@ -164,7 +186,50 @@ class AppBackupRepository(
         dateEpochMillis = date,
         coinId = coinId,
         coinName = coinName,
-        exchange = exchange
+        exchange = exchange,
+        type = tradeType.name,
+        fee = fee.toPlainString(),
+        portfolioId = portfolioId
+    )
+
+    private fun Portfolio.toBackup() = PortfolioBackup(
+        id = id,
+        name = name,
+        createdAtEpochMillis = createdAt,
+        sortOrder = sortOrder
+    )
+
+    private fun PortfolioBackup.toPortfolio() = Portfolio(
+        id = id,
+        name = name,
+        createdAt = createdAtEpochMillis,
+        sortOrder = sortOrder
+    )
+
+    private fun PriceAlert.toBackup() = AlertBackup(
+        id = id,
+        symbol = symbol,
+        coinName = coinName,
+        type = type,
+        threshold = threshold.toPlainString(),
+        currency = currency,
+        enabled = enabled,
+        createdAtEpochMillis = createdAt,
+        triggeredAtEpochMillis = triggeredAt,
+        triggeredValue = triggeredValue
+    )
+
+    private fun AlertBackup.toAlert() = PriceAlert(
+        id = id,
+        symbol = symbol,
+        coinName = coinName,
+        type = type,
+        threshold = BigDecimal(threshold),
+        currency = currency,
+        enabled = enabled,
+        createdAt = createdAtEpochMillis,
+        triggeredAt = triggeredAtEpochMillis,
+        triggeredValue = triggeredValue
     )
 
     private fun TransactionBackup.toHolding() = HoldingData(
@@ -176,7 +241,10 @@ class AppBackupRepository(
         date = dateEpochMillis,
         coinId = coinId,
         coinName = coinName,
-        exchange = exchange
+        exchange = exchange,
+        type = type,
+        fee = BigDecimal(fee),
+        portfolioId = portfolioId
     )
 
     private companion object {

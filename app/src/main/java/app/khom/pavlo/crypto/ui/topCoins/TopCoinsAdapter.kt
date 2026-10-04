@@ -4,9 +4,11 @@ import android.view.LayoutInflater
 import app.khom.pavlo.crypto.R
 import app.khom.pavlo.crypto.databinding.TopCoinItemBinding
 import app.khom.pavlo.crypto.model.CoinsController
+import app.khom.pavlo.crypto.model.CurrencyManager
 import app.khom.pavlo.crypto.model.TopCoinData
 import app.khom.pavlo.crypto.ui.common.TrackedListAdapter
 import app.khom.pavlo.crypto.utils.ResourceProvider
+import app.khom.pavlo.crypto.utils.PortfolioValueFormatter
 import app.khom.pavlo.crypto.utils.addCommasToStringNumber
 import app.khom.pavlo.crypto.utils.getChangeColor
 import app.khom.pavlo.crypto.utils.getStringWithTwoDecimalsFromDouble
@@ -14,6 +16,7 @@ import com.squareup.picasso.Picasso
 import androidx.recyclerview.widget.RecyclerView
 import android.view.View
 import android.view.ViewGroup
+import java.math.BigDecimal
 import javax.inject.Inject
 
 class TopCoinsAdapter @Inject constructor(private val coins: ArrayList<TopCoinData>,
@@ -50,7 +53,7 @@ class TopCoinsAdapter @Inject constructor(private val coins: ArrayList<TopCoinDa
             binding.root.setOnClickListener(itemClickListener)
             binding.topCoinRank.text = coin.rank.toString()
             binding.topCoinName.text = coin.name
-            binding.topCoinPrice.text = addCommasToStringNumber(coin.price_usd)
+            binding.topCoinPrice.text = coin.price_usd.usdAmount()?.let(PortfolioValueFormatter::priceNumber).orEmpty()
             val pctCh24h: String = coin.percent_change_24h ?: ""
             val pctValue = pctCh24h.replace(",", "").toDoubleOrNull()
             if (pctValue != null && !pctValue.isNaN() && !pctValue.isInfinite()) {
@@ -61,9 +64,14 @@ class TopCoinsAdapter @Inject constructor(private val coins: ArrayList<TopCoinDa
                 binding.topCoin24hPct.text = ""
                 binding.topCoin24hPct.setTextColor(resProvider.getColor(R.color.colorPrimaryDark))
             }
-            binding.topCoinMarketCap.text = addCommasToStringNumber(coin.market_cap_usd)
+            binding.topCoinMarketCap.text = coin.market_cap_usd.usdAmount()?.let(PortfolioValueFormatter::wholeNumber).orEmpty()
             binding.topCoinSupply.text = addCommasToStringNumber(coin.total_supply)
-            binding.topCoinVolume24h.text = addCommasToStringNumber(coin.vol24Usd)
+            binding.topCoinVolume24h.text = coin.vol24Usd.usdAmount()?.let(PortfolioValueFormatter::wholeNumber).orEmpty()
+            val currencySign = CurrencyManager.selected.symbol
+            binding.topCoinCurrencySign.text = currencySign
+            binding.topCoinCapCurrencySign.text = currencySign
+            binding.topCoinVolumeCurrencySign.text = currencySign
+            binding.topCoinCircSupplyCurrencySign.visibility = View.INVISIBLE
             val symbol = coin.symbol.orEmpty()
             val isAdding = symbol in addingSymbols
             binding.topCoinAddLoading.visibility = if (isAdding) android.view.View.VISIBLE else android.view.View.GONE
@@ -101,6 +109,9 @@ class TopCoinsAdapter @Inject constructor(private val coins: ArrayList<TopCoinDa
             binding.topCoinAddLayout.setOnClickListener(null)
         }
     }
+
+    private fun String?.usdAmount(): BigDecimal? =
+        this?.replace(",", "")?.trim()?.toBigDecimalOrNull()
 
     override fun getItemCount() = coins.size
 

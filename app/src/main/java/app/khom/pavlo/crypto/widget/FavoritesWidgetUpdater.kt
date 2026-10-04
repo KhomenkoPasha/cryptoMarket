@@ -15,6 +15,7 @@ import app.khom.pavlo.crypto.model.NAME
 import app.khom.pavlo.crypto.model.TO
 import app.khom.pavlo.crypto.ui.coinInfo.CoinInfoActivity
 import app.khom.pavlo.crypto.ui.main.MainActivity
+import app.khom.pavlo.crypto.utils.PortfolioValueFormatter
 import app.khom.pavlo.crypto.utils.getChangeColor
 import dagger.hilt.android.EntryPointAccessors
 
@@ -117,7 +118,14 @@ object FavoritesWidgetUpdater {
                     val coin = coins[i]
                     views.setViewVisibility(rowIds[i], View.VISIBLE)
                     views.setTextViewText(nameIds[i], coin.fullName.ifEmpty { coin.from })
-                    views.setTextViewText(priceIds[i], coin.price.ifEmpty { "--" })
+                    views.setTextViewText(
+                        priceIds[i],
+                        coin.priceRaw.takeIf { it > 0f }
+                            ?.toString()
+                            ?.toBigDecimalOrNull()
+                            ?.let(PortfolioValueFormatter::price)
+                            ?: "--"
+                    )
 
                     val changeText = if (coin.changePct24h.isNotEmpty()) {
                         if (coin.changePct24h.contains("%")) coin.changePct24h else "${coin.changePct24h}%"

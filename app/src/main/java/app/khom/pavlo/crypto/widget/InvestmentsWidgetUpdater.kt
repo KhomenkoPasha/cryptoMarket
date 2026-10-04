@@ -9,6 +9,7 @@ import android.view.View
 import android.widget.RemoteViews
 import androidx.core.content.ContextCompat
 import app.khom.pavlo.crypto.R
+import app.khom.pavlo.crypto.model.ALL_PORTFOLIOS_ID
 import app.khom.pavlo.crypto.model.Coin
 import app.khom.pavlo.crypto.model.FSYMS
 import app.khom.pavlo.crypto.model.HoldingData
@@ -128,11 +129,13 @@ object InvestmentsWidgetUpdater {
             context,
             AppWidgetEntryPoint::class.java
         )
+        val selectedPortfolio = entryPoint.portfolioSelection().activeId
         val holdings = entryPoint.database()
             .holdingsDao()
             .getAllHoldings()
             .first(emptyList())
             .blockingGet()
+            .filter { selectedPortfolio == ALL_PORTFOLIOS_ID || it.portfolioId == selectedPortfolio }
         if (holdings.isEmpty()) return investmentsWidgetContent(emptyList(), emptyList())
 
         val cachedPrices = loadCachedPrices(context, holdings)

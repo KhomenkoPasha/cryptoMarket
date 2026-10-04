@@ -3,6 +3,7 @@ package app.khom.pavlo.crypto.ui.coins
 import app.khom.pavlo.crypto.R
 import app.khom.pavlo.crypto.model.*
 import app.khom.pavlo.crypto.model.db.CMDatabase
+import app.khom.pavlo.crypto.model.db.PortfolioRepository
 import app.khom.pavlo.crypto.model.network.NetworkRequests
 import app.khom.pavlo.crypto.model.rxbus.*
 import app.khom.pavlo.crypto.utils.PortfolioValueFormatter
@@ -18,6 +19,7 @@ class CoinsPresenter @Inject constructor(private val view: ICoins.View,
                                          private val networkRequests: NetworkRequests,
                                          private val coinsController: CoinsController,
                                          private val db: CMDatabase,
+                                         private val portfolioRepository: PortfolioRepository,
                                          private val resProvider: ResourceProvider,
                                          private val pageController: PageController,
                                          private val multiSelector: MultiSelector,
@@ -101,7 +103,7 @@ class CoinsPresenter @Inject constructor(private val view: ICoins.View,
     }
 
     private fun addHoldingsChangesObservable() {
-        disposable.add(db.holdingsDao().getAllHoldings()
+        disposable.add(portfolioRepository.observeHoldings()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ onHoldingsUpdate(it) }, { logger.logError("Observe holdings: $it") }))
@@ -116,6 +118,8 @@ class CoinsPresenter @Inject constructor(private val view: ICoins.View,
         } else {
             view.disableTotalHoldings()
         }
+        // Rows show each coin's own quantity and value, so they follow the transactions too.
+        if (coins.isNotEmpty()) view.updateRecyclerView()
     }
 
     private fun updateHoldings() {

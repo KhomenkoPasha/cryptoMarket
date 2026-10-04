@@ -1,5 +1,6 @@
 package app.khom.pavlo.crypto.widget
 
+import app.khom.pavlo.crypto.model.PortfolioSelection
 import app.khom.pavlo.crypto.model.db.CMDatabase
 import app.khom.pavlo.crypto.model.network.NetworkRequests
 import dagger.hilt.EntryPoint
@@ -13,6 +14,7 @@ import java.util.concurrent.Executors
 internal interface AppWidgetEntryPoint {
     fun database(): CMDatabase
     fun networkRequests(): NetworkRequests
+    fun portfolioSelection(): PortfolioSelection
 }
 
 internal object AppWidgetExecutor {

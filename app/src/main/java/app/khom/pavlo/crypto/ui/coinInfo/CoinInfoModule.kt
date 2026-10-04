@@ -4,6 +4,7 @@ import android.app.Activity
 import app.khom.pavlo.crypto.model.CoinsController
 import app.khom.pavlo.crypto.model.GraphMaker
 import app.khom.pavlo.crypto.model.HoldingsHandler
+import app.khom.pavlo.crypto.model.Preferences
 import app.khom.pavlo.crypto.model.network.NetworkRequests
 import app.khom.pavlo.crypto.utils.Logger
 import app.khom.pavlo.crypto.utils.ResourceProvider
@@ -27,8 +28,9 @@ class CoinInfoModule {
                          networkRequests: NetworkRequests,
                          graphMaker: GraphMaker,
                          holdingsHandler: HoldingsHandler,
+                         preferences: Preferences,
                          resourceProvider: ResourceProvider,
                          logger: Logger): ICoinInfo.Presenter =
-            CoinInfoPresenter(view, coinsController, networkRequests, graphMaker, holdingsHandler, resourceProvider, logger)
+            CoinInfoPresenter(view, coinsController, networkRequests, graphMaker, holdingsHandler, preferences, resourceProvider, logger)
 
 }

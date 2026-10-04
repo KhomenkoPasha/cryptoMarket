@@ -5,6 +5,7 @@ import android.view.View
 import app.khom.pavlo.crypto.R
 import app.khom.pavlo.crypto.databinding.CoinsListItemBinding
 import app.khom.pavlo.crypto.model.Coin
+import app.khom.pavlo.crypto.model.CurrencyManager
 import app.khom.pavlo.crypto.model.HoldingsHandler
 import app.khom.pavlo.crypto.model.MultiSelector
 import app.khom.pavlo.crypto.ui.common.TrackedListAdapter
@@ -67,7 +68,7 @@ class CoinsListAdapter(private val coins: ArrayList<Coin>,
                 binding.mainItemLayout.setBackgroundResource(R.drawable.bg_card_surface)
             }
             binding.mainItemFrom.text = coin.from
-            val to = " / ${coin.to}"
+            val to = " / ${CurrencyManager.selected.code}"
             binding.mainItemTo.text = to
             binding.mainItemFullName.text = coin.fullName
             binding.mainItemLastPrice.text = coin.priceRaw

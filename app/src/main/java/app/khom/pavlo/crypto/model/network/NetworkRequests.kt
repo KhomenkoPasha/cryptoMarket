@@ -6,6 +6,7 @@ import app.khom.pavlo.crypto.utils.*
 import io.reactivex.rxjava3.core.Single
 import io.reactivex.rxjava3.schedulers.Schedulers
 import java.util.Locale
+import java.util.Optional
 
 class NetworkRequests(private val cryptoCompareAPI: CryptoCompareAPI) {
 
@@ -23,6 +24,12 @@ class NetworkRequests(private val cryptoCompareAPI: CryptoCompareAPI) {
     private var newsCache: List<NewsItem> = emptyList()
     @Volatile
     private var newsCacheTime = 0L
+    @Volatile
+    private var marketOverviewRequest: Single<MarketOverview>? = null
+    @Volatile
+    private var marketOverviewCache: MarketOverview? = null
+    @Volatile
+    private var marketOverviewCacheTime = 0L
 
     @Synchronized
     fun getAllCoins(): Single<ArrayList<InfoCoin>> {
@@ -149,6 +156,14 @@ class NetworkRequests(private val cryptoCompareAPI: CryptoCompareAPI) {
                 coinbaseCandleCount = 180
                 aggregate = 6
             }
+            ALL_TIME -> {
+                histoPeriod = HISTO_DAY
+                coinDeskPeriod = COINDESK_HISTO_DAYS
+                coinbaseGranularity = COINBASE_GRANULARITY_DAY
+                coinbaseCandleCount = COINBASE_MAX_CANDLES
+                limit = 700
+                aggregate = 7
+            }
             else -> {
                 histoPeriod = HISTO_DAY
                 coinDeskPeriod = COINDESK_HISTO_DAYS
@@ -198,6 +213,52 @@ class NetworkRequests(private val cryptoCompareAPI: CryptoCompareAPI) {
         return coinDesk
                 .onErrorResumeNext { coinbase }
                 .onErrorResumeNext { cryptoCompare }
+    }
+
+
+    /**
+     * Daily closing prices in USD for the last [days] days, keyed by days since 1970-01-01 (UTC).
+     * The latest entry is today's price so far. CoinDesk first, then Coinbase and CryptoCompare.
+     */
+    fun getDailyCloses(symbol: String, days: Int): Single<Map<Long, Double>> {
+        val fromSymbol = symbol.normalizedSymbol()
+                ?: return Single.error(IllegalArgumentException("Symbol is missing"))
+        val limit = days.coerceIn(2, MAX_DAILY_HISTORY_DAYS)
+
+        val coinDesk = cryptoCompareAPI.getCoinDeskHistoPeriod(
+                url = COINDESK_HISTO_BASE_URL + COINDESK_HISTO_DAYS,
+                market = COINDESK_INDEX_MARKET,
+                instrument = "$fromSymbol-$USD",
+                limit = limit,
+                aggregate = 1,
+                groups = COINDESK_HISTO_GROUPS,
+                apiKey = BuildConfig.COINDESK_API_KEY.takeIf { it.isNotBlank() }
+        )
+                .subscribeOn(Schedulers.io())
+                .map { getHistoListFromJson(it) }
+                .requireHistoData("CoinDesk returned no daily prices")
+
+        val cryptoCompare = cryptoCompareAPI.getHistoPeriod(HISTO_DAY, fromSymbol, USD, limit, 1)
+                .subscribeOn(Schedulers.io())
+                .map { getHistoListFromJson(it) }
+                .requireHistoData("CryptoCompare returned no daily prices")
+
+        val coinbase = cryptoCompareAPI.getCoinbaseCandles(
+                url = "$COINBASE_EXCHANGE_CANDLES_BASE_URL$fromSymbol-$USD/candles",
+                granularity = COINBASE_GRANULARITY_DAY
+        )
+                .subscribeOn(Schedulers.io())
+                .map { candles -> ArrayList(getHistoListFromCoinbase(candles).takeLast(limit)) }
+                .requireHistoData("Coinbase returned no daily prices")
+
+        return coinDesk
+                .onErrorResumeNext { cryptoCompare }
+                .onErrorResumeNext { coinbase }
+                .map { candles ->
+                    candles
+                            .filter { it.close > 0f }
+                            .associate { Math.floorDiv(it.time, SECONDS_PER_DAY) to it.close.toDouble() }
+                }
     }
 
     fun getTopCoins(): Single<ArrayList<TopCoinData>> {
@@ -284,9 +345,72 @@ class NetworkRequests(private val cryptoCompareAPI: CryptoCompareAPI) {
         newsRequest = null
     }
 
+
+    /** Units of every supported display currency per one USD. CryptoCompare first, Coinbase as backup. */
+    fun getFxRates(): Single<Map<String, Double>> {
+        val symbols = AppCurrency.values()
+                .filter { it != AppCurrency.USD }
+                .joinToString(",") { it.code }
+        val cryptoCompare = cryptoCompareAPI.getFxRates(USD, symbols)
+                .subscribeOn(Schedulers.io())
+                .map { getFxRatesFromCryptoCompare(it) }
+                .requireRates("CryptoCompare returned no exchange rates")
+        val coinbase = cryptoCompareAPI.getCoinbaseRates(COINBASE_RATES_URL, USD)
+                .subscribeOn(Schedulers.io())
+                .map { getFxRatesFromCoinbase(it) }
+                .requireRates("Coinbase returned no exchange rates")
+        return cryptoCompare.onErrorResumeNext { coinbase }
+    }
+
+    /** Fear & greed index and global stats; either half may be missing, both missing is an error. */
+    @Synchronized
+    fun getMarketOverview(forceRefresh: Boolean = false): Single<MarketOverview> {
+        val now = System.currentTimeMillis()
+        marketOverviewCache?.let { cached ->
+            if (!forceRefresh && now - marketOverviewCacheTime < MARKET_OVERVIEW_CACHE_TTL_MS) return Single.just(cached)
+        }
+        marketOverviewRequest?.let { return it }
+
+        val fearGreed = cryptoCompareAPI.getFearGreed(FEAR_GREED_URL, 2)
+                .subscribeOn(Schedulers.io())
+                .map { Optional.ofNullable(getFearGreedFromJson(it)) }
+                .onErrorReturnItem(Optional.empty())
+        val global = cryptoCompareAPI.getGlobalMarket(COINPAPRIKA_GLOBAL_URL)
+                .subscribeOn(Schedulers.io())
+                .map { Optional.ofNullable(getGlobalMarketFromJson(it)) }
+                .onErrorReturnItem(Optional.empty())
+
+        return Single.zip(fearGreed, global) { index, stats ->
+                    MarketOverview(index.orElse(null), stats.orElse(null))
+                }
+                .flatMap { overview ->
+                    if (overview.fearGreed == null && overview.global == null) {
+                        Single.error(IllegalStateException("No market overview data available"))
+                    } else {
+                        Single.just(overview)
+                    }
+                }
+                .doOnSuccess { cacheMarketOverview(it) }
+                .doFinally { clearMarketOverviewRequest() }
+                .cache()
+                .also { marketOverviewRequest = it }
+    }
+
+    @Synchronized
+    private fun cacheMarketOverview(overview: MarketOverview) {
+        marketOverviewCache = overview
+        marketOverviewCacheTime = System.currentTimeMillis()
+    }
+
+    @Synchronized
+    private fun clearMarketOverviewRequest() {
+        marketOverviewRequest = null
+    }
+
     private companion object {
         const val COINPAPRIKA_CACHE_TTL_MS = 5L * 60L * 1000L
         const val NEWS_CACHE_TTL_MS = 10L * 60L * 1000L
+        const val MARKET_OVERVIEW_CACHE_TTL_MS = 10L * 60L * 1000L
         const val COINDESK_INDEX_MARKET = "cadli"
         const val COINDESK_HISTO_GROUPS = "OHLC,VOLUME"
         const val COINDESK_HISTO_MINUTES = "minutes"
@@ -297,6 +421,8 @@ class NetworkRequests(private val cryptoCompareAPI: CryptoCompareAPI) {
         const val COINBASE_GRANULARITY_SIX_HOURS = 21_600
         const val COINBASE_GRANULARITY_DAY = 86_400
         const val COINBASE_MAX_CANDLES = 300
+        const val MAX_DAILY_HISTORY_DAYS = 1_000
+        const val SECONDS_PER_DAY = 86_400L
     }
 }
 
@@ -315,4 +441,11 @@ private fun Single<ArrayList<NewsItem>>.requireNews(message: String): Single<Arr
         flatMap { news ->
             if (news.isEmpty()) Single.error(IllegalStateException(message))
             else Single.just(news)
+        }
+
+
+private fun Single<Map<String, Double>>.requireRates(message: String): Single<Map<String, Double>> =
+        flatMap { rates ->
+            if (rates.isEmpty()) Single.error(IllegalStateException(message))
+            else Single.just(rates)
         }

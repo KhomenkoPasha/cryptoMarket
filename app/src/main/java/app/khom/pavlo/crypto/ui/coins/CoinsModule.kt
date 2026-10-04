@@ -3,6 +3,7 @@ package app.khom.pavlo.crypto.ui.coins
 import androidx.fragment.app.Fragment
 import app.khom.pavlo.crypto.model.*
 import app.khom.pavlo.crypto.model.db.CMDatabase
+import app.khom.pavlo.crypto.model.db.PortfolioRepository
 import app.khom.pavlo.crypto.model.network.NetworkRequests
 import app.khom.pavlo.crypto.utils.Logger
 import app.khom.pavlo.crypto.utils.ResourceProvider
@@ -26,6 +27,7 @@ class CoinsModule {
                          networkRequests: NetworkRequests,
                          coinsController: CoinsController,
                          db: CMDatabase,
+                         portfolioRepository: PortfolioRepository,
                          resProvider: ResourceProvider,
                          pageController: PageController,
                          multiSelector: MultiSelector,
@@ -34,7 +36,7 @@ class CoinsModule {
                          logger: Logger,
                          toaster: Toaster,
                          preferences: Preferences): ICoins.Presenter =
-            CoinsPresenter(view, networkRequests, coinsController, db, resProvider,
+            CoinsPresenter(view, networkRequests, coinsController, db, portfolioRepository, resProvider,
                     pageController, multiSelector, holdingsHandler, favoritesChangeNotifier,
                     logger, toaster, preferences)
 }

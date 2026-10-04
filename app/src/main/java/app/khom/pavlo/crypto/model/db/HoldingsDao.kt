@@ -40,6 +40,12 @@ interface HoldingsDao {
     @Delete
     fun deleteHolding(holdingData: HoldingData): Completable
 
+    @Query("DELETE FROM holdings WHERE portfolio_id = :portfolioId")
+    fun deleteByPortfolioSync(portfolioId: Long)
+
+    @Query("SELECT COUNT(*) FROM holdings WHERE portfolio_id = :portfolioId")
+    fun countByPortfolioSync(portfolioId: Long): Int
+
     @Query("DELETE FROM holdings WHERE from_coin = :from AND to_currency = :to")
     fun deleteByPair(from: String, to: String): Completable
 }

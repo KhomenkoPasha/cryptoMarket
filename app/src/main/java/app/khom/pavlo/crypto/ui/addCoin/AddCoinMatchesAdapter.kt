@@ -3,6 +3,7 @@ package app.khom.pavlo.crypto.ui.addCoin
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import app.khom.pavlo.crypto.R
 import app.khom.pavlo.crypto.databinding.AddCoinMatchesItemBinding
 import app.khom.pavlo.crypto.model.InfoCoin
 import app.khom.pavlo.crypto.ui.common.TrackedListAdapter
@@ -38,17 +39,18 @@ class AddCoinMatchesAdapter(private val items: ArrayList<InfoCoin>,
             binding.addCoinName.text = coin.coinName
             binding.addCoinShortName.text = coin.name
             Picasso.get().cancelRequest(binding.addCoinIcon)
-            binding.addCoinIcon.setImageDrawable(null)
+            binding.addCoinIcon.visibility = View.VISIBLE
             if (coin.imageUrl.isNotEmpty()) {
-                binding.addCoinIcon.visibility = View.VISIBLE
                 Picasso.get()
                         .load(coin.imageUrl)
+                        .placeholder(R.drawable.ic_coin_placeholder)
+                        .error(R.drawable.ic_coin_placeholder)
                         .tag(this@AddCoinMatchesAdapter)
                         .fit()
                         .centerInside()
                         .into(binding.addCoinIcon)
             } else {
-                binding.addCoinIcon.visibility = View.INVISIBLE
+                binding.addCoinIcon.setImageResource(R.drawable.ic_coin_placeholder)
             }
             binding.root.setOnClickListener(itemClickListener)
         }

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/holdings_summary_extra_row"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="8dp"
+    android:baselineAligned="false"
+    android:orientation="horizontal"
+    android:visibility="gone"
+    tools:visibility="visible">
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/portfolio_realized_pnl"
+            android:textColor="@color/colorAccent"
+            android:textSize="@dimen/text_size_label" />
+
+        <TextView
+            android:id="@+id/holdings_summary_realized"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/grey_light"
+            android:textSize="@dimen/text_size_body_large"
+            tools:text="+$76.00" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/portfolio_fees_paid"
+            android:textColor="@color/colorAccent"
+            android:textSize="@dimen/text_size_label" />
+
+        <TextView
+            android:id="@+id/holdings_summary_fees"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/grey_light"
+            android:textSize="@dimen/text_size_body_large"
+            tools:text="$6.00" />
+    </LinearLayout>
+</LinearLayout>

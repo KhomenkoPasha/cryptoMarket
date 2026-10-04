@@ -2,6 +2,8 @@ package app.khom.pavlo.crypto.di
 
 import android.app.Application
 import androidx.room.Room
+import androidx.room.RoomDatabase
+import androidx.sqlite.db.SupportSQLiteDatabase
 import android.content.Context
 import app.khom.pavlo.crypto.model.*
 import app.khom.pavlo.crypto.model.backup.AppBackupRepository
@@ -10,6 +12,12 @@ import app.khom.pavlo.crypto.model.db.CMDatabase
 import app.khom.pavlo.crypto.model.db.DBController
 import app.khom.pavlo.crypto.model.db.ALL_MIGRATIONS
 import app.khom.pavlo.crypto.model.db.PortfolioRepository
+import app.khom.pavlo.crypto.security.AppLock
+import app.khom.pavlo.crypto.model.db.PriceAlertRepository
+import app.khom.pavlo.crypto.alerts.PriceAlertScheduler
+import app.khom.pavlo.crypto.history.PortfolioHistoryScheduler
+import app.khom.pavlo.crypto.model.db.PortfolioHistoryRepository
+import app.khom.pavlo.crypto.model.network.NetworkRequests
 import app.khom.pavlo.crypto.model.db.CoinsRepository
 import app.khom.pavlo.crypto.widget.InvestmentsWidgetUpdater
 import app.khom.pavlo.crypto.widget.FavoritesWidgetUpdater
@@ -33,16 +41,41 @@ class AppModule {
     fun provideDatabase(application: Application): CMDatabase =
             Room.databaseBuilder(application, CMDatabase::class.java, DATABASE_NAME)
                     .addMigrations(*ALL_MIGRATIONS)
+                    .addCallback(object : RoomDatabase.Callback() {
+                        override fun onCreate(db: SupportSQLiteDatabase) {
+                            // Migrations create this row themselves; a fresh install needs it here.
+                            db.execSQL(
+                                "INSERT OR IGNORE INTO `portfolios` (`id`, `name`, `created_at`, `sort_order`) " +
+                                    "VALUES (1, '', ${System.currentTimeMillis()}, 0)"
+                            )
+                        }
+                    })
                     .build()
 
     @Provides @Singleton
     fun provideDBController(db: CMDatabase, logger: Logger) = DBController(db, logger)
 
     @Provides @Singleton
+    fun providePortfolioSelection(preferences: Preferences) = PortfolioSelection(preferences)
+
+    @Provides @Singleton
     fun providePortfolioRepository(
             db: CMDatabase,
-            changeNotifier: PortfolioChangeNotifier
-    ) = PortfolioRepository(db, changeNotifier)
+            changeNotifier: PortfolioChangeNotifier,
+            selection: PortfolioSelection,
+            preferences: Preferences,
+            application: Application
+    ) = PortfolioRepository(db, changeNotifier, selection) {
+        preferences.historyDirty = true
+        PortfolioHistoryScheduler.refreshSoon(application)
+    }
+
+    @Provides @Singleton
+    fun providePortfolioHistoryRepository(
+            db: CMDatabase,
+            networkRequests: NetworkRequests,
+            preferences: Preferences
+    ) = PortfolioHistoryRepository(db, networkRequests, preferences)
 
     @Provides @Singleton
     fun providePortfolioChangeNotifier(application: Application) =
@@ -58,8 +91,20 @@ class AppModule {
             }
 
     @Provides @Singleton
-    fun provideBackupChangeNotifier(application: Application) =
+    fun providePriceAlertsChangeNotifier(application: Application) =
+            PriceAlertsChangeNotifier { PriceAlertScheduler.ensureScheduledAsync(application) }
+
+    @Provides @Singleton
+    fun providePriceAlertRepository(db: CMDatabase, changeNotifier: PriceAlertsChangeNotifier) =
+            PriceAlertRepository(db, changeNotifier)
+
+    @Provides @Singleton
+    fun provideBackupChangeNotifier(application: Application, preferences: Preferences) =
             BackupChangeNotifier {
+                // Restored transactions need their value history rebuilt.
+                preferences.historyDirty = true
+                PortfolioHistoryScheduler.refreshSoon(application)
+                PriceAlertScheduler.ensureScheduledAsync(application)
                 FavoritesWidgetUpdater.updateAllAsync(application)
                 InvestmentsWidgetUpdater.updateAllAsync(application)
             }
@@ -108,4 +153,13 @@ class AppModule {
 
     @Provides @Singleton
     fun providePreferences(context: Context) = Preferences(context)
+
+    @Provides @Singleton
+    fun provideAppLock(preferences: Preferences) = AppLock(object : AppLock.Store {
+        override var enabled: Boolean
+            get() = preferences.appLockEnabled
+            set(value) {
+                preferences.appLockEnabled = value
+            }
+    })
 }

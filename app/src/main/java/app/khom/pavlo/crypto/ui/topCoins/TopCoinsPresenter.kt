@@ -42,6 +42,7 @@ class TopCoinsPresenter @Inject constructor(private val view: ITopCoins.View,
         initialCacheHandled = false
         view.setLoadingVisibility(true)
         subscribeToObservables()
+        loadMarketOverview(forceRefresh = false)
     }
 
     private fun subscribeToObservables() {
@@ -112,6 +113,13 @@ class TopCoinsPresenter @Inject constructor(private val view: ITopCoins.View,
         }
     }
 
+    private fun loadMarketOverview(forceRefresh: Boolean) {
+        disposable.add(networkRequests.getMarketOverview(forceRefresh)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({ view.showMarketOverview(it) },
+                        { logger.logError("loadMarketOverview $it") }))
+    }
+
     private fun updateTopCoins() {
         if (topCoinsRequestInFlight) return
         topCoinsRequestInFlight = true
@@ -167,11 +175,13 @@ class TopCoinsPresenter @Inject constructor(private val view: ITopCoins.View,
     override fun onSwipeUpdate() {
         isRefreshing = true
         updateTopCoins()
+        loadMarketOverview(forceRefresh = true)
     }
 
     override fun onRetryClicked() {
         view.setLoadingVisibility(true)
         updateTopCoins()
+        loadMarketOverview(forceRefresh = true)
     }
 
     override fun onAddCoinClicked(coin: TopCoinData) {

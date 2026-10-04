@@ -20,8 +20,10 @@ import androidx.fragment.app.Fragment
 import app.khom.pavlo.crypto.R
 import app.khom.pavlo.crypto.databinding.NotesFragmentBinding
 import app.khom.pavlo.crypto.model.Coin
+import app.khom.pavlo.crypto.model.CurrencyManager
 import app.khom.pavlo.crypto.model.Preferences
 import app.khom.pavlo.crypto.model.db.CMDatabase
+import app.khom.pavlo.crypto.utils.PortfolioValueFormatter
 import app.khom.pavlo.crypto.utils.ResourceProvider
 import app.khom.pavlo.crypto.utils.applyCryptoRefreshStyle
 import app.khom.pavlo.crypto.utils.toastShort
@@ -518,13 +520,15 @@ class NotesFragment : Fragment() {
             if (coin.fullName.isNotEmpty()) {
                 "${coin.from} - ${coin.fullName}"
             } else {
-                "${coin.from} / ${coin.to}"
+                "${coin.from} / ${CurrencyManager.selected.code}"
             }
 
     private fun coinMeta(coin: Coin): String {
-        val price = coin.price.ifEmpty {
-            coin.priceRaw.takeIf { it > 0f }?.toString() ?: "-"
-        }
+        val price = coin.priceRaw.takeIf { it > 0f }
+            ?.toString()
+            ?.toBigDecimalOrNull()
+            ?.let(PortfolioValueFormatter::price)
+            ?: "-"
         val change = coin.changePct24h.ifEmpty { "${coin.changePct24hRaw}%" }
         return "${getString(R.string.current_price)}: $price   ${getString(R.string._24h)} $change"
     }

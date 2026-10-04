@@ -1,5 +1,7 @@
 package app.khom.pavlo.crypto.model.backup
 
+import app.khom.pavlo.crypto.model.PriceAlertType
+import app.khom.pavlo.crypto.model.TradeType
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonParser
@@ -27,7 +29,7 @@ class BackupJsonCodec(
         }
         if (!root.isJsonObject) throw InvalidBackupException("Backup root must be a JSON object")
         val rootObject = root.asJsonObject
-        listOf("favorites", "transactions", "preferences").forEach { field ->
+        listOf("favorites", "transactions", "alerts", "portfolios", "preferences").forEach { field ->
             if (rootObject.has(field) && rootObject.get(field).isJsonNull) {
                 throw InvalidBackupException("Backup field '$field' cannot be null")
             }
@@ -50,6 +52,8 @@ class BackupJsonCodec(
         }
         if (document.favorites.size > MAX_FAVORITES ||
             document.transactions.size > MAX_TRANSACTIONS ||
+            document.alerts.size > MAX_ALERTS ||
+            document.portfolios.size > MAX_PORTFOLIOS ||
             document.preferences.size > MAX_PREFERENCES
         ) {
             throw InvalidBackupException("Backup contains too many entries")
@@ -83,8 +87,47 @@ class BackupJsonCodec(
             requireLength(transaction.exchange, "Exchange", MAX_TEXT_LENGTH)
             requireDecimal(transaction.quantity, "Transaction quantity")
             requireDecimal(transaction.purchasePrice, "Transaction purchase price")
+            requireDecimal(transaction.fee, "Transaction fee")
+            if (BigDecimal(transaction.fee).signum() < 0) throw InvalidBackupException("Transaction fee is invalid")
+            if (TradeType.values().none { it.name == transaction.type }) {
+                throw InvalidBackupException("Transaction type is invalid")
+            }
             if (transaction.dateEpochMillis < 0L) {
                 throw InvalidBackupException("Transaction date is invalid")
+            }
+        }
+
+        val portfolioIds = HashSet<Long>()
+        document.portfolios.forEach { portfolio ->
+            if (portfolio.id <= 0L || !portfolioIds.add(portfolio.id)) {
+                throw InvalidBackupException("Backup contains invalid portfolio identifiers")
+            }
+            requireLength(portfolio.name, "Portfolio name", MAX_PORTFOLIO_NAME_LENGTH)
+            if (portfolio.createdAtEpochMillis < 0L) throw InvalidBackupException("Portfolio date is invalid")
+        }
+        if (document.schemaVersion >= BACKUP_PORTFOLIOS_SINCE_VERSION) {
+            document.transactions.forEach { transaction ->
+                if (transaction.portfolioId !in portfolioIds && portfolioIds.isNotEmpty()) {
+                    throw InvalidBackupException("Transaction refers to an unknown portfolio")
+                }
+            }
+        }
+
+        val alertIds = HashSet<Long>()
+        document.alerts.forEach { alert ->
+            if (alert.id < 0L || !alertIds.add(alert.id)) {
+                throw InvalidBackupException("Backup contains invalid alert identifiers")
+            }
+            requireText(alert.symbol, "Alert symbol", MAX_SYMBOL_LENGTH)
+            requireText(alert.currency, "Alert currency", MAX_SYMBOL_LENGTH)
+            requireLength(alert.coinName, "Alert coin name", MAX_TEXT_LENGTH)
+            requireLength(alert.triggeredValue, "Alert triggered value", MAX_TEXT_LENGTH)
+            if (PriceAlertType.values().none { it.name == alert.type }) {
+                throw InvalidBackupException("Alert type is invalid")
+            }
+            requireDecimal(alert.threshold, "Alert threshold")
+            if (BigDecimal(alert.threshold).signum() <= 0 || alert.createdAtEpochMillis < 0L || alert.triggeredAtEpochMillis < 0L) {
+                throw InvalidBackupException("Alert contains an invalid value")
             }
         }
 
@@ -115,6 +158,9 @@ class BackupJsonCodec(
         const val MAX_FAVORITES = 10_000
         const val MAX_TRANSACTIONS = 100_000
         const val MAX_PREFERENCES = 10_000
+        const val MAX_ALERTS = 1_000
+        const val MAX_PORTFOLIOS = 200
+        const val MAX_PORTFOLIO_NAME_LENGTH = 64
         const val MAX_SYMBOL_LENGTH = 32
         const val MAX_TEXT_LENGTH = 2_048
         const val MAX_DECIMAL_PRECISION = 100

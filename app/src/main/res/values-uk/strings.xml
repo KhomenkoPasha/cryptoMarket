@@ -156,17 +156,7 @@
     <string name="insights_note_hint">Додати нотатку</string>
     <string name="insights_note_saved">Нотатку збережено</string>
 
-    <string-array name="histo_periods">
-        <item> 1 час </item>
-        <item> 12 годин </item>
-        <item> 24 часа </item>
-        <item> 3 дня </item>
-        <item> 1 неделя </item>
-        <item> 1 місяць </item>
-        <item> 3 місяця </item>
-        <item> 6 місяців </item>
-        <item> 1 год </item>
-    </string-array>
+
     <string name="notes">Нотатки</string>
     <string name="notes_news_notes">Нотатки до новин</string>
     <string name="notes_news_notes_hint">Зберігайте тут посилання, заголовки та важливі події.</string>
@@ -222,4 +212,128 @@
     <string name="backup_restored">Дані відновлено: обране — %1$d, транзакції — %2$d</string>
     <string name="backup_save_error">Не вдалося зберегти резервну копію</string>
     <string name="backup_restore_error">Не вдалося відновити дані. Виберіть коректну копію Crypto InvestPulse.</string>
+    <string name="settings_theme">Тема</string>
+    <string name="theme_system">Як у системі</string>
+    <string name="theme_light">Світла</string>
+    <string name="theme_dark">Темна</string>
+    <string name="settings_currency">Валюта</string>
+    <string name="currency_rate_error">Не вдалося завантажити курс валют. Перевірте з’єднання та спробуйте ще раз.</string>
+    <string name="market_fear_greed">Індекс страху та жадібності</string>
+    <string name="market_btc_dominance">Домінація BTC</string>
+    <string name="fng_extreme_fear">Надмірний страх</string>
+    <string name="fng_fear">Страх</string>
+    <string name="fng_neutral">Нейтрально</string>
+    <string name="fng_greed">Жадібність</string>
+    <string name="fng_extreme_greed">Надмірна жадібність</string>
+    <string name="fng_yesterday">Вчора: %1$d</string>
+    <string name="chart_period_all">Усе</string>
+    <string name="chart_type_line">Лінійний графік</string>
+    <string name="chart_type_candles">Свічковий графік</string>
+    <string name="price_alerts">Цінові сповіщення</string>
+    <string name="alerts_settings_subtitle">Сповіщення про рух цін</string>
+    <string name="alerts_empty_title">Поки немає цінових сповіщень</string>
+    <string name="alerts_empty_body">Створіть сповіщення, щоб отримати повідомлення, коли монета досягне вашої ціни або різко зміниться.</string>
+    <string name="alert_add">Додати сповіщення</string>
+    <string name="alert_create_title">Нове цінове сповіщення</string>
+    <string name="alert_coin">Криптовалюта</string>
+    <string name="alert_condition">Умова</string>
+    <string name="alert_condition_above">Ціна підніметься вище</string>
+    <string name="alert_condition_below">Ціна опуститься нижче</string>
+    <string name="alert_condition_change_up">Зростання за 24г не менше</string>
+    <string name="alert_condition_change_down">Падіння за 24г не менше</string>
+    <string name="alert_target_price_hint">Цільова ціна (%1$s)</string>
+    <string name="alert_target_percent_hint">Зміна у відсотках</string>
+    <string name="alert_current_price">Поточна ціна: %1$s</string>
+    <string name="alert_create">Створити</string>
+    <string name="alert_invalid_value">Введіть значення більше нуля</string>
+    <string name="alert_no_coins">Спершу додайте монети до обраного, щоб створювати сповіщення.</string>
+    <string name="alert_saved">Сповіщення створено</string>
+    <string name="alert_deleted">Сповіщення видалено</string>
+    <string name="alert_delete_confirmation">Видалити це сповіщення?</string>
+    <string name="alert_summary_above">%1$s підніметься вище %2$s</string>
+    <string name="alert_summary_below">%1$s опуститься нижче %2$s</string>
+    <string name="alert_summary_change_up">%1$s зросте на %2$s або більше за 24г</string>
+    <string name="alert_summary_change_down">%1$s впаде на %2$s або більше за 24г</string>
+    <string name="alert_status_active">Активне</string>
+    <string name="alert_status_triggered">Спрацювало %1$s</string>
+    <string name="alert_notification_title">Цінове сповіщення %1$s</string>
+    <string name="alert_notification_above">%1$s зараз %2$s — вище за вашу ціль %3$s.</string>
+    <string name="alert_notification_below">%1$s зараз %2$s — нижче за вашу ціль %3$s.</string>
+    <string name="alert_notification_change_up">%1$s зріс на %2$s за останні 24 години.</string>
+    <string name="alert_notification_change_down">%1$s впав на %2$s за останні 24 години.</string>
+    <string name="alert_channel_name">Цінові сповіщення</string>
+    <string name="alert_channel_description">Повідомлення, коли ціна або рух за 24г досягає вашого сповіщення.</string>
+    <string name="alert_permission_denied">Сповіщення вимкнено. Дозвольте їх у налаштуваннях системи, щоб отримувати цінові сповіщення.</string>
+    <string name="alert_status_paused">Призупинено</string>
+    <string name="trade_type">Тип</string>
+    <string name="trade_type_buy">Купівля</string>
+    <string name="trade_type_sell">Продаж</string>
+    <string name="trade_type_transfer_in">Переказ на гаманець</string>
+    <string name="trade_type_transfer_out">Переказ із гаманця</string>
+    <string name="trade_fee">Комісія (%1$s)</string>
+    <string name="portfolio_fee">Комісія</string>
+    <string name="portfolio_sale_price">Ціна продажу</string>
+    <string name="portfolio_cost_basis">Базова вартість за одиницю</string>
+    <string name="portfolio_proceeds">Виторг</string>
+    <string name="portfolio_realized_pnl">Зафіксований PnL</string>
+    <string name="portfolio_fees_paid">Сплачено комісій</string>
+    <string name="portfolio_sell_exceeds">У вас лише %1$s, тому продати або надіслати більше не можна.</string>
+    <string name="portfolio_all">Усі</string>
+    <string name="portfolio_default_name">Основний портфель</string>
+    <string name="portfolio_new">Новий портфель</string>
+    <string name="portfolio_rename">Перейменувати</string>
+    <string name="portfolio_delete">Видалити портфель</string>
+    <string name="portfolio_name_hint">Назва портфеля</string>
+    <string name="portfolio_name_required">Введіть назву</string>
+    <string name="portfolio_delete_message">Видалити «%1$s» і всі його транзакції? Цю дію не можна скасувати.</string>
+    <string name="portfolio_field">Портфель</string>
+    <string name="portfolio_created">Портфель створено</string>
+    <string name="portfolio_deleted">Портфель видалено</string>
+    <string name="portfolio_last_cannot_delete">Має залишитися хоча б один портфель</string>
+    <string name="portfolio_value_history">Вартість портфеля</string>
+    <string name="portfolio_max_drawdown">Макс. просідання</string>
+    <string name="portfolio_best_day">Найкращий день</string>
+    <string name="portfolio_worst_day">Найгірший день</string>
+    <string name="portfolio_history_building">Будуємо історію…</string>
+    <string name="portfolio_history_unavailable">Поки недостатньо історії</string>
+    <string name="menu_export_csv">Експорт у CSV</string>
+    <string name="menu_import_csv">Імпорт із CSV</string>
+    <string name="csv_export_format_title">Експортувати транзакції як</string>
+    <string name="csv_exported">Експортовано транзакцій: %1$d</string>
+    <string name="csv_export_error">Не вдалося зберегти CSV-файл</string>
+    <string name="csv_import_error">Не вдалося прочитати файл. Підтримуються експорт Crypto InvestPulse, історія угод Binance і звіт Coinbase.</string>
+    <string name="csv_import_title">Імпорт транзакцій</string>
+    <string name="csv_import_summary">Знайдено транзакцій: %1$d (%2$s).</string>
+    <string name="csv_import_summary_skipped">Знайдено транзакцій: %1$d (%2$s). Пропущено рядків: %3$d — невідомий тип, оцінка не в USD або некоректні дані.</string>
+    <string name="csv_import_target">Додати до портфеля</string>
+    <string name="csv_import_confirm">Імпортувати</string>
+    <string name="csv_imported">Імпортовано: %1$d, дублікатів пропущено: %2$d</string>
+    <string name="csv_import_nothing">У цьому файлі немає транзакцій для імпорту</string>
+    <string name="settings_app_lock">Блокування застосунку</string>
+    <string name="app_lock_on">Увімкнено</string>
+    <string name="app_lock_off">Вимкнено</string>
+    <string name="app_lock_locked_title">Застосунок заблоковано</string>
+    <string name="app_lock_locked_message">Підтвердьте, що це ви, щоб побачити портфель</string>
+    <string name="app_lock_unlock">Розблокувати</string>
+    <string name="app_lock_prompt_title">Розблокувати Crypto InvestPulse</string>
+    <string name="app_lock_prompt_subtitle">Скористайтеся відбитком пальця, обличчям або блокуванням екрана</string>
+    <string name="app_lock_enable_title">Увімкнути блокування застосунку</string>
+    <string name="app_lock_disable_title">Вимкнути блокування застосунку</string>
+    <string name="app_lock_unavailable_title">Потрібне блокування екрана</string>
+    <string name="app_lock_unavailable_message">Налаштуйте PIN-код, графічний ключ, пароль або відбиток пальця в налаштуваннях пристрою, щоб захистити застосунок.</string>
+    <string name="app_lock_open_settings">Відкрити налаштування</string>
+    <string name="app_lock_removed">Блокування застосунку вимкнено: на пристрої немає блокування екрана</string>
+    <string name="app_lock_unavailable_now">Автентифікація зараз недоступна. Спробуйте пізніше.</string>
+    <string name="wallpaper_title">Шпалери</string>
+    <string name="wallpaper_description">Один фон для всіх екранів застосунку. Вибір зберігається автоматично.</string>
+    <string name="wallpaper_gallery">Виберіть фон</string>
+    <string name="wallpaper_none">Без шпалер</string>
+    <string name="wallpaper_number">Шпалери %1$d</string>
+    <string name="wallpaper_selected">Вибрано</string>
+    <string name="wallpaper_appearance">Прозоре оформлення</string>
+    <string name="wallpaper_transparency_label">Прозорість панелей</string>
+    <string name="wallpaper_dimming_label">Приглушення фону</string>
+    <string name="wallpaper_transparency_value">Прозорість панелей: %1$d%%</string>
+    <string name="wallpaper_dimming_value">Приглушення фону: %1$d%%</string>
+    <string name="wallpaper_readability">Текст і зображення залишаються чіткими. Виберіть «Без шпалер», щоб повернути звичайну тему.</string>
 </resources>

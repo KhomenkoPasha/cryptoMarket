@@ -11,7 +11,10 @@ import app.khom.pavlo.crypto.model.*
         Coin::class,
         InfoCoin::class,
         TopCoinData::class,
-        HoldingData::class], version = 6)
+        HoldingData::class,
+        PriceAlert::class,
+        Portfolio::class,
+        PortfolioSnapshot::class], version = 10)
 @TypeConverters(DecimalConverters::class)
 abstract class CMDatabase : RoomDatabase() {
 
@@ -22,4 +25,10 @@ abstract class CMDatabase : RoomDatabase() {
     abstract fun topCoinsDao(): TopCoinsDao
 
     abstract fun holdingsDao(): HoldingsDao
+
+    abstract fun priceAlertsDao(): PriceAlertsDao
+
+    abstract fun portfoliosDao(): PortfoliosDao
+
+    abstract fun portfolioSnapshotsDao(): PortfolioSnapshotsDao
 }

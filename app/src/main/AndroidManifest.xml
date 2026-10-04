@@ -3,6 +3,7 @@
 
     <uses-permission android:name="com.google.android.gms.permission.AD_ID" />
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
     <application
         android:name=".CApp"
@@ -29,13 +30,24 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.addCoin.AddCoinActivity" />
-        <activity android:name=".ui.coinInfo.CoinInfoActivity" />
+        <activity
+            android:name=".ui.addCoin.AddCoinActivity"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".ui.coinInfo.CoinInfoActivity"
+            android:parentActivityName=".ui.main.MainActivity" />
+        <activity android:name=".ui.alerts.AlertsActivity" />
         <activity android:name=".ui.holdings.AddTransactionActivity" />
         <activity android:name=".ui.coinAllocation.CoinAllocationActivity" />
         <activity android:name=".ui.holdings.HoldingsActivity" />
         <activity android:name=".ui.insights.InsightsActivity" />
         <activity android:name=".ui.settings.SettingsActivity" />
+        <activity
+            android:name=".ui.wallpaper.WallpaperActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".security.LockActivity"
+            android:launchMode="singleTop" />
 
         <receiver
             android:name=".widget.FavoritesWidgetSmallProvider"

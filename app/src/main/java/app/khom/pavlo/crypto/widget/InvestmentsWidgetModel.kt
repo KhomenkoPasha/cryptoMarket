@@ -2,6 +2,7 @@ package app.khom.pavlo.crypto.widget
 
 import app.khom.pavlo.crypto.model.Coin
 import app.khom.pavlo.crypto.model.HoldingData
+import app.khom.pavlo.crypto.model.PositionCalculator
 import java.math.BigDecimal
 import java.math.MathContext
 import java.util.Locale
@@ -40,23 +41,29 @@ internal fun investmentsWidgetContent(
         }
     }
 
-    val positions = holdings
+    val names = holdings
         .groupBy(HoldingData::normalizedPair)
-        .map { (pair, transactions) ->
-            val quantity = transactions.sumOf(HoldingData::quantity)
-            val invested = transactions.sumOf { it.quantity.multiply(it.price) }
-            val current = priceByPair[pair]?.multiply(quantity)
+        .mapValues { (_, transactions) ->
+            transactions.firstNotNullOfOrNull { it.coinName.trim().takeIf(String::isNotEmpty) }
+        }
+    val report = PositionCalculator.replay(
+        holdings.map { it.copy(from = it.normalizedPair().first, to = it.normalizedPair().second) }
+    )
+    val positions = report.positions
+        .filter { it.quantity.signum() > 0 }
+        .map { position ->
+            val pair = position.from to position.to
             PositionDraft(
-                symbol = pair.first,
-                name = transactions.firstNotNullOfOrNull {
-                    it.coinName.trim().takeIf(String::isNotEmpty)
-                } ?: pair.first,
-                quantity = quantity,
-                investedValue = invested,
-                currentValue = current
+                symbol = position.from,
+                name = names[pair] ?: position.from,
+                quantity = position.quantity,
+                investedValue = position.costBasis,
+                currentValue = priceByPair[pair]?.multiply(position.quantity)
             )
         }
         .sortedByDescending { it.currentValue ?: it.investedValue }
+    val realizedPnl = report.positions.sumOf { it.realizedPnl }
+    val soldCostBasis = report.positions.sumOf { it.soldCostBasis }
 
     val investedValue = positions.sumOf(PositionDraft::investedValue)
     val hasAllPrices = positions.all { it.currentValue != null }
@@ -90,10 +97,11 @@ internal fun investmentsWidgetContent(
         )
     }
 
-    val totalPnl = currentValue?.subtract(investedValue)
+    val totalPnl = currentValue?.subtract(investedValue)?.add(realizedPnl)
+    val costBase = investedValue.add(soldCostBasis)
     val totalPnlPercent = totalPnl?.let { pnl ->
-        if (investedValue.signum() == 0) BigDecimal.ZERO
-        else pnl.multiply(ONE_HUNDRED).divide(investedValue, MathContext.DECIMAL128)
+        if (costBase.signum() == 0) BigDecimal.ZERO
+        else pnl.multiply(ONE_HUNDRED).divide(costBase, MathContext.DECIMAL128)
     }
     return InvestmentsWidgetContent(
         investedValue = investedValue,

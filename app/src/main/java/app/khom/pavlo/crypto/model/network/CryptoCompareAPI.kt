@@ -66,4 +66,16 @@ interface CryptoCompareAPI {
 
     @GET
     fun getNewsRss(@Url url: String): Single<ResponseBody>
+
+    @GET("price")
+    fun getFxRates(@Query("fsym") from: String, @Query("tsyms") to: String): Single<JsonObject>
+
+    @GET
+    fun getCoinbaseRates(@Url url: String, @Query("currency") currency: String): Single<JsonObject>
+
+    @GET
+    fun getFearGreed(@Url url: String, @Query("limit") limit: Int): Single<JsonObject>
+
+    @GET
+    fun getGlobalMarket(@Url url: String): Single<JsonObject>
 }

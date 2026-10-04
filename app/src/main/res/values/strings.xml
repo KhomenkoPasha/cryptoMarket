@@ -78,17 +78,7 @@
     <string name="admob_app_id" translatable="false">ca-app-pub-7371958965084168~3069069282</string>
     <string name="admob_banner_main" translatable="false">ca-app-pub-7371958965084168/1234719877</string>
 
-    <string-array name="histo_periods">
-        <item>1 hour</item>
-        <item>12 hours</item>
-        <item>24 hours</item>
-        <item>3 days</item>
-        <item>1 week</item>
-        <item>1 month</item>
-        <item>3 months</item>
-        <item>6 months</item>
-        <item>1 year</item>
-    </string-array>
+
 
     <!--Non-translatable-->
     <string name="dollar_sign" translatable="false">$</string>
@@ -173,4 +163,139 @@
     <string name="backup_restored" tools:ignore="PluralsCandidate">Data restored: %1$d favorites and %2$d transactions</string>
     <string name="backup_save_error">Could not save the backup file</string>
     <string name="backup_restore_error">Could not restore data. Select a valid Crypto InvestPulse backup file.</string>
+    <string name="settings_theme">Theme</string>
+    <string name="theme_system">System default</string>
+    <string name="theme_light">Light</string>
+    <string name="theme_dark">Dark</string>
+    <string name="settings_currency">Currency</string>
+    <string name="currency_rate_error">Couldn’t load the exchange rate. Check your connection and try again.</string>
+    <string name="market_fear_greed">Fear &amp; Greed Index</string>
+    <string name="market_btc_dominance">BTC dominance</string>
+    <string name="fng_extreme_fear">Extreme fear</string>
+    <string name="fng_fear">Fear</string>
+    <string name="fng_neutral">Neutral</string>
+    <string name="fng_greed">Greed</string>
+    <string name="fng_extreme_greed">Extreme greed</string>
+    <string name="fng_yesterday">Yesterday: %1$d</string>
+    <string name="chart_period_1h" translatable="false">1H</string>
+    <string name="chart_period_24h" translatable="false">24H</string>
+    <string name="chart_period_7d" translatable="false">7D</string>
+    <string name="chart_period_1m" translatable="false">1M</string>
+    <string name="chart_period_1y" translatable="false">1Y</string>
+    <string name="chart_period_all">All</string>
+    <string name="chart_type_line">Line chart</string>
+    <string name="chart_type_candles">Candlestick chart</string>
+    <string name="price_alerts">Price alerts</string>
+    <string name="alerts_settings_subtitle">Get notified when prices move</string>
+    <string name="alerts_empty_title">No price alerts yet</string>
+    <string name="alerts_empty_body">Create an alert to get a notification when a coin reaches your price or moves sharply.</string>
+    <string name="alert_add">Add alert</string>
+    <string name="alert_create_title">New price alert</string>
+    <string name="alert_coin">Cryptocurrency</string>
+    <string name="alert_condition">Condition</string>
+    <string name="alert_condition_above">Price rises above</string>
+    <string name="alert_condition_below">Price falls below</string>
+    <string name="alert_condition_change_up">24h gain of at least</string>
+    <string name="alert_condition_change_down">24h drop of at least</string>
+    <string name="alert_target_price_hint">Target price (%1$s)</string>
+    <string name="alert_target_percent_hint">Change in percent</string>
+    <string name="alert_current_price">Current price: %1$s</string>
+    <string name="alert_create">Create</string>
+    <string name="alert_invalid_value">Enter a value greater than zero</string>
+    <string name="alert_no_coins">Add favorite coins first to create alerts.</string>
+    <string name="alert_saved">Alert created</string>
+    <string name="alert_deleted">Alert deleted</string>
+    <string name="alert_delete_confirmation">Delete this alert?</string>
+    <string name="alert_summary_above">%1$s rises above %2$s</string>
+    <string name="alert_summary_below">%1$s falls below %2$s</string>
+    <string name="alert_summary_change_up">%1$s gains %2$s or more in 24h</string>
+    <string name="alert_summary_change_down">%1$s drops %2$s or more in 24h</string>
+    <string name="alert_status_active">Active</string>
+    <string name="alert_status_triggered">Triggered %1$s</string>
+    <string name="alert_notification_title">%1$s price alert</string>
+    <string name="alert_notification_above">%1$s is now %2$s, above your %3$s target.</string>
+    <string name="alert_notification_below">%1$s is now %2$s, below your %3$s target.</string>
+    <string name="alert_notification_change_up">%1$s is up %2$s in the last 24 hours.</string>
+    <string name="alert_notification_change_down">%1$s is down %2$s in the last 24 hours.</string>
+    <string name="alert_channel_name">Price alerts</string>
+    <string name="alert_channel_description">Notifications when a price or 24h move reaches your alert.</string>
+    <string name="alert_permission_denied">Notifications are off. Allow them in system settings to receive price alerts.</string>
+    <string name="alert_status_paused">Paused</string>
+    <string name="trade_type">Type</string>
+    <string name="trade_type_buy">Buy</string>
+    <string name="trade_type_sell">Sell</string>
+    <string name="trade_type_transfer_in">Transfer in</string>
+    <string name="trade_type_transfer_out">Transfer out</string>
+    <string name="trade_fee">Fee (%1$s)</string>
+    <string name="portfolio_fee">Fee</string>
+    <string name="portfolio_sale_price">Sale price</string>
+    <string name="portfolio_cost_basis">Cost basis per unit</string>
+    <string name="portfolio_proceeds">Proceeds</string>
+    <string name="portfolio_realized_pnl">Realized PnL</string>
+    <string name="portfolio_fees_paid">Fees paid</string>
+    <string name="portfolio_sell_exceeds">You hold only %1$s, so this can’t be sold or sent.</string>
+    <string name="portfolio_all">All</string>
+    <string name="portfolio_default_name">Main portfolio</string>
+    <string name="portfolio_new">New portfolio</string>
+    <string name="portfolio_rename">Rename</string>
+    <string name="portfolio_delete">Delete portfolio</string>
+    <string name="portfolio_name_hint">Portfolio name</string>
+    <string name="portfolio_name_required">Enter a name</string>
+    <string name="portfolio_delete_message">Delete “%1$s” and all its transactions? This can’t be undone.</string>
+    <string name="portfolio_field">Portfolio</string>
+    <string name="portfolio_created">Portfolio created</string>
+    <string name="portfolio_deleted">Portfolio deleted</string>
+    <string name="portfolio_last_cannot_delete">You need at least one portfolio</string>
+    <string name="portfolio_value_history">Portfolio value</string>
+    <string name="portfolio_max_drawdown">Max drawdown</string>
+    <string name="portfolio_best_day">Best day</string>
+    <string name="portfolio_worst_day">Worst day</string>
+    <string name="portfolio_history_building">Building history…</string>
+    <string name="portfolio_history_unavailable">Not enough history yet</string>
+    <string name="chart_period_3m" translatable="false">3M</string>
+    <string name="menu_export_csv">Export CSV</string>
+    <string name="menu_import_csv">Import CSV</string>
+    <string name="csv_export_format_title">Export transactions as</string>
+    <string name="csv_exported">Transactions exported: %1$d</string>
+    <string name="csv_export_error">Could not save the CSV file</string>
+    <string name="csv_import_error">This file could not be read. Supported: Crypto InvestPulse export, Binance trade history and Coinbase report.</string>
+    <string name="csv_import_title">Import transactions</string>
+    <string name="csv_import_summary">Transactions found: %1$d (%2$s).</string>
+    <string name="csv_import_summary_skipped">Transactions found: %1$d (%2$s). Rows skipped: %3$d (unknown type, value not in USD or invalid data).</string>
+    <string name="csv_import_target">Add to portfolio</string>
+    <string name="csv_import_confirm">Import</string>
+    <string name="csv_imported">Imported: %1$d, duplicates skipped: %2$d</string>
+    <string name="csv_import_nothing">There are no transactions to import in this file</string>
+    <string name="csv_format_native" translatable="false">Crypto InvestPulse</string>
+    <string name="csv_format_koinly" translatable="false">Koinly</string>
+    <string name="csv_source_native" translatable="false">Crypto InvestPulse</string>
+    <string name="csv_source_binance" translatable="false">Binance</string>
+    <string name="csv_source_coinbase" translatable="false">Coinbase</string>
+    <string name="settings_app_lock">App lock</string>
+    <string name="app_lock_on">On</string>
+    <string name="app_lock_off">Off</string>
+    <string name="app_lock_locked_title">The app is locked</string>
+    <string name="app_lock_locked_message">Confirm that it is you to see your portfolio</string>
+    <string name="app_lock_unlock">Unlock</string>
+    <string name="app_lock_prompt_title">Unlock Crypto InvestPulse</string>
+    <string name="app_lock_prompt_subtitle">Use your fingerprint, face or screen lock</string>
+    <string name="app_lock_enable_title">Turn on app lock</string>
+    <string name="app_lock_disable_title">Turn off app lock</string>
+    <string name="app_lock_unavailable_title">Screen lock required</string>
+    <string name="app_lock_unavailable_message">Set up a PIN, pattern, password or fingerprint in your device settings to protect the app.</string>
+    <string name="app_lock_open_settings">Open settings</string>
+    <string name="app_lock_removed">App lock was turned off because this device has no screen lock</string>
+    <string name="app_lock_unavailable_now">Authentication is not available right now. Try again later.</string>
+    <string name="wallpaper_title">Wallpapers</string>
+    <string name="wallpaper_description">One background for every app screen. Your choice is saved automatically.</string>
+    <string name="wallpaper_gallery">Choose a background</string>
+    <string name="wallpaper_none">No wallpaper</string>
+    <string name="wallpaper_number">Wallpaper %1$d</string>
+    <string name="wallpaper_selected">Selected</string>
+    <string name="wallpaper_appearance">Transparent appearance</string>
+    <string name="wallpaper_transparency_label">Panel transparency</string>
+    <string name="wallpaper_dimming_label">Background softening</string>
+    <string name="wallpaper_transparency_value">Panel transparency: %1$d%%</string>
+    <string name="wallpaper_dimming_value">Background softening: %1$d%%</string>
+    <string name="wallpaper_readability">Text and images stay clear. Select “No wallpaper” to restore the standard theme.</string>
 </resources>

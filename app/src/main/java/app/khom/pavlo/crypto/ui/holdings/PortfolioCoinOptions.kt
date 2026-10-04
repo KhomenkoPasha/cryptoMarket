@@ -1,10 +1,11 @@
 package app.khom.pavlo.crypto.ui.holdings
 
 import app.khom.pavlo.crypto.model.Coin
+import app.khom.pavlo.crypto.model.CurrencyManager
 
 internal fun portfolioCoinLabel(coin: Coin): String {
     val name = coin.fullName.ifBlank { coin.from }
-    return "$name (${coin.from}) / ${coin.to}"
+    return "$name (${coin.from}) / ${CurrencyManager.selected.code}"
 }
 
 internal fun findPortfolioCoinForInput(

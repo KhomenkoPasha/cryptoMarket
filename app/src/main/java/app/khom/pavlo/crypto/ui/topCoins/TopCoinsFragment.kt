@@ -10,10 +10,15 @@ import androidx.fragment.app.Fragment
 import app.khom.pavlo.crypto.R
 import app.khom.pavlo.crypto.model.*
 import app.khom.pavlo.crypto.ui.coinInfo.CoinInfoActivity
+import app.khom.pavlo.crypto.utils.PortfolioValueFormatter
 import app.khom.pavlo.crypto.utils.ResourceProvider
 import app.khom.pavlo.crypto.utils.applyCryptoRefreshStyle
+import app.khom.pavlo.crypto.utils.fearGreedColor
+import app.khom.pavlo.crypto.utils.fearGreedLabel
 import app.khom.pavlo.crypto.databinding.TopCoinsFragmentBinding
 import dagger.hilt.android.AndroidEntryPoint
+import java.math.BigDecimal
+import java.text.NumberFormat
 import javax.inject.Inject
 
 
@@ -98,6 +103,45 @@ class TopCoinsFragment : Fragment(), ITopCoins.View {
 
     override fun setCoinAdded(symbol: String) {
         adapter?.setCoinAdded(symbol)
+    }
+
+    override fun showMarketOverview(overview: MarketOverview) {
+        val card = binding.marketOverview
+        val fearGreed = overview.fearGreed
+        val global = overview.global
+        if (fearGreed == null && global == null) return
+
+        card.marketFearGreedBlock.visibility = if (fearGreed != null) View.VISIBLE else View.GONE
+        card.marketGlobalBlock.visibility = if (global != null) View.VISIBLE else View.GONE
+        card.marketOverviewDivider.visibility =
+            if (fearGreed != null && global != null) View.VISIBLE else View.GONE
+
+        if (fearGreed != null) {
+            val color = resProvider.getColor(fearGreedColor(fearGreed.value))
+            card.marketFearGreedValue.text = NumberFormat.getIntegerInstance().format(fearGreed.value)
+            card.marketFearGreedValue.setTextColor(color)
+            card.marketFearGreedLabel.setText(fearGreedLabel(fearGreed.value))
+            card.marketFearGreedBar.setIndicatorColor(color)
+            card.marketFearGreedBar.setProgressCompat(fearGreed.value, false)
+            val previous = fearGreed.previousValue
+            card.marketFearGreedYesterday.text = previous?.let {
+                getString(R.string.fng_yesterday, it)
+            }.orEmpty()
+        }
+
+        if (global != null) {
+            val dominance = global.btcDominance
+            card.marketBtcDominanceValue.text = dominance?.let {
+                PortfolioValueFormatter.percent(BigDecimal.valueOf(it)).removePrefix("+")
+            } ?: getString(R.string.value_unavailable)
+            card.marketBtcDominanceBar.setProgressCompat(dominance?.toInt()?.coerceIn(0, 100) ?: 0, false)
+            val cap = global.marketCapUsd?.let { PortfolioValueFormatter.compact(BigDecimal.valueOf(it)) }
+            val change = global.marketCapChange24h?.let { PortfolioValueFormatter.percent(BigDecimal.valueOf(it)) }
+            card.marketTotalCap.text = listOfNotNull(cap, change).joinToString("  ").let { text ->
+                if (text.isEmpty()) "" else getString(R.string.display_label_value, getString(R.string.cap), text)
+            }
+        }
+        card.root.visibility = View.VISIBLE
     }
 
     override fun startCoinInfoActivity(name: String?) {

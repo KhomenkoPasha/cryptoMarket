@@ -13,7 +13,11 @@ data class PortfolioSummary(
     val totalPnl: BigDecimal,
     val totalPnlPercent: BigDecimal,
     val dayPnl: BigDecimal,
-    val dayPnlPercent: BigDecimal
+    val dayPnlPercent: BigDecimal,
+    val realizedPnl: BigDecimal = BigDecimal.ZERO,
+    val unrealizedPnl: BigDecimal = BigDecimal.ZERO,
+    val feesPaid: BigDecimal = BigDecimal.ZERO,
+    val hasSales: Boolean = false
 )
 
 data class PortfolioHoldingStats(
@@ -28,7 +32,9 @@ data class PortfolioTransactionStats(
     val totalSpent: BigDecimal,
     val currentValue: BigDecimal,
     val profit: BigDecimal,
-    val profitPercent: BigDecimal
+    val profitPercent: BigDecimal,
+    val type: TradeType = TradeType.BUY,
+    val fee: BigDecimal = BigDecimal.ZERO
 )
 
 class HoldingsHandler(
@@ -78,7 +84,7 @@ class HoldingsHandler(
         PortfolioCalculator.statsFor(holdingData, holdings, coins)
 
     fun getTransactionStats(holdingData: HoldingData): PortfolioTransactionStats =
-        PortfolioCalculator.transactionStats(holdingData, coins)
+        PortfolioCalculator.transactionStats(holdingData, holdings, coins)
 
     fun getTotalChangePercent(): BigDecimal = getPortfolioSummary().totalPnlPercent
 
@@ -110,7 +116,7 @@ class HoldingsHandler(
 
     fun isThereSuchHolding(from: String?, to: String?): HoldingData? {
         val holding = holdings.find { it.from == from && it.to == to } ?: return null
-        return PortfolioCalculator.aggregatePair(holding, holdings)
+        return PortfolioCalculator.aggregatePair(holding, holdings).takeIf { it.quantity.signum() > 0 }
     }
 
     private fun getCoinByHolding(holdingData: HoldingData) =

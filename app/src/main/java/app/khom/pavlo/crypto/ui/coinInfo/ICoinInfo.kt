@@ -1,6 +1,6 @@
 package app.khom.pavlo.crypto.ui.coinInfo
 
-import com.github.mikephil.charting.data.CandleData
+import app.khom.pavlo.crypto.model.ChartPayload
 
 
 interface ICoinInfo {
@@ -9,7 +9,7 @@ interface ICoinInfo {
         fun setTitle(title: String)
         fun setLogo(url: String)
         fun setMainPrice(price: String)
-        fun drawChart(line: CandleData)
+        fun drawChart(payload: ChartPayload)
         fun setOpen(open: String)
         fun setHigh(high: String)
         fun setLow(low: String)
@@ -21,12 +21,14 @@ interface ICoinInfo {
         fun disableGraphLoading()
         fun enableEmptyGraphText()
         fun disableEmptyGraphText()
-        fun setupSpinner()
+        fun setupChartControls(period: String, style: String)
+        fun setChartStyle(style: String)
     }
 
     interface Presenter {
         fun onCreate(fromArg: String, toArg: String)
-        fun onSpinnerItemClicked(position: Int)
+        fun onPeriodSelected(period: String)
+        fun onChartStyleSelected(style: String)
         fun onDestroy()
     }
 }

@@ -6,6 +6,8 @@ import java.util.Locale
 class Preferences(context: Context) {
 
     companion object {
+        const val CHART_STYLE_LINE = "line"
+        const val CHART_STYLE_CANDLES = "candles"
         val PREFS_NAME = "com.rmnivnv.cryptomoon"
         val SEARCH_HASH_TAG = "search_hash_tag"
         val SEARCH_HASH_TAG_DEFAULT = ""
@@ -13,6 +15,14 @@ class Preferences(context: Context) {
         val SORT_BY_DEFAULT = CoinSort.NAME
         val SELECTED_LANGUAGE = "selected_language"
         val SELECTED_LANGUAGE_DEFAULT = ""
+        private const val THEME_MODE = "theme_mode"
+        private const val CURRENCY_CODE = "currency_code"
+        private const val CHART_STYLE = "chart_style"
+        private const val ACTIVE_PORTFOLIO_ID = "active_portfolio_id"
+        private const val HISTORY_DIRTY = "portfolio_history_dirty"
+        private const val APP_LOCK_ENABLED = "app_lock_enabled"
+        private const val FX_RATE_PREFIX = "fx_rate_"
+        private const val FX_RATES_UPDATED_AT = "fx_rates_updated_at"
         private const val INSIGHTS_NOTE_PREFIX = "insights_note_"
         private const val INSIGHTS_TRACKED_DATE_PREFIX = "insights_tracked_date_"
         private const val INSIGHTS_TRACKED_PRICE_PREFIX = "insights_tracked_price_"
@@ -41,6 +51,46 @@ class Preferences(context: Context) {
     var language: String
         get() = prefs.getString(SELECTED_LANGUAGE, SELECTED_LANGUAGE_DEFAULT) ?: SELECTED_LANGUAGE_DEFAULT
         set(value) = setLang(value)
+
+    var themeMode: String
+        get() = ThemeMode.normalize(prefs.getString(THEME_MODE, ThemeMode.SYSTEM))
+        set(value) = prefs.edit().putString(THEME_MODE, ThemeMode.normalize(value)).apply()
+
+    var chartStyle: String
+        get() = prefs.getString(CHART_STYLE, CHART_STYLE_LINE)?.takeIf { it == CHART_STYLE_CANDLES } ?: CHART_STYLE_LINE
+        set(value) = prefs.edit().putString(CHART_STYLE, if (value == CHART_STYLE_CANDLES) CHART_STYLE_CANDLES else CHART_STYLE_LINE).apply()
+
+    var activePortfolioId: Long
+        get() = prefs.getLong(ACTIVE_PORTFOLIO_ID, ALL_PORTFOLIOS_ID)
+        set(value) = prefs.edit().putLong(ACTIVE_PORTFOLIO_ID, value).apply()
+
+    /** True when transactions changed since the portfolio value history was last rebuilt. */
+    var historyDirty: Boolean
+        get() = prefs.getBoolean(HISTORY_DIRTY, true)
+        set(value) = prefs.edit().putBoolean(HISTORY_DIRTY, value).apply()
+
+    /** Ask for a fingerprint, face or the device screen lock when the app is opened. */
+    var appLockEnabled: Boolean
+        get() = prefs.getBoolean(APP_LOCK_ENABLED, false)
+        set(value) = prefs.edit().putBoolean(APP_LOCK_ENABLED, value).apply()
+
+    var currencyCode: String
+        get() = prefs.getString(CURRENCY_CODE, AppCurrency.USD.code) ?: AppCurrency.USD.code
+        set(value) = prefs.edit().putString(CURRENCY_CODE, AppCurrency.fromCode(value).code).apply()
+
+    val fxRatesUpdatedAt: Long
+        get() = prefs.getLong(FX_RATES_UPDATED_AT, 0L)
+
+    fun fxRates(): Map<String, Double> =
+        AppCurrency.values().mapNotNull { currency ->
+            prefs.getString(FX_RATE_PREFIX + currency.code, null)?.toDoubleOrNull()?.let { currency.code to it }
+        }.toMap()
+
+    fun saveFxRates(rates: Map<String, Double>) {
+        val editor = prefs.edit()
+        rates.forEach { (code, rate) -> editor.putString(FX_RATE_PREFIX + code, rate.toString()) }
+        editor.putLong(FX_RATES_UPDATED_AT, System.currentTimeMillis()).apply()
+    }
 
     var newsNotes: String
         get() = prefs.getString(INSIGHTS_NEWS_NOTES, "") ?: ""

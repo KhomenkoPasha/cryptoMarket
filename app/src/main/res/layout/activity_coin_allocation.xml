@@ -23,7 +23,7 @@
             android:theme="@style/ToolbarColoredBackArrow"
             app:titleTextAppearance="@style/TextAppearance.Crypto.Toolbar"
             app:titleTextColor="@color/on_surface"
-            android:background="@drawable/bg_appbar_glass"/>
+            android:background="@android:color/transparent" />
 
     </com.google.android.material.appbar.AppBarLayout>
     <com.github.mikephil.charting.charts.PieChart

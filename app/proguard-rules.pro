@@ -42,3 +42,6 @@
 -keep class app.khom.pavlo.crypto.model.backup.FavoriteBackup { *; }
 -keep class app.khom.pavlo.crypto.model.backup.TransactionBackup { *; }
 -keep class app.khom.pavlo.crypto.model.backup.PreferenceBackup { *; }
+
+-keep class app.khom.pavlo.crypto.model.backup.AlertBackup { *; }
+-keep class app.khom.pavlo.crypto.model.backup.PortfolioBackup { *; }

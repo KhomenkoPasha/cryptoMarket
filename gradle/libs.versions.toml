@@ -1,5 +1,6 @@
 [versions]
 androidx-appcompat = "1.7.1"
+androidx-biometric = "1.1.0"
 androidx-cardview = "1.0.0"
 androidx-constraintlayout = "2.2.2"
 androidx-core-splashscreen = "1.2.0"
@@ -27,6 +28,7 @@ rxjava = "3.1.12"
 
 [libraries]
 androidx-appcompat = { module = "androidx.appcompat:appcompat", version.ref = "androidx-appcompat" }
+androidx-biometric = { module = "androidx.biometric:biometric", version.ref = "androidx-biometric" }
 androidx-cardview = { module = "androidx.cardview:cardview", version.ref = "androidx-cardview" }
 androidx-constraintlayout = { module = "androidx.constraintlayout:constraintlayout", version.ref = "androidx-constraintlayout" }
 androidx-core-splashscreen = { module = "androidx.core:core-splashscreen", version.ref = "androidx-core-splashscreen" }
